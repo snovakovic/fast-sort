@@ -7,7 +7,7 @@
   "license": "MIT",
   "homepage": "https://github.com/snovakovic/fast-sort#readme",
   "scripts": {
-    "test": "node integration_test/index.j",
+    "test": "node integration_test/index.js",
     "publish": "node publish"
   },
   "bugs": {
