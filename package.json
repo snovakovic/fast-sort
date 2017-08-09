@@ -2,10 +2,16 @@
   "name": "fast-sort",
   "version": "1.1.0",
   "description": "Blazing fast array sorting.",
-  "main": "sort.js",
+  "main": "dist/sort.js",
+  "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/snovakovic/fast-sort#readme",
   "scripts": {
     "test": "node integration_test/index.j",
     "publish": "node publish"
+  },
+  "bugs": {
+    "url": "https://github.com/snovakovic/fast-sort/issues"
   },
   "repository": {
     "type": "git",
@@ -17,18 +23,12 @@
     "order",
     "orderBy"
   ],
-  "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/snovakovic/fast-sort/issues"
-  },
-  "homepage": "https://github.com/snovakovic/fast-sort#readme",
-  "//": "WARNING: Do not remove!.  Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
-  "private": true,
   "devDependencies": {
     "eslint": "^4.4.1",
     "eslint-config-airbnb-base": "^11.3.1",
     "eslint-plugin-import": "^2.7.0",
     "fs-extra": "^4.0.1"
-  }
+  },
+  "//": "WARNING: Do not remove!.  Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
+  "private": true
 }

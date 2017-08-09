@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 const exec = require('child_process').exec;
-const Fs = require('fs-extra');
+const Fs = require('fs-extra'); // eslint-disable-line import/no-extraneous-dependencies
 const Path = require('path');
 
 
@@ -11,6 +11,12 @@ const path = {
 };
 
 const filesToInclude = [{
+  name: 'publish.js',
+  path: Path.resolve(__dirname, 'publish.js')
+}, {
+  name: '.npmignore',
+  path: Path.resolve(__dirname, '.npmignore')
+}, {
   name: 'package.json',
   path: Path.resolve(__dirname, 'package.json')
 }, {
@@ -64,6 +70,8 @@ execute('rm -rf node_modules/js-flock && rm -rf dist')
     const packageJson = Fs.readJsonSync(packagePath);
     delete packageJson.private; // Used to prevent accidental publish with npm publish
     delete packageJson['//'];
+
+    packageJson.main = 'sort.js';
 
     Fs.writeJsonSync(packagePath, packageJson);
 
