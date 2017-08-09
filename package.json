@@ -1,10 +1,10 @@
 {
   "name": "fast-sort",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Blazing fast array sorting.",
   "main": "sort.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node integration_test/index.j",
     "publish": "node publish"
   },
   "repository": {

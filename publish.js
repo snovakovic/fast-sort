@@ -20,6 +20,9 @@ const filesToInclude = [{
   name: 'README.md',
   path: Path.resolve(__dirname, 'README.md')
 }, {
+  name: 'internals/getTag.js',
+  path: Path.resolve(path.jsFlock, 'internals/getTag.js')
+}, {
   name: 'sort.js',
   path: Path.resolve(path.jsFlock, 'sort.js')
 }, {
