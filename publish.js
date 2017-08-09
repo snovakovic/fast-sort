@@ -7,19 +7,28 @@ const Path = require('path');
 
 const path = {
   dist: Path.resolve(__dirname, 'dist'),
-  sortModules: [
-    {
-      name: 'sort.js',
-      path: Path.resolve(__dirname, 'node_modules/js-flock/sort.js')
-    }, {
-      name: 'sort.es5.js',
-      path: Path.resolve(__dirname, 'node_modules/js-flock/es5/sort.js')
-    }, {
-     name: 'sort.es5.min.js',
-     path: Path.resolve(__dirname, 'node_modules/js-flock/es5/sort.min.js')
-    }
-  ]
-}
+  jsFlock: Path.resolve(__dirname, 'node_modules/js-flock')
+};
+
+const filesToInclude = [{
+  name: 'package.json',
+  path: Path.resolve(__dirname, 'package.json')
+}, {
+  name: 'LICENSE',
+  path: Path.resolve(__dirname, 'LICENSE')
+}, {
+  name: 'README.md',
+  path: Path.resolve(__dirname, 'README.md')
+}, {
+  name: 'sort.js',
+  path: Path.resolve(path.jsFlock, 'sort.js')
+}, {
+  name: 'sort.es5.js',
+  path: Path.resolve(path.jsFlock, 'es5/sort.js')
+}, {
+  name: 'sort.es5.min.js',
+  path: Path.resolve(path.jsFlock, 'es5/sort.min.js')
+}];
 
 const execute = function(command) {
   return new Promise((resolve, reject) => {
@@ -44,11 +53,9 @@ execute('rm -rf node_modules/js-flock && rm -rf dist')
     console.info('Coping files...');
     Fs.ensureDirSync(path.dist);
 
-    path.sortModules.forEach((file) => {
-      Fs.copySync(file.path, Path.resolve(path.dist, file.name))
+    filesToInclude.forEach((file) => {
+      Fs.copySync(file.path, Path.resolve(path.dist, file.name));
     });
-
-    Fs.copySync('package.json', Path.resolve(path.dist, 'package.json'))
 
     const packagePath = Path.resolve(path.dist, 'package.json');
     const packageJson = Fs.readJsonSync(packagePath);
@@ -58,8 +65,9 @@ execute('rm -rf node_modules/js-flock && rm -rf dist')
     Fs.writeJsonSync(packagePath, packageJson);
 
     console.info(`Publishing version ${ packageJson.version }...`);
-    // process.chdir(Path.resolve(__dirname, 'dist'));
-    // return execute('npm publish');
+
+    process.chdir(Path.resolve(path.dist));
+    return execute('npm publish');
   }).then(() => {
     console.info('---ALL DONE---');
   });
