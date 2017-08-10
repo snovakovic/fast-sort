@@ -75,7 +75,7 @@ execute('rm -rf node_modules/js-flock && rm -rf dist')
 
     Fs.writeJsonSync(packagePath, packageJson);
 
-    console.info(`Publishing version ${ packageJson.version }...`);
+    console.info(`Publishing version ${packageJson.version}...`);
 
     process.chdir(Path.resolve(path.dist));
     return execute('npm publish');

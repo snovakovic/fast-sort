@@ -1,6 +1,6 @@
 {
   "name": "fast-sort",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Blazing fast array sorting.",
   "main": "dist/sort.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
@@ -10,12 +10,12 @@
     "test": "node integration_test/index.js",
     "publish": "node publish"
   },
-  "bugs": {
-    "url": "https://github.com/snovakovic/fast-sort/issues"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/snovakovic/fast-sort.git"
+    "url": "git+https://github.com/snovakovic/js-flock.git"
+  },
+  "bugs": {
+    "url": "https://github.com/snovakovic/js-flock/issues"
   },
   "keywords": [
     "sort",
