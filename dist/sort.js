@@ -1,14 +1,10 @@
-const getTag = require('./internals/getTag');
-
-
-const sorter = function(direction, sortBy, subsequentSort, a, b) {
+const sorter = function(direction, sortBy, thenBy, depth, a, b) {
   const valA = sortBy(a);
   const valB = sortBy(b);
 
   if (valA === valB) {
-    if (subsequentSort.length) {
-      const subsequent = subsequentSort.slice();
-      return sorter(direction, subsequent.shift(), subsequent, a, b);
+    if (thenBy && thenBy.length > depth) {
+      return sorter(direction, thenBy[depth], thenBy, depth + 1, a, b);
     }
     return 0;
   }
@@ -25,19 +21,13 @@ const descSorter = sorter.bind(null, -1);
 
 const emptySortBy = (a) => a;
 
-const assertSortBy = function(sortBy) {
-  const invalidSortBy = sortBy.filter((s) => typeof s !== 'function');
-  if (invalidSortBy.length) {
-    throw new TypeError(`sort: expected [Function] but got ${getTag(invalidSortBy[0])}`);
-  }
-};
-
 const sort = function(ctx, _sorter, sortBy = emptySortBy) {
   if (Array.isArray(ctx)) {
-    sortBy = Array.isArray(sortBy) ? sortBy : [sortBy];
-    assertSortBy(sortBy);
-    return ctx.sort(_sorter.bind(null, sortBy.shift(), sortBy));
+    return Array.isArray(sortBy)
+      ? ctx.sort(_sorter.bind(undefined, sortBy.shift(), sortBy, 0))
+      : ctx.sort(_sorter.bind(undefined, sortBy, undefined, 0));
   }
+
   return ctx;
 };
 

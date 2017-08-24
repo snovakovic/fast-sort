@@ -75,30 +75,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
-/***/ 1:
+/***/ 10:
 /***/ (function(module, exports) {
 
-// Public
-
-module.exports = function (input) {
-  return Object.prototype.toString.call(input);
-};
-
-/***/ }),
-
-/***/ 10:
-/***/ (function(module, exports, __webpack_require__) {
-
-var getTag = __webpack_require__(1);
-
-var sorter = function sorter(direction, sortBy, subsequentSort, a, b) {
+var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
   var valA = sortBy(a);
   var valB = sortBy(b);
 
   if (valA === valB) {
-    if (subsequentSort.length) {
-      var subsequent = subsequentSort.slice();
-      return sorter(direction, subsequent.shift(), subsequent, a, b);
+    if (thenBy && thenBy.length > depth) {
+      return sorter(direction, thenBy[depth], thenBy, depth + 1, a, b);
     }
     return 0;
   }
@@ -117,23 +103,13 @@ var emptySortBy = function emptySortBy(a) {
   return a;
 };
 
-var assertSortBy = function assertSortBy(sortBy) {
-  var invalidSortBy = sortBy.filter(function (s) {
-    return typeof s !== 'function';
-  });
-  if (invalidSortBy.length) {
-    throw new TypeError('sort: expected [Function] but got ' + getTag(invalidSortBy[0]));
-  }
-};
-
 var sort = function sort(ctx, _sorter) {
   var sortBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : emptySortBy;
 
   if (Array.isArray(ctx)) {
-    sortBy = Array.isArray(sortBy) ? sortBy : [sortBy];
-    assertSortBy(sortBy);
-    return ctx.sort(_sorter.bind(null, sortBy.shift(), sortBy));
+    return Array.isArray(sortBy) ? ctx.sort(_sorter.bind(undefined, sortBy.shift(), sortBy, 0)) : ctx.sort(_sorter.bind(undefined, sortBy, undefined, 0));
   }
+
   return ctx;
 };
 
