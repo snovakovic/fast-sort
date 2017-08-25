@@ -75,7 +75,7 @@ Every run of benchmark outputs different results but the results are constantly 
 
 Benchmark has been run on:
 
-* 15 GB Ram
+* 16 GB Ram
 * Intel® Core™ i5-4570 CPU @ 3.20GHz × 4
 * Ubuntu 16.04
 * Node 6.9.2
