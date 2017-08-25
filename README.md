@@ -9,19 +9,20 @@
 [![NPM Package](https://nodei.co/npm/fast-sort.png)](https://www.npmjs.com/package/fast-sort)
 
 
-Blazing fast array sorting. **~2x faster than lodash sort**. Benchmark results coming soon.
+Blazing fast array sorting that **outperforms lodash sorting by ~2x** (in some cases it's more then 5x).
+Take a look at the benchmark section for more information about performance.
 
-fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module. For source code and bug/issue reporting visit [js-flock](https://www.npmjs.com/package/js-flock) github page.
 
+### Capabilities
 
-### Usage
-
-Small wrapper around sort to make sorting more readable and easier to write.
-
+* Sorting array of objects (supports comparing by nested object properties)
+* Sorting flat arrays
+* Sorting by multiple properties
 * Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
-* Supports sorting by multiple properties
-* Mutates input array in a same way as native [Array.prototype.sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+* Mutates input array in a same way as native [Array.prototype.sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) does.
 
+
+### Example
 
 ```javascript
   import sort from 'fast-sort';
@@ -60,3 +61,37 @@ Small wrapper around sort to make sorting more readable and easier to write.
   import sort from 'js-flock/es5/sort'; // === import sort from 'fast-sort/sort.es5';
   import sort from 'js-flock/es5/sort.min'; // === import sort from 'fast-sort/sort.es5.min';
 ```
+
+### Benchmark
+
+Benchmarking sort is not an easy task as there is so many different scenarios that can happen while sorting.
+Because of that 5 different benchmarks have been created to test how fast-sort is behaving on different inputs and sort scenarios.
+Each benchmark is run with different array sizes from small 100 items to large 100 000 items.
+
+Every run of benchmark outputs different results but the results are constantly better then lodash sort and in following benchmark score ranges from 1.37x to 13.51x faster then lodash sort. This will vary on each benchmark run but it should not vary too much.
+
+
+#### Benchmark scores
+
+Benchmark has been run on:
+
+* 15 GB Ram
+* Intel® Core™ i5-4570 CPU @ 3.20GHz × 4
+* Ubuntu 16.04
+* Node 6.9.2
+
+
+![benchmark results](https://github.com/snovakovic/fast-sort/raw/master/benchmark.png)
+
+
+#### Running benchmark
+
+To run benchmark on your PC follow steps from below
+
+1) git clone https://github.com/snovakovic/js-flock.git
+2) cd js-flock
+3) npm install
+4) npm run benchmark:sort
+
+In case you notice any irregularities in benchmark or you want to add sort library to benchmark score
+please open issue [here](https://github.com/snovakovic/js-flock/issues)
