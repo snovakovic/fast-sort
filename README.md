@@ -80,6 +80,8 @@ Benchmark has been run on:
 * Ubuntu 16.04
 * Node 6.9.2
 
+fast-sort benchmark result are represent with flock name and is colored in blue.
+
 
 ![benchmark results](https://github.com/snovakovic/fast-sort/raw/master/benchmark.png)
 
