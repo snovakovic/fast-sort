@@ -77,5 +77,8 @@ execute('rm -rf node_modules/js-flock && rm -rf dist')
     process.chdir(Path.resolve(path.dist));
     return execute('npm publish');
   })
-  .then(() => execute('npm test'))
+  .then(() => {
+    process.chdir(__dirname);
+    execute('npm test');
+  })
   .then(() => console.info('---ALL DONE---'));

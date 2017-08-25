@@ -53,7 +53,7 @@ console.info('Cleaning folders...');
 execute('rm -rf node_modules/js-flock && rm -rf dist')
   .then(() => {
     console.info('Installing js-flock');
-    return execute('npm install --no-package-lock js-flock')
+    return execute('npm install --no-package-lock js-flock');
   })
   .then(() => {
     console.info('Coping files...');
@@ -76,6 +76,9 @@ execute('rm -rf node_modules/js-flock && rm -rf dist')
 
     process.chdir(Path.resolve(path.dist));
     return execute('npm publish');
-  }).then(() => {
-    console.info('---ALL DONE---');
-  });
+  })
+  .then(() => {
+    process.chdir(__dirname);
+    execute('npm test');
+  })
+  .then(() => console.info('---ALL DONE---'));
