@@ -89,9 +89,9 @@ var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
     return 0;
   }
 
+  if (valA < valB) return -direction;
   if (valA == null) return 1;
   if (valB == null) return -1;
-  if (valA < valB) return -direction;
 
   return direction;
 };
@@ -106,11 +106,11 @@ var emptySortBy = function emptySortBy(a) {
 var sort = function sort(ctx, _sorter) {
   var sortBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : emptySortBy;
 
-  if (Array.isArray(ctx)) {
-    return Array.isArray(sortBy) ? ctx.sort(_sorter.bind(undefined, sortBy.shift(), sortBy, 0)) : ctx.sort(_sorter.bind(undefined, sortBy, undefined, 0));
+  if (!Array.isArray(ctx)) {
+    return ctx;
   }
 
-  return ctx;
+  return Array.isArray(sortBy) ? ctx.sort(_sorter.bind(undefined, sortBy.shift(), sortBy, 0)) : ctx.sort(_sorter.bind(undefined, sortBy, undefined, 0));
 };
 
 // Public

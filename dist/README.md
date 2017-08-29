@@ -12,6 +12,8 @@
 Blazing fast array sorting that **outperforms lodash sorting by ~2x** (in some cases it's more then 5x).
 Take a look at the benchmark section for more information about performance.
 
+fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module. check [js-flock](https://www.npmjs.com/package/js-flock) for more cool modules.
+
 
 ### Capabilities
 
@@ -52,14 +54,15 @@ Take a look at the benchmark section for more information about performance.
   import sort from 'fast-sort'; // Loads unmodified es6 code
   import sort from 'fast-sort/sort.es5'; // Loads transpiled es5 code
   import sort from 'fast-sort/sort.es5.min'; // Loads transpiled minified es5 code
+```
 
+fast-sort is part of js-flock library and can be included throught js-flock.
 
-  // We can import same module through js-flock library
-
+```javascript
   // npm install js-flock --save
-  import sort from 'js-flock/sort'; // === import sort from 'fast-sort';
-  import sort from 'js-flock/es5/sort'; // === import sort from 'fast-sort/sort.es5';
-  import sort from 'js-flock/es5/sort.min'; // === import sort from 'fast-sort/sort.es5.min';
+  import sort from 'js-flock/sort';
+  import sort from 'js-flock/es5/sort';
+  import sort from 'js-flock/es5/sort.min';
 ```
 
 ### Benchmark
