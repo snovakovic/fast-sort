@@ -75,7 +75,7 @@ execute('rm -rf node_modules/js-flock && rm -rf dist')
     console.info(`Publishing version ${packageJson.version}...`);
 
     process.chdir(Path.resolve(path.dist));
-    //return execute('npm publish');
+    return execute('npm publish');
   })
   .then(() => {
     process.chdir(__dirname);
