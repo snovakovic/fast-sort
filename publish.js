@@ -67,6 +67,7 @@ execute('rm -rf node_modules/js-flock && rm -rf dist')
     const packageJson = Fs.readJsonSync(packagePath);
     delete packageJson.private; // Used to prevent accidental publish with npm publish
     delete packageJson['//'];
+    delete packageJson.devDependencies;
 
     packageJson.main = 'sort.js';
 
