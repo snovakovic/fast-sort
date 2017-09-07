@@ -22,9 +22,7 @@ const descSorter = sorter.bind(null, -1);
 const emptySortBy = (a) => a;
 
 const sort = function(ctx, _sorter, sortBy = emptySortBy) {
-  if (!Array.isArray(ctx)) {
-    return ctx;
-  }
+  if (!Array.isArray(ctx)) return ctx;
 
   return Array.isArray(sortBy)
     ? ctx.sort(_sorter.bind(undefined, sortBy.shift(), sortBy, 0))
@@ -35,11 +33,7 @@ const sort = function(ctx, _sorter, sortBy = emptySortBy) {
 
 module.exports = function(ctx) {
   return {
-    asc(sortBy) {
-      return sort(ctx, ascSorter, sortBy);
-    },
-    desc(sortBy) {
-      return sort(ctx, descSorter, sortBy);
-    }
+    asc: (sortBy) => sort(ctx, ascSorter, sortBy),
+    desc: (sortBy) => sort(ctx, descSorter, sortBy)
   };
 };

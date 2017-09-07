@@ -70,12 +70,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 10:
+/***/ 11:
 /***/ (function(module, exports) {
 
 var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
@@ -106,9 +106,7 @@ var emptySortBy = function emptySortBy(a) {
 var sort = function sort(ctx, _sorter) {
   var sortBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : emptySortBy;
 
-  if (!Array.isArray(ctx)) {
-    return ctx;
-  }
+  if (!Array.isArray(ctx)) return ctx;
 
   return Array.isArray(sortBy) ? ctx.sort(_sorter.bind(undefined, sortBy.shift(), sortBy, 0)) : ctx.sort(_sorter.bind(undefined, sortBy, undefined, 0));
 };
