@@ -18,24 +18,23 @@ const sorter = function(direction, sortBy, thenBy, depth, a, b) {
   return direction;
 };
 
-const ascSorter = sorter.bind(null, 1);
-const descSorter = sorter.bind(null, -1);
-
 const emptySortBy = (a) => a;
 
-const sort = function(ctx, _sorter, sortBy = emptySortBy) {
+const sort = function(direction, ctx, sortBy = emptySortBy) {
   if (!Array.isArray(ctx)) return ctx;
 
-  return Array.isArray(sortBy)
-    ? ctx.sort(_sorter.bind(undefined, sortBy.shift(), sortBy, 0))
-    : ctx.sort(_sorter.bind(undefined, sortBy, undefined, 0));
+  const _sorter = Array.isArray(sortBy)
+    ? sorter.bind(undefined, direction, sortBy.shift(), sortBy, 0)
+    : sorter.bind(undefined, direction, sortBy, undefined, 0);
+
+  return ctx.sort(_sorter);
 };
 
 // Public
 
 module.exports = function(ctx) {
   return {
-    asc: (sortBy) => sort(ctx, ascSorter, sortBy),
-    desc: (sortBy) => sort(ctx, descSorter, sortBy)
+    asc: (sortBy) => sort(1, ctx, sortBy),
+    desc: (sortBy) => sort(-1, ctx, sortBy)
   };
 };

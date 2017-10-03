@@ -1,6 +1,6 @@
 {
   "name": "fast-sort",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Blazing fast array sorting.",
   "main": "dist/sort.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
@@ -32,6 +32,6 @@
   "//": "WARNING: Do not remove!.  Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
   "private": true,
   "dependencies": {
-    "js-flock": "^2.4.6"
+    "js-flock": "^2.4.7"
   }
 }

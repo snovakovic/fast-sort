@@ -24,19 +24,18 @@ var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
   return direction;
 };
 
-var ascSorter = sorter.bind(null, 1);
-var descSorter = sorter.bind(null, -1);
-
 var emptySortBy = function emptySortBy(a) {
   return a;
 };
 
-var sort = function sort(ctx, _sorter) {
+var sort = function sort(direction, ctx) {
   var sortBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : emptySortBy;
 
   if (!Array.isArray(ctx)) return ctx;
 
-  return Array.isArray(sortBy) ? ctx.sort(_sorter.bind(undefined, sortBy.shift(), sortBy, 0)) : ctx.sort(_sorter.bind(undefined, sortBy, undefined, 0));
+  var _sorter = Array.isArray(sortBy) ? sorter.bind(undefined, direction, sortBy.shift(), sortBy, 0) : sorter.bind(undefined, direction, sortBy, undefined, 0);
+
+  return ctx.sort(_sorter);
 };
 
 // Public
@@ -44,10 +43,10 @@ var sort = function sort(ctx, _sorter) {
 var sort_1 = function sort_1(ctx) {
   return {
     asc: function asc(sortBy) {
-      return sort(ctx, ascSorter, sortBy);
+      return sort(1, ctx, sortBy);
     },
     desc: function desc(sortBy) {
-      return sort(ctx, descSorter, sortBy);
+      return sort(-1, ctx, sortBy);
     }
   };
 };
