@@ -1,6 +1,6 @@
 {
   "name": "fast-sort",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Blazing fast array sorting.",
   "main": "sort.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
@@ -24,6 +24,6 @@
     "orderBy"
   ],
   "dependencies": {
-    "js-flock": "^2.4.7"
+    "js-flock": "^3.0.4"
   }
 }
