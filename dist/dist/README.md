@@ -14,6 +14,9 @@ Take a look at the benchmark section for more information about performance.
 
 fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module. check [js-flock](https://www.npmjs.com/package/js-flock) for more cool modules.
 
+Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
+
 
 ### Capabilities
 
@@ -21,7 +24,6 @@ fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library 
 * Sorting flat arrays
 * Sorting by multiple properties
 * Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
-* Mutates input array in a same way as native [Array.prototype.sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) does.
 
 
 ### Example
