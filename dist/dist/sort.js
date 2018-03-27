@@ -1,4 +1,4 @@
-// Internals
+// >>> INTERNALS <<<
 
 const sorter = function(direction, sortBy, thenBy, depth, a, b) {
   const valA = sortBy(a);
@@ -30,7 +30,7 @@ const sort = function(direction, ctx, sortBy = emptySortBy) {
   return ctx.sort(_sorter);
 };
 
-// Public
+// >>> PUBLIC <<<
 
 module.exports = function(ctx) {
   return {

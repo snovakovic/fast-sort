@@ -4,7 +4,7 @@
 	(global.sort = global.sort || {}, global.sort.js = factory());
 }(this, (function () { 'use strict';
 
-// Internals
+// >>> INTERNALS <<<
 
 var sorter = function sorter(direction, sortBy, thenBy, depth, a, b) {
   var valA = sortBy(a);
@@ -38,7 +38,7 @@ var sort = function sort(direction, ctx) {
   return ctx.sort(_sorter);
 };
 
-// Public
+// >>> PUBLIC <<<
 
 var sort_1 = function sort_1(ctx) {
   return {
