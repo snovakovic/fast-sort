@@ -1,6 +1,6 @@
 {
   "name": "fast-sort",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Blazing fast array sorting.",
   "main": "dist/sort.es5.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",

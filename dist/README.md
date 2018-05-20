@@ -12,17 +12,19 @@
 Blazing fast array sorting that **outperforms lodash sorting by ~2x** (in some cases it's more then 5x).
 Take a look at the benchmark section for more information about performance.
 
-fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module. check [js-flock](https://www.npmjs.com/package/js-flock) for more cool modules.
+fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module. Please reference [js-flock](https://github.com/snovakovic/js-flock) github repository for source code, issue opening, contributing or giving a star ;)
+
 
 Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
 Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
 
 
-### Capabilities
+### Fast sort higlights
 
-* Sorting array of objects (supports comparing by nested object properties)
+* Sorting an array of objects by one or more properties
 * Sorting flat arrays
-* Sorting by multiple properties
+* Easy to read syntax for asc and desc sorting
+* Faster then other sort alternatives
 * Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
 
 
@@ -49,24 +51,6 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort(33).desc(); // => 33
 ```
 
-### Including module
-
-```javascript
-  // npm install fast-sort --save
-  import sort from 'fast-sort'; // Loads unmodified es6 code
-  import sort from 'fast-sort/sort.es5'; // Loads transpiled es5 code
-  import sort from 'fast-sort/sort.es5.min'; // Loads transpiled minified es5 code
-```
-
-fast-sort is part of js-flock library and can be included throught js-flock.
-
-```javascript
-  // npm install js-flock --save
-  import sort from 'js-flock/sort';
-  import sort from 'js-flock/es5/sort';
-  import sort from 'js-flock/es5/sort.min';
-```
-
 ### Benchmark
 
 Benchmarking sort is not an easy task as there is so many different scenarios that can happen while sorting.
@@ -83,10 +67,7 @@ Benchmark has been run on:
 * 16 GB Ram
 * Intel® Core™ i5-4570 CPU @ 3.20GHz × 4
 * Ubuntu 16.04
-* Node 6.9.2
-
-fast-sort benchmark result are represent with flock name and is colored in blue.
-
+* Node 8.9.1
 
 ![benchmark results](https://github.com/snovakovic/fast-sort/raw/master/benchmark.png)
 
