@@ -51,15 +51,6 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort(33).desc(); // => 33
 ```
 
-### Including module
-
-```javascript
-  // npm install fast-sort --save
-  import sort from 'fast-sort'; // Loads unmodified es6 code
-  import sort from 'fast-sort/sort.es5'; // Loads transpiled es5 code
-  import sort from 'fast-sort/sort.es5.min'; // Loads transpiled minified es5 code
-```
-
 ### Benchmark
 
 Benchmarking sort is not an easy task as there is so many different scenarios that can happen while sorting.
