@@ -11,12 +11,14 @@ function run(err) {
     return;
   }
 
-  const sort = require('fast-sort');
+  const sortDefault = require('fast-sort');
+  const sortEs6 = require('fast-sort/sort');
   const sortEs5 = require('fast-sort/sort.es5');
   const sortEs5Min = require('fast-sort/sort.es5.min');
 
   // sort
-  assert.deepEqual(sort([1, 4, 3]).asc(), [1, 3, 4]);
+  assert.deepEqual(sortDefault([1, 4, 3]).asc(), [1, 3, 4]);
+  assert.deepEqual(sortEs6([1, 4, 3]).asc(), [1, 3, 4]);
   assert.deepEqual(sortEs5([1, 4, 3]).asc(), [1, 3, 4]);
   assert.deepEqual(sortEs5Min([1, 4, 3]).asc(), [1, 3, 4]);
   console.log('sort: SUCCESS');
