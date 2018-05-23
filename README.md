@@ -69,7 +69,7 @@ Benchmark has been run on:
 * Ubuntu 16.04
 * Node 8.9.1
 
-![benchmark results](https://github.com/snovakovic/fast-sort/raw/master/benchmark.png)
+![benchmark results](https://github.com/snovakovic/fast-sort/raw/master/benchmark.jpg)
 
 
 #### Running benchmark
