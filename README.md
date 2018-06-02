@@ -36,15 +36,29 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort([1,4,2]).asc(); // sort array in ascending order [1, 2, 4]
   sort([1,4,2]).desc(); // sort array in descending order [4, 2, 1]
 
-  // Sort persons [Object] ascending by lowercase firstName
-  sort(persons).asc((p) => p.firstName.toLowerCase());
+  // Sort persons [Object] ascending by firstName
+  sort(users).asc(u => u.firstName);
 
-  // Sort persons by multiple properties
-  sort(persons).desc([
-    (p) => p.firstName, // Sort by first name
-    (p) => p.lastName, // Persons that have same firstName will be sorted by lastName
-    (p) => p.dob // Persons that have same firstName and lastName will be sorted by dob
+  // Same as above (but bit more performant)
+  // NOTE: sorting by string is avaliable from version [1.3.0]
+  sort(users).asc('firstName');
+
+  // If we wan't to sort by nested property we need to provide sort function
+  // String alternative is only available for root level properties
+  sort(users).desc(u => u.address.city);
+
+  // Sort users by multiple properties
+  sort(users).desc([
+    'firstName', // Sort by first name
+    'lastName', // Persons that have same firstName will be sorted by lastName
+    u => u.address.city // NOTE: For nested properties we have to use function as 'address.city' is not valid property
   ]);
+
+  // Sort by any custom logic e.g sort vip users first
+  sort(users).asc([
+    u => u.tags === 'vip' ? 1 : -1, // Sort users that have vip tag to the top
+    u => u.firstName // users with vip tag will be sorted by firstName
+  ])
 
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
