@@ -55,7 +55,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   ]);
 
   // Sort in multiple directions
-  // NOTE: Available from version [1.4.0]
+  // NOTE: Available from version [1.5.0]
   sort(persons).by([
     { asc: 'name' }
     { desc: 'age' }
