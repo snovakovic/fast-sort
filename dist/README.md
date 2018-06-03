@@ -54,11 +54,16 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
     u => u.address.city // NOTE: For nested properties we have to use function as 'address.city' is not valid property
   ]);
 
+  // Sort in multiple directions
+  // NOTE: Available from version [1.4.0]
+  sort(persons).by([
+    { asc: 'name' }
+    { desc: 'age' }
+    { asc: p => p.address.city }
+  ]);
+
   // Sort by any custom logic e.g sort vip users first
-  sort(users).asc([
-    u => u.tags === 'vip' ? 1 : -1, // Sort users that have vip tag to the top
-    u => u.firstName // users with vip tag will be sorted by firstName
-  ])
+  sort(users).asc(u => u.tags === 'vip' ? 1 : -1);
 
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null

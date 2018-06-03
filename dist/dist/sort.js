@@ -1,4 +1,6 @@
-// >>> INTERNALS <<<
+/* eslint no-use-before-define: 0 */
+
+// >>> SORTERS <<<
 
 const sorter = function(direction, a, b) {
   if (a === b) return 0;
@@ -10,9 +12,9 @@ const sorter = function(direction, a, b) {
 };
 
 /**
- * String sorter does not support nested property.
+ * stringSorter does not support nested property.
  * For nested properties or value transformation (e.g toLowerCase) we should use functionSorter
- * Based on benchmark testing using string sorter is bit faster then using equivalent function sorter
+ * Based on benchmark testing using stringSorter is bit faster then using equivalent function sorter
  * @example sort(users).asc('firstName')
  */
 const stringSorter = function(direction, sortBy, a, b) {
@@ -27,22 +29,59 @@ const functionSorter = function(direction, sortBy, a, b) {
 };
 
 /**
- * Return string or function sorter depending on sortBy value
- * @param {Function, String} sortBy
- * @returns {Function} sorter
+ * Used when we have sorting by multyple properties and when current sorter is function
+ * @example sort(users).asc([p => p.address.city, p => p.firstName])
  */
-const getMultyPropertySort = function(sortBy) {
-  if (typeof sortBy === 'string') {
-    return stringMultyPropertySort; // eslint-disable-line no-use-before-define
-  }
-
-  return functionMultyPropertySort; // eslint-disable-line no-use-before-define
+const multiPropFunctionSorter = function(sortBy, thenBy, depth, direction, a, b) {
+  return multiPropEqualityHandler(sortBy(a), sortBy(b), thenBy, depth, direction, a, b);
 };
 
-const multyPropertySort = function(valA, valB, direction, thenBy, depth, a, b) {
-  if (valA === valB) {
+/**
+ * Used when we have sorting by multyple properties and when current sorter is string
+ * @example sort(users).asc(['firstName', 'lastName'])
+ */
+const multiPropStringSorter = function(sortBy, thenBy, depth, direction, a, b) {
+  return multiPropEqualityHandler(a[sortBy], b[sortBy], thenBy, depth, direction, a, b);
+};
+
+/**
+ * Used with 'by' sorter when we have sorting in multiple direction
+ * @example sort(users).asc(['firstName', 'lastName'])
+ */
+const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, a, b) {
+  const sortBy = sortByObj.asc || sortByObj.desc;
+  const direction = sortByObj.asc ? 1 : -1;
+
+  if (!sortBy) {
+    throw Error(`sort: Invalid 'by' sorting onfiguration.
+      Expecting object with 'asc' or 'desc' key`);
+  }
+
+  const multiSorter = getMultiPropertySorter(sortBy);
+  return multiSorter(sortBy, thenBy, depth, direction, a, b);
+};
+
+// >>> HELPERS <<<
+
+/**
+ * Return multiProperty sort handler based on sortBy value
+ */
+const getMultiPropertySorter = function(sortBy) {
+  const type = typeof sortBy;
+  if (type === 'string') {
+    return multiPropStringSorter;
+  } else if (type === 'function') {
+    return multiPropFunctionSorter;
+  }
+
+  return multiPropObjectSorter;
+};
+
+const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, a, b) {
+  if (valA === valB || (valA == null && valB == null)) {
     if (thenBy.length > depth) {
-      return getMultyPropertySort(thenBy[depth])(direction, thenBy[depth], thenBy, depth + 1, a, b);
+      const multiSorter = getMultiPropertySorter(thenBy[depth]);
+      return multiSorter(thenBy[depth], thenBy, depth + 1, direction, a, b);
     }
     return 0;
   }
@@ -51,25 +90,7 @@ const multyPropertySort = function(valA, valB, direction, thenBy, depth, a, b) {
 };
 
 /**
- * Used when we have sorting by multyple properties and when current sorter is function
- * @example sort(users).asc([p => p.address.city, p => p.firstName])
- */
-const functionMultyPropertySort = function(direction, sortBy, thenBy, depth, a, b) {
-  return multyPropertySort(sortBy(a), sortBy(b), direction, thenBy, depth, a, b);
-};
-
-/**
- * Used when we have sorting by multyple properties and when current sorter is string
- * @example sort(users).asc(['firstName', 'lastName'])
- */
-const stringMultyPropertySort = function(direction, sortBy, thenBy, depth, a, b) {
-  return multyPropertySort(a[sortBy], b[sortBy], direction, thenBy, depth, a, b);
-};
-
-/**
  * Pick sorter based on provided sortBy value
- * @param {Array} ctx - Array that will be sorted
- * @param {undefined, String, Function, Function[]} sortBy
  */
 const sort = function(direction, ctx, sortBy) {
   if (!Array.isArray(ctx)) return ctx;
@@ -85,10 +106,11 @@ const sort = function(direction, ctx, sortBy) {
     _sorter = sorter.bind(undefined, direction);
   } else if (typeof sortBy === 'string') {
     _sorter = stringSorter.bind(undefined, direction, sortBy);
-  } else if (Array.isArray(sortBy)) {
-    _sorter = getMultyPropertySort(sortBy[0]).bind(undefined, direction, sortBy.shift(), sortBy, 0);
-  } else {
+  } else if (typeof sortBy === 'function') {
     _sorter = functionSorter.bind(undefined, direction, sortBy);
+  } else {
+    _sorter = getMultiPropertySorter(sortBy[0])
+      .bind(undefined, sortBy.shift(), sortBy, 0, direction);
   }
 
   return ctx.sort(_sorter);
@@ -99,6 +121,18 @@ const sort = function(direction, ctx, sortBy) {
 module.exports = function(ctx) {
   return {
     asc: (sortBy) => sort(1, ctx, sortBy),
-    desc: (sortBy) => sort(-1, ctx, sortBy)
+    desc: (sortBy) => sort(-1, ctx, sortBy),
+    by: (sortBy) => {
+      if (!Array.isArray(ctx)) return ctx;
+
+      if (!Array.isArray(sortBy) || sortBy.length < 2) {
+        throw Error(`sort: Invalid usage of 'by' sorter.
+          'by' sorter should be used only for sorting in multiple directions.
+          Did you mean to use 'asc' or 'desc' sorter instead?`);
+      }
+
+      const _sorter = multiPropObjectSorter.bind(undefined, sortBy.shift(), sortBy, 0, undefined);
+      return ctx.sort(_sorter);
+    }
   };
 };
