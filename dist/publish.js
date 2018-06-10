@@ -68,6 +68,7 @@ execute('rm -rf node_modules/js-flock && rm -rf dist')
     delete packageJson.private; // Used to prevent accidental publish with npm publish
     delete packageJson['//'];
     delete packageJson.devDependencies;
+    delete packageJson.dependencies;
 
     packageJson.main = 'sort.js';
 
