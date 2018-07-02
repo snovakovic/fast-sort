@@ -1,6 +1,6 @@
 {
   "name": "fast-sort",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Fast and powerful array sorting. Sort by any property in any direction with easy to read syntax.",
   "main": "dist/sort.es5.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
@@ -32,6 +32,6 @@
   "//": "WARNING: Do not remove!.  Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
   "private": true,
   "dependencies": {
-    "js-flock": "^3.5.1"
+    "js-flock": "^3.5.3"
   }
 }

@@ -125,10 +125,20 @@ module.exports = function(ctx) {
     by: (sortBy) => {
       if (!Array.isArray(ctx)) return ctx;
 
-      if (!Array.isArray(sortBy) || sortBy.length < 2) {
-        throw Error(`sort: Invalid usage of 'by' sorter.
-          'by' sorter should be used only for sorting in multiple directions.
+      if (!Array.isArray(sortBy)) {
+        throw Error(`sort: Invalid usage of 'by' sorter. Array syntax is required.
           Did you mean to use 'asc' or 'desc' sorter instead?`);
+      }
+
+      // Unwrap sort by to faster path
+      if (sortBy.length === 1) {
+        const direction = sortBy[0].asc ? 1 : -1;
+        const sortOnProp = sortBy[0].asc || sortBy[0].desc;
+        if (!sortOnProp) {
+          throw Error(`sort: Invalid 'by' sorting onfiguration.
+            Expecting object with 'asc' or 'desc' key`);
+        }
+        return sort(direction, ctx, sortOnProp);
       }
 
       const _sorter = multiPropObjectSorter.bind(undefined, sortBy.shift(), sortBy, 0, undefined);
