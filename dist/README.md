@@ -44,8 +44,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   // NOTE: sorting by string is avaliable from version [1.3.0]
   sort(users).asc('firstName');
 
-  // If we wan't to sort by nested property we need to provide sort function
-  // String alternative is only available for root level properties
+  // For sorting by nested property we have to provide sort function
   sort(users).desc(u => u.address.city);
 
   // Sort users by multiple properties

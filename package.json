@@ -1,6 +1,6 @@
 {
   "name": "fast-sort",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Fast and powerful array sorting. Sort by any property in any direction with easy to read syntax.",
   "main": "dist/sort.es5.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
