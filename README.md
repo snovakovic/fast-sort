@@ -12,14 +12,7 @@
 Blazing fast array sorting that **outperforms lodash sorting by ~2x** (in some cases it's more then 5x).
 Take a look at the benchmark section for more information about performance.
 
-fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module. Please reference [js-flock](https://github.com/snovakovic/js-flock) github repository for source code, issue opening, contributing or giving a star ;)
-
-
-Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
-Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
-
-
-### Fast sort higlights
+### Fast sort highlights
 
 * Sorting an array of objects by one or more properties
 * Sorting flat arrays
@@ -28,30 +21,32 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 * Faster then other sort alternatives
 * Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
 
+Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort
 
 ### Example
 
 ```javascript
   import sort from 'fast-sort';
 
-  sort([1,4,2]).asc(); // sort array in ascending order [1, 2, 4]
-  sort([1,4,2]).desc(); // sort array in descending order [4, 2, 1]
+  sort([1,4,2]).asc(); // => [1, 2, 4]
+  sort([1,4,2]).desc(); // => [4, 2, 1]
 
-  // Sort persons [Object] ascending by firstName
+  // Sort users [Object] ascending by firstName
   sort(users).asc(u => u.firstName);
 
-  // Same as above (but bit more performant)
-  // NOTE: sorting by string is avaliable from version [1.3.0]
+  // If sorting by single property we can use string syntax
+  // NOTE: sorting by string is available from version [1.3.0]
   sort(users).asc('firstName');
 
   // For sorting by nested property we have to provide sort function
   sort(users).desc(u => u.address.city);
 
-  // Sort users by multiple properties
+  // Sort users by firstName, lastName and city
   sort(users).desc([
-    'firstName', // Sort by first name
-    'lastName', // Persons that have same firstName will be sorted by lastName
-    u => u.address.city // NOTE: For nested properties we have to use function as 'address.city' is not valid property
+    'firstName',
+    'lastName',
+    u => u.address.city // String syntax is not available for nested properties
   ]);
 
   // Sort in multiple directions
@@ -59,7 +54,6 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort(persons).by([
     { asc: 'name' }
     { desc: 'age' }
-    { asc: p => p.address.city }
   ]);
 
   // Sort by any custom logic e.g sort vip users first
@@ -69,6 +63,9 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort(null).asc(); // => null
   sort(33).desc(); // => 33
 ```
+
+NOTE: fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module.
+
 
 ### Benchmark
 
