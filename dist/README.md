@@ -9,7 +9,7 @@
 [![NPM Package](https://nodei.co/npm/fast-sort.png)](https://www.npmjs.com/package/fast-sort)
 
 
-Blazing fast array sorting that **outperforms lodash sorting by ~2x** (in some cases it's more then 5x).
+Blazing fast array sorting that **outperforms lodash sorting by ~2x** (in some cases it's more than 5x).
 Take a look at the benchmark section for more information about performance.
 
 fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module. Please reference [js-flock](https://github.com/snovakovic/js-flock) github repository for source code, issue opening, contributing or giving a star ;)
@@ -25,7 +25,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 * Sorting flat arrays
 * Sorting in multiple directions
 * Easy to read syntax for asc and desc sorting
-* Faster then other sort alternatives
+* Faster than other sort alternatives
 * Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
 
 
