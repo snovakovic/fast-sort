@@ -9,7 +9,7 @@
 [![NPM Package](https://nodei.co/npm/fast-sort.png)](https://www.npmjs.com/package/fast-sort)
 
 
-Blazing fast array sorting that **outperforms lodash sorting by ~2x** (in some cases it's more then 5x).
+Blazing fast array sorting that **outperforms lodash sorting by ~2x** (in some cases it's more than 5x).
 Take a look at the benchmark section for more information about performance.
 
 ### Fast sort highlights
@@ -18,7 +18,7 @@ Take a look at the benchmark section for more information about performance.
 * Sorting flat arrays
 * Sorting in multiple directions
 * Easy to read syntax for asc and desc sorting
-* Faster then other sort alternatives
+* Faster than other sort alternatives
 * Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
 
 Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
