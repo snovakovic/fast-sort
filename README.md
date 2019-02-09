@@ -19,7 +19,7 @@ Take a look at the benchmark section for more information about performance.
   sort([1,4,2]).asc(); // => [1, 2, 4]
 
   // Sort array of objects
-  sort(users).asc(u => u.firstName);
+  sort(users).desc(u => u.firstName);
 
   // Sort in multiple directions
   sort(users).by([
@@ -30,15 +30,15 @@ Take a look at the benchmark section for more information about performance.
 
 ### Fast sort highlights
 
-* Sorting an array of objects by one or more properties
-* Sorting flat arrays
-* Sorting in multiple directions
-* Easy to read syntax for asc and desc sorting
-* Faster than other sort alternatives
-* Undefined and null values are always sorted to bottom of list no matter if ordering is ascending or descending.
+* Sort array of objects by one or more properties
+* Sort flat arrays
+* Sort in multiple directions
+* Easy to read syntax
+* Faster than other popular sort alternatives
+* Undefined and null values are always sorted to bottom
 
 Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
-Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort
+Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
 
 ### Example
 
