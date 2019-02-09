@@ -12,6 +12,22 @@
 Blazing fast array sorting that **outperforms lodash sorting by ~2x** (in some cases it's more than 5x).
 Take a look at the benchmark section for more information about performance.
 
+### Quick example
+
+```javascript
+  // Sort flat array
+  sort([1,4,2]).asc(); // => [1, 2, 4]
+
+  // Sort array of objects
+  sort(users).asc(u => u.firstName);
+
+  // Sort in multiple directions
+  sort(users).by([
+    { asc: 'name' }
+    { desc: 'age' }
+  ]);
+```
+
 ### Fast sort highlights
 
 * Sorting an array of objects by one or more properties
@@ -32,7 +48,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort([1,4,2]).asc(); // => [1, 2, 4]
   sort([1,4,2]).desc(); // => [4, 2, 1]
 
-  // Sort users [Object] ascending by firstName
+  // Sort users Object[] ascending by firstName
   sort(users).asc(u => u.firstName);
 
   // If sorting by single property we can use string syntax
@@ -51,7 +67,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 
   // Sort in multiple directions
   // NOTE: Available from version [1.5.0]
-  sort(persons).by([
+  sort(users).by([
     { asc: 'name' }
     { desc: 'age' }
   ]);
@@ -62,6 +78,17 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
   sort(33).desc(); // => 33
+
+  // By default sort is mutating input array,
+  const arr = [1, 4, 2];
+  const sortedArr = sort(arr).asc();
+  console.log(arr) // => [1, 2, 4]
+
+  // We can easily prevent mutating of input array by using ES6 spread operator
+  const arr = [1, 4, 2];
+  const sortedArr = sort([...arr]).asc();
+  console.log(arr) // => [1, 4, 2]
+  console.log(sortedArr) // => [1, 2, 4]
 ```
 
 NOTE: fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module.
@@ -69,11 +96,11 @@ NOTE: fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) li
 
 ### Benchmark
 
-Benchmarking sort is not an easy task as there is so many different scenarios that can happen while sorting.
-Because of that 5 different benchmarks have been created to test how fast-sort is behaving on different inputs and sort scenarios.
-Each benchmark is run with different array sizes from small 100 items to large 100 000 items.
+Five different benchmarks have been created to get better insight of how fast-sort perform under different scenarios.
+Each benchmark is run with different array sizes raging from small 100 items to large 100 000 items.
 
-Every run of benchmark outputs different results but the results are constantly better then lodash sort and in following benchmark score ranges from 1.37x to 13.51x faster then lodash sort. This will vary on each benchmark run but it should not vary too much.
+Every run of benchmark outputs different results but the results are constantly showing better scores compared to
+similar popular sorting libraries.
 
 
 #### Benchmark scores

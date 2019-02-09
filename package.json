@@ -29,7 +29,7 @@
     "eslint-plugin-import": "^2.7.0",
     "fs-extra": "^4.0.1"
   },
-  "//": "WARNING: Do not remove!.  Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
+  "//": "WARNING: Do not remove!. Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
   "private": true,
   "dependencies": {
     "js-flock": "^3.5.3"
