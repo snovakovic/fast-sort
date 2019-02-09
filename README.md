@@ -82,13 +82,13 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   // By default sort is mutating input array,
   const arr = [1, 4, 2];
   const sortedArr = sort(arr).asc();
-  console.log(arr) // => [1, 2, 4]
+  console.log(arr); // => [1, 2, 4]
 
   // We can easily prevent mutating of input array by using ES6 spread operator
   const arr = [1, 4, 2];
   const sortedArr = sort([...arr]).asc();
-  console.log(arr) // => [1, 4, 2]
-  console.log(sortedArr) // => [1, 2, 4]
+  console.log(arr); // => [1, 4, 2]
+  console.log(sortedArr); // => [1, 2, 4]
 ```
 
 NOTE: fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module.
