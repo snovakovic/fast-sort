@@ -1,0 +1,22 @@
+{
+  "name": "sort-benchmark",
+  "version": "1.0.0",
+  "description": "benchmark for js-flock sort",
+  "main": "index.js",
+  "dependencies": {
+    "array-sort": "^0.1.4",
+    "chalk": "^2.1.0",
+    "cli-table2": "^0.2.0",
+    "js-flock": "^3.5.1",
+    "lodash": "^4.17.4",
+    "minimist": "^1.2.0",
+    "single-line-log": "^1.1.2",
+    "sort-array": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "stefan.novakovich@gmail.com",
+  "license": "MIT"
+}
