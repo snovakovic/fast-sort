@@ -23,10 +23,10 @@ if (flockOnly) {
 }
 
 const runConfiguration = [
-  { size: 100, noRuns: 100, flockOnly },
-  { size: 1000, noRuns: 50, flockOnly },
-  { size: 10000, noRuns: 25, flockOnly },
-  { size: 100000, noRuns: 5, flockOnly }
+  { size: 100, numberOfRuns: 100, flockOnly },
+  { size: 1000, numberOfRuns: 50, flockOnly },
+  { size: 10000, numberOfRuns: 25, flockOnly },
+  { size: 100000, numberOfRuns: 5, flockOnly }
 ];
 
 const headerItems = [Chalk.hex('f49b42')('Library')];

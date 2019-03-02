@@ -2,8 +2,8 @@ const runner = require('./../runner');
 
 // Measure times
 
-module.exports.run = function(impl, testArr, controlArr, noRuns, flockOnly) {
-  const run = runner.bind(undefined, testArr, controlArr, noRuns);
+module.exports.run = function(impl, testArr, controlArr, numberOfRuns, flockOnly) {
+  const run = runner.bind(undefined, testArr, controlArr, numberOfRuns);
 
   const output = {
     flock: impl.flock ? run(impl.flock) : undefined

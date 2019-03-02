@@ -25,7 +25,7 @@ const implementations = {
 
 // Measure times
 
-module.exports.run = function({ size, noRuns, flockOnly }) {
+module.exports.run = function({ size, numberOfRuns, flockOnly }) {
   const testArr = [];
   for (let i = 0; i < size; i++) { // eslint-disable-line no-plusplus
     testArr.push({
@@ -36,5 +36,5 @@ module.exports.run = function({ size, noRuns, flockOnly }) {
   }
 
   const controlArr = implementations.flock(testArr.slice(0));
-  return base.run(implementations, testArr, controlArr, noRuns, flockOnly);
+  return base.run(implementations, testArr, controlArr, numberOfRuns, flockOnly);
 };

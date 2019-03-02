@@ -1,11 +1,11 @@
 const assert = require('assert');
 
-module.exports = function(arr, controlArr, noRuns, sortImplementation) {
+module.exports = function(arr, controlArr, numberOfRuns, sortImplementation) {
   const times = [];
   const { length } = arr;
   assert.equal(arr.length, controlArr.length, 'control array does not match test array');
 
-  for (let i = 0; i < noRuns; i++) {
+  for (let i = 0; i < numberOfRuns; i++) {
     const arrToSort = arr.slice(0);
     const start = process.hrtime();
     const sorted = sortImplementation(arrToSort);
