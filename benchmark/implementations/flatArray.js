@@ -22,14 +22,12 @@ const implementations = {
     })
 };
 
-// Measure times
-
 module.exports.run = function({ size, numberOfRuns, flockOnly, randomizer = Math.random }) {
   const testArr = [];
-  for (let i = 0; i < size; i++) { // eslint-disable-line no-plusplus
+  for (let i = 0; i < size; i++) {
     testArr.push(randomizer());
   }
 
-  const controlArr = implementations.flock(testArr.slice(0));
+  const controlArr = implementations.flock([...testArr]);
   return base.run(implementations, testArr, controlArr, numberOfRuns, flockOnly);
 };

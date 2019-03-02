@@ -6,12 +6,11 @@ const lodash = require('lodash');
 
 const base = require('./base');
 
-
 const implementations = {
   flock: (arr) => jsFlock.sort(arr).asc((p) => p.level1.level2.amount),
   latestFlock: (arr) => latestFlockSort(arr).asc((p) => p.level1.level2.amount),
   lodash: (arr) => lodash.sortBy(arr, [(p) => p.level1.level2.amount]),
-  sortArray: (arr) => sortArray(arr, 'lebenchmarkvel1.level2.amount'),
+  sortArray: (arr) => sortArray(arr, 'level1.level2.amount'),
   arraySort: (arr) => arraySort(arr, 'level1.level2.amount'),
   native: (arr) =>
     arr.sort((a, b) => {
@@ -24,11 +23,9 @@ const implementations = {
     })
 };
 
-// Measure times
-
 module.exports.run = function({ size, numberOfRuns, flockOnly, randomizer = Math.random }) {
   const testArr = [];
-  for (let i = 0; i < size; i++) { // eslint-disable-line no-plusplus
+  for (let i = 0; i < size; i++) {
     testArr.push({
       name: 'test',
       level1: {
@@ -37,6 +34,6 @@ module.exports.run = function({ size, numberOfRuns, flockOnly, randomizer = Math
     });
   }
 
-  const controlArr = implementations.flock(testArr.slice(0));
+  const controlArr = implementations.flock([...testArr]);
   return base.run(implementations, testArr, controlArr, numberOfRuns, flockOnly);
 };

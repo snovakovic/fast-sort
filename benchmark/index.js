@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const Chalk = require('chalk');
+const chalk = require('chalk');
 const minimist = require('minimist');
 const Table = require('cli-table2');
 const log = require('single-line-log').stdout;
@@ -29,12 +29,12 @@ const runConfiguration = [
   { size: 100000, numberOfRuns: 5, flockOnly }
 ];
 
-const headerItems = [Chalk.hex('f49b42')('Library')];
-headerItems.push(...runConfiguration.map((c) => Chalk.hex('f49b42')(`${c.size} items`)));
+const headerItems = [chalk.hex('f49b42')('Library')];
+headerItems.push(...runConfiguration.map((c) => chalk.hex('f49b42')(`${c.size} items`)));
 
 function getRowValue(name, run) {
   if (!run[name]) {
-    return Chalk.red('NOT SUPPORTED');
+    return chalk.red('NOT SUPPORTED');
   }
 
   const flock = run.flock.average;
@@ -43,18 +43,20 @@ function getRowValue(name, run) {
   if (flock !== lib) {
     const color = flock < lib ? 'red' : 'green';
     const comparedToFlock = (Math.max(flock, lib) / Math.min(flock, lib)).toFixed(2);
-    comparison = Chalk[color](`${flock < lib ? '↓' : '↑'} ${comparedToFlock}x `);
+    comparison = chalk[color](`${flock < lib ? '↓' : '↑'} ${comparedToFlock}x `);
     comparison = `(${comparison})`;
   }
 
   const result = `${run[name].average.toFixed(4)}ms ${comparison}`;
-  return name === 'flock' ? Chalk.blue(result) : result;
+  return name === 'flock'
+    ? chalk.blue(result)
+    : result;
 }
 
 function addRow(libName, result, table) {
   const value = getRowValue.bind(null, libName);
 
-  if (libName === 'flock') libName = Chalk.blue(libName);
+  if (libName === 'flock') libName = chalk.blue(libName);
   table.push([libName, ...result.map((r) => value(r))]);
 }
 
