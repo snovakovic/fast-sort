@@ -10,7 +10,7 @@ const getPath = function(subPath) {
 
 const path = {
   dist: getPath('dist'),
-  jsFlock: getPath('node_modules/js-flock/dist')
+  jsFlock: getPath('node_modules/js-flock/')
 };
 
 const filesToInclude = [{
@@ -42,7 +42,6 @@ const filesToInclude = [{
 const execute = function(command) {
   return new Promise((resolve, reject) => {
     exec(command, (err, stdout) => {
-      console.log('called', err);
       if (err) {
         return reject(err);
       }
@@ -60,7 +59,7 @@ async function publish() {
 
   console.info('Installing js-flock');
 
-  await execute('npm install --no-package-lock js-flock');
+  await execute('npm install --no-save js-flock');
 
   console.info('Coping files...');
 
