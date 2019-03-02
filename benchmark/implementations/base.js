@@ -1,9 +1,7 @@
 const runner = require('./../runner');
 
-// Measure times
-
 module.exports.run = function({ sortImplementation, testArr, numberOfRuns, flockOnly }) {
-  // Assert that sort of all implementations match control array
+  // Control array to make sure that all implementation have sorted arrays correctly
   const controlArr = sortImplementation.flock([...testArr]);
   const run = runner.bind(undefined, testArr, controlArr, numberOfRuns);
 

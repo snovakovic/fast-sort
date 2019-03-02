@@ -1,4 +1,3 @@
-
 const jsFlock = require('js-flock');
 const latestFlockSort = require('../../dist/sort.js');
 const sortArray = require('sort-array');

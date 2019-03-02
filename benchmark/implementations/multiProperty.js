@@ -1,4 +1,3 @@
-
 const jsFlock = require('js-flock');
 const latestFlockSort = require('../../dist/sort.js');
 const arraySort = require('array-sort');
@@ -23,11 +22,9 @@ const sortImplementation = {
   arraySort: (arr) => arraySort(arr, 'am1', 'am2')
 };
 
-// Measure times
-
 module.exports.run = function({ size, numberOfRuns, flockOnly }) {
   const testArr = [];
-  for (let i = 0; i < size; i++) { // eslint-disable-line no-plusplus
+  for (let i = 0; i < size; i++) {
     testArr.push({
       name: 'test',
       am1: getRandomInt(1, 20),

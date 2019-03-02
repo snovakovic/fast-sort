@@ -8,8 +8,7 @@
   "homepage": "https://github.com/snovakovic/fast-sort#readme",
   "scripts": {
     "test": "node integration_test/index.js",
-    "publish": "node publish",
-    "benchmark": "node benchmark"
+    "publish": "node publish"
   },
   "repository": {
     "type": "git",
