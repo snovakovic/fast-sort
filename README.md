@@ -9,7 +9,7 @@
 [![NPM Package](https://nodei.co/npm/fast-sort.png)](https://www.npmjs.com/package/fast-sort)
 
 
-Blazing fast array sorting that **outperforms lodash sorting by ~2x** (in some cases it's more than 5x).
+Blazing fast array sorting that **outperforms other popular sort libraries even up to 20x.**
 Take a look at the benchmark section for more information about performance.
 
 ### Quick example
@@ -21,10 +21,16 @@ Take a look at the benchmark section for more information about performance.
   // Sort array of objects
   sort(users).desc(u => u.firstName);
 
+  // Sort on multiple properties
+  sort(users).asc([
+    u => u.firstName,
+    u => u.lastName
+  ]);
+
   // Sort in multiple directions
   sort(users).by([
-    { asc: 'name' }
-    { desc: 'age' }
+    { asc: u => u.name },
+    { desc: u => u.age }
   ]);
 ```
 
@@ -68,7 +74,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   // Sort in multiple directions
   // NOTE: Available from version [1.5.0]
   sort(users).by([
-    { asc: 'name' }
+    { asc: 'name' },
     { desc: 'age' }
   ]);
 
@@ -99,8 +105,7 @@ NOTE: fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) li
 Five different benchmarks have been created to get better insight of how fast-sort perform under different scenarios.
 Each benchmark is run with different array sizes raging from small 100 items to large 100 000 items.
 
-Every run of benchmark outputs different results but the results are constantly showing better scores compared to
-similar popular sorting libraries.
+Every run of benchmark outputs different results but the results are constantly showing better scores compared to similar popular sorting libraries.
 
 
 #### Benchmark scores
@@ -119,10 +124,10 @@ Benchmark has been run on:
 
 To run benchmark on your PC follow steps from below
 
-1) git clone https://github.com/snovakovic/js-flock.git
-2) cd js-flock
+1) git clone https://github.com/snovakovic/fast-sort.git
+2) cd fast-sort/benchmark
 3) npm install
-4) npm run benchmark:sort
+4) npm start
 
 In case you notice any irregularities in benchmark or you want to add sort library to benchmark score
-please open issue [here](https://github.com/snovakovic/js-flock/issues)
+please open issue [here](https://github.com/snovakovic/fast-sort)
