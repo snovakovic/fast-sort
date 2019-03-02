@@ -7,7 +7,7 @@ const lodash = require('lodash');
 
 const base = require('./base');
 
-const implementations = {
+const sortImplementation = {
   flock: (arr) => jsFlock.sort(arr).asc([
     (p) => p.am1,
     (p) => p.am2
@@ -35,6 +35,5 @@ module.exports.run = function({ size, numberOfRuns, flockOnly }) {
     });
   }
 
-  const controlArr = implementations.flock(testArr.slice(0));
-  return base.run(implementations, testArr, controlArr, numberOfRuns, flockOnly);
+  return base.run({ sortImplementation, testArr, numberOfRuns, flockOnly });
 };
