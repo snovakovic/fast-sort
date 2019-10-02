@@ -21,6 +21,13 @@ function run(err) {
   assert.deepEqual(sortEs6([1, 4, 3]).asc(), [1, 3, 4]);
   assert.deepEqual(sortEs5([1, 4, 3]).asc(), [1, 3, 4]);
   assert.deepEqual(sortEs5Min([1, 4, 3]).asc(), [1, 3, 4]);
+
+  assert.deepEqual(sortDefault(['A10', 'A1', 'B10', 'B2']).by([{
+    asc: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
+  }]), ['A1', 'A10', 'B2', 'B10']);
+
+  assert.deepEqual(sortDefault(['A10', 'A1', 'B10', 'B2']).asc([new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })]), ['A1', 'A10', 'B2', 'B10']);
+
   console.log('sort: SUCCESS');
 }
 

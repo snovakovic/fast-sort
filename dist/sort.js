@@ -29,6 +29,13 @@ const functionSorter = function(direction, sortBy, a, b) {
 };
 
 /**
+ * @example sort(users).asc(new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});y)
+ */
+const collatorSorter = function(direction, sortBy, a, b) {
+  return sortBy.compare(a, b) * direction;
+};
+
+/**
  * Used when we have sorting by multyple properties and when current sorter is function
  * @example sort(users).asc([p => p.address.city, p => p.firstName])
  */
@@ -108,6 +115,8 @@ const sort = function(direction, ctx, sortBy) {
     _sorter = stringSorter.bind(undefined, direction, sortBy);
   } else if (typeof sortBy === 'function') {
     _sorter = functionSorter.bind(undefined, direction, sortBy);
+  } else if (typeof sortBy === 'object' && sortBy instanceof Intl.Collator) {
+    _sorter = collatorSorter.bind(undefined, direction, sortBy);
   } else {
     _sorter = getMultiPropertySorter(sortBy[0])
       .bind(undefined, sortBy.shift(), sortBy, 0, direction);
