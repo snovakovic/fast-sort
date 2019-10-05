@@ -1,6 +1,6 @@
 {
   "name": "fast-sort",
-  "version": "1.5.6",
+  "version": "1.6.0",
   "description": "Fast and powerful array sorting. Sort by any property in any direction with easy to read syntax.",
   "main": "dist/sort.es5.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
@@ -29,6 +29,9 @@
     "eslint-plugin-import": "^2.7.0",
     "fs-extra": "^4.0.1"
   },
+  "contributors": [
+    "Tony Gutierrez: https://github.com/tony-gutierrez"
+  ],
   "//": "WARNING: Do not remove!. Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
   "private": true
 }
