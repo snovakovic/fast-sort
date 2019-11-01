@@ -95,6 +95,15 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   const sortedArr = sort([...arr]).asc();
   console.log(arr); // => [1, 4, 2]
   console.log(sortedArr); // => [1, 2, 4]
+  
+  // Create dynamic sorting properties
+  // Comparer is the custom compare function
+  const sortingOptions = [];
+  sortingOptions.push({ 'asc': 'firstName', comparer: (a, b) => { a.localeCompare(b, undefined, {sensitivity: 'base'})} });
+  sortingOptions.push({ 'desc': 'lastName', comparer: (a, b) => { a.localeCompare(b, undefined, {sensitivity: 'base'})} });
+  
+  sort(users).by(sortingOptions);
+  
 ```
 
 NOTE: fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module.
