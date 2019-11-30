@@ -7,7 +7,7 @@
   "license": "MIT",
   "homepage": "https://github.com/snovakovic/fast-sort#readme",
   "scripts": {
-    "test": "node integration_test/index.js",
+    "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha -r ts-node/register test/*.spec.ts",
     "publish": "node publish"
   },
   "repository": {
