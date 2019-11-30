@@ -1,8 +1,8 @@
 {
   "name": "fast-sort",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "description": "Fast and powerful array sorting. Sort by any property in any direction with easy to read syntax.",
-  "main": "dist/sort.es5.js",
+  "main": "dist/sort.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/snovakovic/fast-sort#readme",
@@ -21,17 +21,15 @@
     "sort",
     "sortBy",
     "order",
-    "orderBy"
+    "orderBy",
+    "natural sort"
   ],
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^11.3.1",
-    "eslint-plugin-import": "^2.7.0",
-    "fs-extra": "^4.0.1"
+    "eslint": "^6.7.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
   },
   "contributors": [
     "Tony Gutierrez: https://github.com/tony-gutierrez"
-  ],
-  "//": "WARNING: Do not remove!. Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
-  "private": true
+  ]
 }
