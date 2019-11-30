@@ -1,0 +1,4 @@
+v2 Release requirements:
+☐ Name default exported sort function
+☐ Better documentation for natural sort
+☐ Check about natural sort improving (instance that do natural sort by default)
