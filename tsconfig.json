@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitThis": true,
+    "keyofStringsOnly": true,
+    "declaration": true,
+    "declarationDir": "./dist",
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "typeRoots": [
+      "./node_modules/@types",
+    ],
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}
