@@ -73,7 +73,7 @@ const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _co
 // >>> HELPERS <<<
 
 /**
- * Return multiProperty sort hanrdler based on sortBy value
+ * Return multiProperty sort handler based on sortBy value
  */
 const getMultiPropertySorter = function(sortBy) {
   const type = typeof sortBy;
@@ -128,7 +128,7 @@ const sort = function(direction, ctx, sortBy, comparer) {
 
 // >>> PUBLIC <<<
 
-module.exports = function(ctx) {
+export default function(ctx) {
   return {
     asc: (sortBy) => sort(1, ctx, sortBy, defaultComparer),
     desc: (sortBy) => sort(-1, ctx, sortBy, defaultComparer),

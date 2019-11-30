@@ -1,5 +1,5 @@
-const { assert } = require('chai');
-const sort = require('../src/sort');
+import { assert } from 'chai';
+import sort from '../src/sort';
 
 describe('sort', () => {
   let flatArray;
@@ -167,7 +167,6 @@ describe('sort', () => {
 
     assertOrder([11, 10, 9, 8, 6], idx => multiPropArray[idx].age);
   });
-
 
   it('Should sort by asc lastName, desc name and asc age', () => {
     sort(multiPropArray).by([
