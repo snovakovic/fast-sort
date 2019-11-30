@@ -8,6 +8,7 @@
   "homepage": "https://github.com/snovakovic/fast-sort#readme",
   "scripts": {
     "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha -r ts-node/register test/*.spec.ts",
+    "test:watch": "watch 'npm run test' ./src",
     "publish": "node publish"
   },
   "repository": {
@@ -36,7 +37,8 @@
     "rollup-plugin-typescript2": "^0.25.2",
     "rollup-plugin-uglify": "^6.0.3",
     "ts-node": "^8.5.4",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.2",
+    "watch": "^1.0.2"
   },
   "contributors": [
     "Tony Gutierrez: https://github.com/tony-gutierrez"
