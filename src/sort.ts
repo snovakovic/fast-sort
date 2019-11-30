@@ -130,9 +130,9 @@ const sort = function(direction, ctx, sortBy, comparer) {
 
 export default function(ctx) {
   return {
-    asc: (sortBy) => sort(1, ctx, sortBy, defaultComparer),
-    desc: (sortBy) => sort(-1, ctx, sortBy, defaultComparer),
-    by: (sortBy) => {
+    asc: (sortBy?) => sort(1, ctx, sortBy, defaultComparer),
+    desc: (sortBy?) => sort(-1, ctx, sortBy, defaultComparer),
+    by: (sortBy?) => {
       if (!Array.isArray(ctx)) return ctx;
 
       let sortByInSingleDirection;

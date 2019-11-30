@@ -2,3 +2,6 @@ v2 Release requirements:
 ☐ Name default exported sort function
 ☐ Better documentation for natural sort
 ☐ Check about natural sort improving (instance that do natural sort by default)
+☐ should we rename customComparerProvider to e.g customComparerHandler (add comments for it)
+☐ Shoud remove 2 almost indentical erros ("Invalid 'by' sorting")
+☐ Check about using object resolver instead if in getMultiPropertySorter e.g sortDefinition[type] || multiPropObjectSorter, (pros/const)
