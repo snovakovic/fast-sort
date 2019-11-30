@@ -11,7 +11,7 @@ module.exports = {
     sinon: true,
   },
   rules: {
-    'comma-dangle': ['error', 'never'],
+    'comma-dangle': ['error', 'always-multiline'],
     'no-underscore-dangle': ['error', { allow: ['_id', '_uid', '__v'] }],
     // Line length
     'max-len': ['error', 100, 2, { ignoreComments: true }],
@@ -27,5 +27,6 @@ module.exports = {
     'no-unused-expressions': 0,
     'guard-for-in': 0,
     'no-plusplus': 0,
+    'arrow-parens': 0,
   }
 };
