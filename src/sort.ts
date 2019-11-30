@@ -35,7 +35,7 @@ const functionSorter = function(direction, sortBy, comparer, a, b) {
 };
 
 /**
- * Used when we have sorting by multyple properties and when current sorter is function
+ * Used when we have sorting by multiple properties and when current sorter is function
  * @example sort(users).asc([p => p.address.city, p => p.firstName])
  */
 const multiPropFunctionSorter = function(sortBy, thenBy, depth, direction, comparer, a, b) {
