@@ -26,7 +26,7 @@ const runConfiguration = [
   { size: 1000, numberOfRuns: 100, flockOnly },
   { size: 5000, numberOfRuns: 50, flockOnly },
   { size: 20000, numberOfRuns: 25, flockOnly },
-  { size: 100000, numberOfRuns: 5, flockOnly }
+  { size: 100000, numberOfRuns: 5, flockOnly },
 ];
 
 const headerItems = [chalk.hex('f49b42')('Library')];

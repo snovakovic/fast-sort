@@ -20,6 +20,7 @@ module.exports = function(arr, controlArr, numberOfRuns, sortImplementation) {
       assert.deepEqual(sorted[length / 2], controlArr[length / 2], 'Middle value does not match');
       assert.deepEqual(sorted[length - 1], controlArr[length - 1], 'Last value does not match');
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log('rr', err);
     }
   }
@@ -29,6 +30,6 @@ module.exports = function(arr, controlArr, numberOfRuns, sortImplementation) {
     min: Math.min(...times),
     average: times.reduce((sum, val) => sum + val, 0) / times.length,
     noOfRuns: times.length,
-    arraySize: length
+    arraySize: length,
   };
 };

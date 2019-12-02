@@ -8,3 +8,4 @@ v2 Release requirements:
 ☐ Initial buidl minified 1.93KB (Check can we make it lower)
 ☐ Add TS specific linter rules as e.g (no space betwene type). check regarding other linter rules
 ☐ Add proper interface for comparer
+☐ Rename flock naming in benchmarks to fast-sort

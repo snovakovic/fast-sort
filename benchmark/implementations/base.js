@@ -1,6 +1,11 @@
 const runner = require('./../runner');
 
-module.exports.run = function({ sortImplementation, testArr, numberOfRuns, flockOnly }) {
+module.exports.run = function({
+  sortImplementation,
+  testArr,
+  numberOfRuns,
+  flockOnly,
+}) {
   // Control array to make sure that all implementation have sorted arrays correctly
   const controlArr = sortImplementation.flock([...testArr]);
   const run = runner.bind(undefined, testArr, controlArr, numberOfRuns);
@@ -8,7 +13,7 @@ module.exports.run = function({ sortImplementation, testArr, numberOfRuns, flock
   if (flockOnly) {
     return {
       flock: run(sortImplementation.flock),
-      latestFlock: run(sortImplementation.latestFlock)
+      latestFlock: run(sortImplementation.latestFlock),
     };
   }
 
