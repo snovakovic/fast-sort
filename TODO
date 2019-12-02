@@ -6,3 +6,5 @@ v2 Release requirements:
 ☐ Shoud remove 2 almost indentical erros ("Invalid 'by' sorting")
 ☐ Check about using object resolver instead if in getMultiPropertySorter e.g sortDefinition[type] || multiPropObjectSorter, (pros/const)
 ☐ Initial buidl minified 1.93KB (Check can we make it lower)
+☐ Add TS specific linter rules as e.g (no space betwene type). check regarding other linter rules
+☐ Add proper interface for comparer

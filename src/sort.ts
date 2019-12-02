@@ -1,5 +1,27 @@
 /* eslint no-use-before-define: 0 */
 
+// >>> INTERFACES <<<
+
+interface ISortByFunction<T> {
+  (prop:T):any
+}
+
+type ISorter<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
+
+interface ISortBySorterBase {
+  comparer?:any, // TODO: Change to actual interface
+}
+
+interface ISortByAscSorter<T> extends ISortBySorterBase {
+  asc: boolean|ISorter<T>,
+}
+
+interface ISortByDescSorter<T> extends ISortBySorterBase {
+  desc: boolean|ISorter<T>,
+}
+
+type ISortBySorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
+
 // >>> SORTERS <<<
 
 const defaultComparer = function(direction, a, b) {
@@ -128,11 +150,15 @@ const sort = function(direction, ctx, sortBy, comparer) {
 
 // >>> PUBLIC <<<
 
-export default function(ctx) {
+export default function<T>(ctx:T[]) {
   return {
-    asc: (sortBy?) => sort(1, ctx, sortBy, defaultComparer),
-    desc: (sortBy?) => sort(-1, ctx, sortBy, defaultComparer),
-    by: (sortBy?) => {
+    asc(sortBy?:ISorter<T>|ISorter<T>[]):T[] {
+      return sort(1, ctx, sortBy, defaultComparer);
+    },
+    desc(sortBy?:ISorter<T>|ISorter<T>[]):T[] {
+      return sort(-1, ctx, sortBy, defaultComparer);
+    },
+    by(sortBy:ISortBySorter<T>|ISortBySorter<T>[]):T[] {
       if (!Array.isArray(ctx)) return ctx;
 
       let sortByInSingleDirection;
@@ -158,7 +184,7 @@ export default function(ctx) {
       }
 
       const _sorter = multiPropObjectSorter
-        .bind(undefined, sortBy.shift(), sortBy, 0, undefined, undefined);
+        .bind(undefined, (sortBy as ISortBySorter<T>[]).shift(), sortBy, 0, undefined, undefined);
 
       return ctx.sort(_sorter);
     }

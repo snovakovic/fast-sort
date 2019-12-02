@@ -2,10 +2,21 @@ import { assert } from 'chai';
 import sort from '../src/sort';
 
 describe('sort', () => {
-  let flatArray;
-  let flatNaturalArray;
-  let persons;
-  let multiPropArray;
+  let flatArray:number[];
+  let flatNaturalArray:string[];
+  let persons: {
+    name:string,
+    dob:Date,
+    address: {
+      code?:number,
+    }
+  }[];
+  let multiPropArray: {
+    name:string,
+    lastName:string,
+    age:number,
+    unit:string,
+  }[];
 
   function assertOrder(order, valueCb) {
     order.forEach((item, idx) => {
@@ -91,12 +102,12 @@ describe('sort', () => {
   });
 
   it('Should ignore values that are not sortable', () => {
-    assert.equal(sort('string').asc(), 'string');
+    assert.equal(sort('string' as any).asc(), 'string' as any);
     assert.equal(sort(undefined).desc(), undefined);
     assert.equal(sort(null).desc(), null);
-    assert.equal(sort(33).asc(), 33);
-    assert.deepEqual(sort({ name: 'test' }).desc(), { name: 'test' });
-    assert.equal(sort(33).by(), 33);
+    assert.equal(sort(33 as any).asc(), 33 as any);
+    assert.deepEqual(sort({ name: 'test' } as any).desc(), { name: 'test' } as any);
+    assert.equal((sort(33 as any) as any).by(), 33 as any);
   });
 
   it('Should sort dates correctly', () => {
@@ -151,7 +162,7 @@ describe('sort', () => {
     assertOrder(['aa', 'aa', 'bb', undefined, null], idx => multiPropArray[idx].lastName);
   });
 
-  it('Should allow using of object sytax with for sort by', () => {
+  it('Should allow using of object syntax with for sort by', () => {
     let sorted = sort(flatArray).by({ asc: true });
     assert.deepEqual(sorted, [1, 2, 3, 4, 5, 5]);
 
@@ -179,9 +190,9 @@ describe('sort', () => {
   });
 
   it('Should throw invalid usage of by sorter exception', () => {
-    assert.throws(() => sort(multiPropArray).by('name'), Error);
-    assert.throws(() => sort(multiPropArray).by([{ asci: 'name' }]), Error);
-    assert.throws(() => sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }]), Error);
+    assert.throws(() => sort(multiPropArray).by('name' as any), Error);
+    assert.throws(() => sort(multiPropArray).by([{ asci: 'name' }] as any), Error);
+    assert.throws(() => sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }] as any), Error);
   });
 
   it('Should sort ascending with by on 1 property', () => {
