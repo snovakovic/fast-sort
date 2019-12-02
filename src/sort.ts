@@ -25,8 +25,8 @@ type ISortBySorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 // >>> SORTERS <<<
 
 const defaultComparer = function(direction, a, b) {
-  if (a === b) return 0;
   if (a < b) return -direction;
+  if (a === b) return 0;
   if (a == null) return 1;
   if (b == null) return -1;
 
