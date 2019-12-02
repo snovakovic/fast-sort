@@ -33,11 +33,7 @@ const defaultComparer = function(direction, a, b) {
   return direction;
 };
 
-const customComparerProvider = function(comparer) {
-  return function(direction, a, b) {
-    return comparer(a, b) * direction;
-  };
-};
+const customComparerHandler = (comparer) => (direction, a, b) => comparer(a, b) * direction;
 
 /**
  * stringSorter does not support nested property.
@@ -80,7 +76,7 @@ const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _co
   const sortBy = sortByObj.asc || sortByObj.desc;
   const direction = sortByObj.asc ? 1 : -1;
   const comparer = sortByObj.comparer
-    ? customComparerProvider(sortByObj.comparer)
+    ? customComparerHandler(sortByObj.comparer)
     : defaultComparer;
 
   if (!sortBy) {
@@ -173,7 +169,7 @@ export default function<T>(ctx:T[]) {
         const direction = sortByInSingleDirection.asc ? 1 : -1;
         const singleDirectionSortBy = sortByInSingleDirection.asc || sortByInSingleDirection.desc;
         const comparer = sortByInSingleDirection.comparer
-          ? customComparerProvider(sortByInSingleDirection.comparer)
+          ? customComparerHandler(sortByInSingleDirection.comparer)
           : defaultComparer;
 
         if (!singleDirectionSortBy) {
