@@ -1,10 +1,5 @@
 // >>> INTERFACES <<<
 
-enum SortingDirection {
-  Asc = 1,
-  Desc = -1,
-}
-
 interface ISortByFunction<T> {
   (prop:T):any
 }
@@ -152,10 +147,10 @@ const sort = function(direction, ctx, sortBy, comparer) {
 export default function<T>(ctx:T[]) {
   return {
     asc(sortBy?:ISorter<T>|ISorter<T>[]):T[] {
-      return sort(SortingDirection.Asc, ctx, sortBy, defaultComparer);
+      return sort(1, ctx, sortBy, defaultComparer);
     },
     desc(sortBy?:ISorter<T>|ISorter<T>[]):T[] {
-      return sort(SortingDirection.Desc, ctx, sortBy, defaultComparer);
+      return sort(-1, ctx, sortBy, defaultComparer);
     },
     by(sortBy:ISortBySorter<T>|ISortBySorter<T>[]):T[] {
       if (!Array.isArray(ctx)) return ctx;
