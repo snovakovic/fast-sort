@@ -1,5 +1,3 @@
-/* eslint no-use-before-define: 0 */
-
 // >>> INTERFACES <<<
 
 interface ISortByFunction<T> {
