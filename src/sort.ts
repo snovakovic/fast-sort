@@ -4,18 +4,18 @@ interface ISortByFunction<T> {
   (prop:T):any
 }
 
-type ISorter<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
+type ISortBy<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
 
 interface ISortByObjectBase {
   comparer?:any, // TODO: Change to actual interface
 }
 
 interface ISortByAscSorter<T> extends ISortByObjectBase {
-  asc: boolean|ISorter<T>,
+  asc: boolean|ISortBy<T>,
 }
 
 interface ISortByDescSorter<T> extends ISortByObjectBase {
-  desc: boolean|ISorter<T>,
+  desc: boolean|ISortBy<T>,
 }
 
 type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
@@ -151,10 +151,10 @@ const sort = function(direction, ctx, sortBy, comparer) {
 
 export default function<T>(ctx:T[]) {
   return {
-    asc(sortBy?:ISorter<T>|ISorter<T>[]):T[] {
+    asc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
       return sort(1, ctx, sortBy, defaultComparer);
     },
-    desc(sortBy?:ISorter<T>|ISorter<T>[]):T[] {
+    desc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
       return sort(-1, ctx, sortBy, defaultComparer);
     },
     by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
