@@ -13,44 +13,22 @@ const customComparerHandler = (comparer) => (direction, a, b) => comparer(a, b) 
 
 // >>> SORTERS <<<
 
-/**
- * stringSorter does not support nested property.
- * For nested properties or value transformation (e.g toLowerCase) we should use functionSorter
- * Based on benchmark testing using stringSorter is bit faster then using equivalent function sorter
- * @example sort(users).asc('firstName')
- */
 const stringSorter = function(direction, sortBy, comparer, a, b) {
   return comparer(direction, a[sortBy], b[sortBy]);
 };
 
-/**
- * @example sort(users).asc(p => p.address.city)
- */
 const functionSorter = function(direction, sortBy, comparer, a, b) {
   return comparer(direction, sortBy(a), sortBy(b));
 };
 
-/**
- * Used when we have sorting by multiple properties and when current sorter is function
- * @example sort(users).asc([p => p.address.city, p => p.firstName])
- */
 const multiPropFunctionSorter = function(sortBy, thenBy, depth, direction, comparer, a, b) {
   return multiPropEqualityHandler(sortBy(a), sortBy(b), thenBy, depth, direction, comparer, a, b);
 };
 
-/**
- * Used when we have sorting by multiple properties and when current sorter is string
- * @example sort(users).asc(['firstName', 'lastName'])
- */
 const multiPropStringSorter = function(sortBy, thenBy, depth, direction, comparer, a, b) {
   return multiPropEqualityHandler(a[sortBy], b[sortBy], thenBy, depth, direction, comparer, a, b);
 };
 
-/**
- * Used with 'by' sorter when we have sorting in multiple direction.
- * Eventually it will resolve to multiPropFunctionSorter or multiPropStringSorter
- * @example sort(users).asc(['firstName', 'lastName'])
- */
 const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
   const { sortBy, direction, comparer } = unpackObjectSorter(sortByObj);
   const multiSorter = getMultiPropertySorter(sortBy);
@@ -98,7 +76,7 @@ const unpackObjectSorter = function(sortByObj) {
 }
 
 /**
- * Pick sorter based on provided sortBy value
+ * Pick sorter based on provided sortBy configuration.
  */
 const sort = function(direction, ctx, sortBy, comparer) {
   if (!Array.isArray(ctx)) {
@@ -152,12 +130,21 @@ export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 
 export default function<T>(ctx:T[]) {
   return {
+    /**
+     * @example sort(users).asc(u => u.firstName)
+     */
     asc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
       return sort(1, ctx, sortBy, defaultComparer);
     },
+    /**
+     * @example sort(users).desc(u => u.firstName)
+     */
     desc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
       return sort(-1, ctx, sortBy, defaultComparer);
     },
+    /**
+     * @example sort(users).by([{ asc: 'firstName'}, { desc: 'lastName' }])
+     */
     by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
       return sort(1, ctx, sortBy, defaultComparer);
     }
