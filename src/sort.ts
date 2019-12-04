@@ -128,25 +128,29 @@ export interface ISortByDescSorter<T> extends ICustomComparer {
 
 export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 
-export default function<T>(ctx:T[]) {
-  return {
-    /**
-     * @example sort(users).asc(u => u.firstName)
-     */
-    asc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
-      return sort(1, ctx, sortBy, defaultComparer);
-    },
-    /**
-     * @example sort(users).desc(u => u.firstName)
-     */
-    desc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
-      return sort(-1, ctx, sortBy, defaultComparer);
-    },
-    /**
-     * @example sort(users).by([{ asc: 'firstName'}, { desc: 'lastName' }])
-     */
-    by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
-      return sort(1, ctx, sortBy, defaultComparer);
-    }
-  };
-};
+export function createSortInstance({ comparer }:{ comparer:any }) {
+  return function sortInstance<T>(ctx:T[]) {
+    return {
+      /**
+       * @example sort(users).asc(u => u.firstName)
+       */
+      asc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
+        return sort(1, ctx, sortBy, comparer);
+      },
+      /**
+       * @example sort(users).desc(u => u.firstName)
+       */
+      desc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
+        return sort(-1, ctx, sortBy, comparer);
+      },
+      /**
+       * @example sort(users).by([{ asc: 'firstName'}, { desc: 'lastName' }])
+       */
+      by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
+        return sort(1, ctx, sortBy, comparer);
+      }
+    };
+  }
+}
+
+export default createSortInstance({ comparer: defaultComparer });
