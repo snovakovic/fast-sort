@@ -3,9 +3,9 @@ v2 Release requirements:
 ☐ Better documentation for natural sort
 ☐ Check about natural sort improving (instance that do natural sort by default)
 ☐ should we rename customComparerProvider to e.g customComparerHandler (add comments for it)
-☐ Shoud remove 2 almost indentical erros ("Invalid 'by' sorting")
+✔ Shoud remove 2 almost indentical erros ("Invalid 'by' sorting") @done(19-12-04 16:09)
 ☐ Check about using object resolver instead if in getMultiPropertySorter e.g sortDefinition[type] || multiPropObjectSorter, (pros/const)
-☐ Initial buidl minified 1.93KB (Check can we make it lower)
+☐ Initial buidl minified 1.93KB (Check can we make it lower) (after build update droped to 1.54 kb)
 ☐ Add TS specific linter rules as e.g (no space betwene type). check regarding other linter rules
 ☐ Add proper interface for comparer
 ☐ Enable eslint in TS files
