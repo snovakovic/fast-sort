@@ -136,15 +136,15 @@ export interface ISortByFunction<T> {
 
 export type ISortBy<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
 
-interface ISortByObjectBase {
-  comparer?:any, // TODO: Change to actual interface
+export interface ICustomComparer {
+  comparer?(a:any, b:any):number,
 }
 
-export interface ISortByAscSorter<T> extends ISortByObjectBase {
+export interface ISortByAscSorter<T> extends ICustomComparer {
   asc: boolean|ISortBy<T>,
 }
 
-export interface ISortByDescSorter<T> extends ISortByObjectBase {
+export interface ISortByDescSorter<T> extends ICustomComparer {
   desc: boolean|ISortBy<T>,
 }
 

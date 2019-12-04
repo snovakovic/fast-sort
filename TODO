@@ -1,4 +1,5 @@
-v2 Release requirements:
+RELEASE REQUIREMENTS:
+
 ☐ Name default exported sort function
 ☐ Better documentation for natural sort
 ☐ Check about natural sort improving (instance that do natural sort by default)
@@ -16,3 +17,8 @@ v2 Release requirements:
 ☐ sort.by('name') is now valid or sort.by() so make sure to cover those new possibilities in tests
 ☐ now we can do something as  sort.asc({ desc: 'aaa' }) which sorts in desc order. Is there a reason to guard against that?? There should not be a reason to complicate a code fo that
 ☐ How correct is (valA == null && valB == null) in multiPropEqualityHandler if we are going to use custom comparer??
+
+
+NICE TO DO FOR PHASE 2:
+
+☐ Improve interfaces (so we don't have any in them as e.g for comparer)
