@@ -15,3 +15,4 @@ v2 Release requirements:
 ☐ Update depndendcy versions in benchmarks and run tbenchamrk reuslts again
 ☐ sort.by('name') is now valid or sort.by() so make sure to cover those new possibilities in tests
 ☐ now we can do something as  sort.asc({ desc: 'aaa' }) which sorts in desc order. Is there a reason to guard against that?? There should not be a reason to complicate a code fo that
+☐ How correct is (valA == null && valB == null) in multiPropEqualityHandler if we are going to use custom comparer??

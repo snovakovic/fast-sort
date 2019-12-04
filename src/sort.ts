@@ -93,15 +93,16 @@ const getMultiPropertySorter = function(sortBy) {
 }
 
 const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, comparer, a, b) {
-  if (valA === valB || (valA == null && valB == null)) {
-    if (thenBy.length > depth) {
-      const multiSorter = getMultiPropertySorter(thenBy[depth]);
-      return multiSorter(thenBy[depth], thenBy, depth + 1, direction, comparer, a, b);
-    }
-    return 0;
+  const equality = comparer(direction, valA, valB);
+  if(
+    thenBy.length > depth &&
+    (equality === 0 || (valA == null && valB == null))
+  ) {
+    const multiSorter = getMultiPropertySorter(thenBy[depth]);
+    return multiSorter(thenBy[depth], thenBy, depth + 1, direction, comparer, a, b);
   }
 
-  return comparer(direction, valA, valB);
+  return equality;
 };
 
 const unpackObjectSorter = function(sortByObj:ISortByObjectSorter<any>) {
