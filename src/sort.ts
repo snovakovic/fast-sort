@@ -6,19 +6,19 @@ interface ISortByFunction<T> {
 
 type ISorter<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
 
-interface ISortBySorterBase {
+interface ISortByObjectBase {
   comparer?:any, // TODO: Change to actual interface
 }
 
-interface ISortByAscSorter<T> extends ISortBySorterBase {
+interface ISortByAscSorter<T> extends ISortByObjectBase {
   asc: boolean|ISorter<T>,
 }
 
-interface ISortByDescSorter<T> extends ISortBySorterBase {
+interface ISortByDescSorter<T> extends ISortByObjectBase {
   desc: boolean|ISorter<T>,
 }
 
-type ISortBySorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
+type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 
 // >>> SORTERS <<<
 
@@ -152,7 +152,7 @@ export default function<T>(ctx:T[]) {
     desc(sortBy?:ISorter<T>|ISorter<T>[]):T[] {
       return sort(-1, ctx, sortBy, defaultComparer);
     },
-    by(sortBy:ISortBySorter<T>|ISortBySorter<T>[]):T[] {
+    by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
       if (!Array.isArray(ctx)) return ctx;
 
       let sortByInSingleDirection;
@@ -178,7 +178,7 @@ export default function<T>(ctx:T[]) {
       }
 
       const _sorter = multiPropObjectSorter
-        .bind(undefined, (sortBy as ISortBySorter<T>[]).shift(), sortBy, 0, undefined, undefined);
+        .bind(undefined, (sortBy as ISortByObjectSorter<T>[]).shift(), sortBy, 0, undefined, undefined);
 
       return ctx.sort(_sorter);
     }
