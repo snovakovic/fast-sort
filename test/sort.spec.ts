@@ -190,7 +190,6 @@ describe('sort', () => {
   });
 
   it('Should throw invalid usage of by sorter exception', () => {
-    assert.throws(() => sort(multiPropArray).by('name' as any), Error);
     assert.throws(() => sort(multiPropArray).by([{ asci: 'name' }] as any), Error);
     assert.throws(() => sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }] as any), Error);
   });

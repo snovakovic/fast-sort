@@ -69,7 +69,8 @@ const multiPropStringSorter = function(sortBy, thenBy, depth, direction, compare
 };
 
 /**
- * Used with 'by' sorter when we have sorting in multiple direction
+ * Used with 'by' sorter when we have sorting in multiple direction.
+ * Eventually it will resolve to multiPropFunctionSorter or multiPropStringSorter
  * @example sort(users).asc(['firstName', 'lastName'])
  */
 const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
@@ -121,27 +122,32 @@ function unpackObjectSorter(sortByObj:ISortByObjectSorter<any>) {
  * Pick sorter based on provided sortBy value
  */
 const sort = function(direction, ctx, sortBy, comparer) {
-  if (!Array.isArray(ctx)) return ctx;
+  if (!Array.isArray(ctx)) {
+    return ctx;
+  }
 
   // Unwrap sortBy if array with only 1 value
   if (Array.isArray(sortBy) && sortBy.length < 2) {
     [sortBy] = sortBy;
   }
 
-  let _sorter;
-
+  let sorter;
+  if(direction)
   if (!sortBy || sortBy === true) {
-    _sorter = comparer.bind(undefined, direction);
+    sorter = comparer.bind(undefined, direction);
   } else if (typeof sortBy === 'string') {
-    _sorter = stringSorter.bind(undefined, direction, sortBy, comparer);
+    sorter = stringSorter.bind(undefined, direction, sortBy, comparer);
   } else if (typeof sortBy === 'function') {
-    _sorter = functionSorter.bind(undefined, direction, sortBy, comparer);
-  } else {
-    _sorter = getMultiPropertySorter(sortBy[0])
+    sorter = functionSorter.bind(undefined, direction, sortBy, comparer);
+  } else if(Array.isArray(sortBy)) {
+    sorter = getMultiPropertySorter(sortBy[0])
       .bind(undefined, sortBy.shift(), sortBy, 0, direction, comparer);
+  } else {
+    const objectSorterConfig = unpackObjectSorter(sortBy);
+    return sort(objectSorterConfig.direction, ctx, objectSorterConfig.sortBy, objectSorterConfig.comparer);
   }
 
-  return ctx.sort(_sorter);
+  return ctx.sort(sorter);
 };
 
 // >>> PUBLIC <<<
@@ -155,30 +161,7 @@ export default function<T>(ctx:T[]) {
       return sort(-1, ctx, sortBy, defaultComparer);
     },
     by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
-      if (!Array.isArray(ctx)) return ctx;
-
-      let sortByInSingleDirection;
-      if (!Array.isArray(sortBy)) {
-        sortByInSingleDirection = sortBy;
-      } else if (sortBy.length === 1) {
-        [sortByInSingleDirection] = sortBy;
-      }
-
-      // Unwrap sort by to faster path for dedicated single direction sorters
-      if (sortByInSingleDirection) {
-        const {
-          sortBy:singleDirectionSortBy,
-          direction,
-          comparer
-        } = unpackObjectSorter(sortByInSingleDirection || {});
-
-        return sort(direction, ctx, singleDirectionSortBy, comparer);
-      }
-
-      const _sorter = multiPropObjectSorter
-        .bind(undefined, (sortBy as ISortByObjectSorter<T>[]).shift(), sortBy, 0, undefined, undefined);
-
-      return ctx.sort(_sorter);
+      return sort(1, ctx, sortBy, defaultComparer);
     }
   };
 };
