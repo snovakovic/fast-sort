@@ -22,7 +22,7 @@ type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 
 // >>> SORTERS <<<
 
-const defaultComparer = function(direction, a, b) {
+const defaultComparer = function(direction:number, a, b):number {
   if (a < b) return -direction;
   if (a === b) return 0;
   if (a == null) return 1;
@@ -71,16 +71,7 @@ const multiPropStringSorter = function(sortBy, thenBy, depth, direction, compare
  * @example sort(users).asc(['firstName', 'lastName'])
  */
 const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
-  const sortBy = sortByObj.asc || sortByObj.desc;
-  const direction = sortByObj.asc ? 1 : -1;
-  const comparer = sortByObj.comparer
-    ? customComparerHandler(sortByObj.comparer)
-    : defaultComparer;
-
-  if (!sortBy) {
-    throw Error(`sort: Invalid 'by' sorting configuration.
-      Expecting object with 'asc' or 'desc' key`);
-  }
+  const { sortBy, direction, comparer } = unpackObjectSorter(sortByObj);
 
   const multiSorter = getMultiPropertySorter(sortBy);
   return multiSorter(sortBy, thenBy, depth, direction, comparer, a, b);
@@ -114,6 +105,20 @@ const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, 
 
   return comparer(direction, valA, valB);
 };
+
+function unpackObjectSorter(sortByObj:ISortByObjectSorter<any>) {
+  const sortBy = (sortByObj as ISortByAscSorter<any>).asc || (sortByObj as ISortByDescSorter<any>).desc;
+  const direction = (sortByObj as any).asc ? 1 : -1;
+  const comparer = sortByObj.comparer
+    ? customComparerHandler(sortByObj.comparer)
+    : defaultComparer;
+
+  if (!sortBy) {
+    throw Error(`Invalid config. Expecting object with 'asc' or 'desc' keys`);
+  }
+
+  return { direction, sortBy, comparer };
+}
 
 /**
  * Pick sorter based on provided sortBy value
@@ -164,16 +169,12 @@ export default function<T>(ctx:T[]) {
 
       // Unwrap sort by to faster path for dedicated single direction sorters
       if (sortByInSingleDirection) {
-        const direction = sortByInSingleDirection.asc ? 1 : -1;
-        const singleDirectionSortBy = sortByInSingleDirection.asc || sortByInSingleDirection.desc;
-        const comparer = sortByInSingleDirection.comparer
-          ? customComparerHandler(sortByInSingleDirection.comparer)
-          : defaultComparer;
+        const {
+          sortBy:singleDirectionSortBy,
+          direction,
+          comparer
+        } = unpackObjectSorter(sortByInSingleDirection || {});
 
-        if (!singleDirectionSortBy) {
-          throw Error(`sort: Invalid 'by' sorting configuration.
-            Expecting object with 'asc' or 'desc' key`);
-        }
         return sort(direction, ctx, singleDirectionSortBy, comparer);
       }
 
