@@ -132,14 +132,13 @@ const sort = function(direction, ctx, sortBy, comparer) {
   }
 
   let sorter;
-  if(direction)
   if (!sortBy || sortBy === true) {
     sorter = comparer.bind(undefined, direction);
   } else if (typeof sortBy === 'string') {
     sorter = stringSorter.bind(undefined, direction, sortBy, comparer);
   } else if (typeof sortBy === 'function') {
     sorter = functionSorter.bind(undefined, direction, sortBy, comparer);
-  } else if(Array.isArray(sortBy)) {
+  } else if (Array.isArray(sortBy)) {
     sorter = getMultiPropertySorter(sortBy[0])
       .bind(undefined, sortBy.shift(), sortBy, 0, direction, comparer);
   } else {
