@@ -8,13 +8,15 @@ export default {
     {
       // sort.js
       file: pkg.main,
-      format: 'cjs',
+      format: 'umd',
+      name: 'fast-sort',
     },
     {
       // sort.min.js
       file: pkg.main.replace('.js', '.min.js'),
-      format: 'cjs',
-      plugins: [uglify()],
+      format: 'umd',
+      name: 'fast-sort',
+      plugins: [uglify({})],
     },
     {
       // sort.es.js
