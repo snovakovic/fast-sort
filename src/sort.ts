@@ -1,25 +1,3 @@
-// >>> INTERFACES <<<
-
-interface ISortByFunction<T> {
-  (prop:T):any
-}
-
-type ISortBy<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
-
-interface ISortByObjectBase {
-  comparer?:any, // TODO: Change to actual interface
-}
-
-interface ISortByAscSorter<T> extends ISortByObjectBase {
-  asc: boolean|ISortBy<T>,
-}
-
-interface ISortByDescSorter<T> extends ISortByObjectBase {
-  desc: boolean|ISortBy<T>,
-}
-
-type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
-
 // >>> COMPARERS <<<
 
 const defaultComparer = function(direction:number, a, b):number {
@@ -105,8 +83,8 @@ const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, 
   return equality;
 };
 
-const unpackObjectSorter = function(sortByObj:ISortByObjectSorter<any>) {
-  const sortBy = (sortByObj as ISortByAscSorter<any>).asc || (sortByObj as ISortByDescSorter<any>).desc;
+const unpackObjectSorter = function(sortByObj) {
+  const sortBy = sortByObj.asc || sortByObj.desc;
   const direction = (sortByObj as any).asc ? 1 : -1;
   const comparer = sortByObj.comparer
     ? customComparerHandler(sortByObj.comparer)
@@ -151,6 +129,26 @@ const sort = function(direction, ctx, sortBy, comparer) {
 };
 
 // >>> PUBLIC <<<
+
+export interface ISortByFunction<T> {
+  (prop:T):any
+}
+
+export type ISortBy<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
+
+interface ISortByObjectBase {
+  comparer?:any, // TODO: Change to actual interface
+}
+
+export interface ISortByAscSorter<T> extends ISortByObjectBase {
+  asc: boolean|ISortBy<T>,
+}
+
+export interface ISortByDescSorter<T> extends ISortByObjectBase {
+  desc: boolean|ISortBy<T>,
+}
+
+export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 
 export default function<T>(ctx:T[]) {
   return {
