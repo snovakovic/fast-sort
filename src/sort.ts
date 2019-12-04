@@ -104,7 +104,7 @@ const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, 
   return comparer(direction, valA, valB);
 };
 
-function unpackObjectSorter(sortByObj:ISortByObjectSorter<any>) {
+const unpackObjectSorter = function(sortByObj:ISortByObjectSorter<any>) {
   const sortBy = (sortByObj as ISortByAscSorter<any>).asc || (sortByObj as ISortByDescSorter<any>).desc;
   const direction = (sortByObj as any).asc ? 1 : -1;
   const comparer = sortByObj.comparer
