@@ -12,3 +12,4 @@ v2 Release requirements:
 ☐ Rename flock naming in benchmarks to fast-sort
 ☐ Examples in multiPropStringSorter and multiPropObjectSorter are wrong
 ☐ We should also have tests for builds not just source code before publishing
+☐ Update depndendcy versions in benchmarks and run tbenchamrk reuslts again

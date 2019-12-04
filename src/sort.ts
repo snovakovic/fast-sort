@@ -20,7 +20,7 @@ interface ISortByDescSorter<T> extends ISortByObjectBase {
 
 type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 
-// >>> SORTERS <<<
+// >>> COMPARERS <<<
 
 const defaultComparer = function(direction:number, a, b):number {
   if (a < b) return -direction;
@@ -32,6 +32,8 @@ const defaultComparer = function(direction:number, a, b):number {
 };
 
 const customComparerHandler = (comparer) => (direction, a, b) => comparer(a, b) * direction;
+
+// >>> SORTERS <<<
 
 /**
  * stringSorter does not support nested property.
@@ -72,27 +74,22 @@ const multiPropStringSorter = function(sortBy, thenBy, depth, direction, compare
  */
 const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
   const { sortBy, direction, comparer } = unpackObjectSorter(sortByObj);
-
   const multiSorter = getMultiPropertySorter(sortBy);
   return multiSorter(sortBy, thenBy, depth, direction, comparer, a, b);
 };
 
 // >>> HELPERS <<<
 
-/**
- * Return multiProperty sort handler based on sortBy value
- */
 const getMultiPropertySorter = function(sortBy) {
-  const type = typeof sortBy;
-  if (type === 'string') {
-    return multiPropStringSorter;
+  switch(typeof sortBy) {
+    case 'string':
+      return multiPropStringSorter;
+    case 'function':
+      return multiPropFunctionSorter;
+    default:
+      return multiPropObjectSorter;
   }
-  if (type === 'function') {
-    return multiPropFunctionSorter;
-  }
-
-  return multiPropObjectSorter;
-};
+}
 
 const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, comparer, a, b) {
   if (valA === valB || (valA == null && valB == null)) {
