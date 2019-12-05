@@ -1,6 +1,6 @@
 // >>> COMPARERS <<<
 
-const defaultComparer = function(direction:number, a, b):number {
+const defaultComparer = function(a, b, direction):number {
   if (a < b) return -direction;
   if (a === b) return 0;
   if (a == null) return 1;
@@ -9,16 +9,16 @@ const defaultComparer = function(direction:number, a, b):number {
   return direction;
 };
 
-const customComparerHandler = (comparer) => (direction, a, b) => comparer(a, b) * direction;
+const customComparerHandler = (comparer) => (a, b, direction) => comparer(a, b, direction) * direction;
 
 // >>> SORTERS <<<
 
 const stringSorter = function(direction, sortBy, comparer, a, b) {
-  return comparer(direction, a[sortBy], b[sortBy]);
+  return comparer(a[sortBy], b[sortBy], direction);
 };
 
 const functionSorter = function(direction, sortBy, comparer, a, b) {
-  return comparer(direction, sortBy(a), sortBy(b));
+  return comparer(sortBy(a), sortBy(b), direction);
 };
 
 const multiPropFunctionSorter = function(sortBy, thenBy, depth, direction, comparer, a, b) {
@@ -49,7 +49,7 @@ const getMultiPropertySorter = function(sortBy) {
 }
 
 const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, comparer, a, b) {
-  const equality = comparer(direction, valA, valB);
+  const equality = comparer(valA, valB, direction);
   if(
     thenBy.length > depth &&
     (equality === 0 || (valA == null && valB == null))
@@ -90,7 +90,7 @@ const sort = function(direction, ctx, sortBy, comparer) {
 
   let sorter;
   if (!sortBy || sortBy === true) {
-    sorter = comparer.bind(undefined, direction);
+    sorter = (a, b) => comparer(a, b, direction);
   } else if (typeof sortBy === 'string') {
     sorter = stringSorter.bind(undefined, direction, sortBy, comparer);
   } else if (typeof sortBy === 'function') {
@@ -115,7 +115,7 @@ export interface ISortByFunction<T> {
 export type ISortBy<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
 
 export interface ICustomComparer {
-  comparer?(a:any, b:any):number,
+  comparer?(a:any, b:any, direction:number):number,
 }
 
 export interface ISortByAscSorter<T> extends ICustomComparer {
@@ -128,7 +128,15 @@ export interface ISortByDescSorter<T> extends ICustomComparer {
 
 export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 
-export function createSortInstance({ comparer }:{ comparer:any }) {
+export interface ICreateSortInstanceOptions extends ICustomComparer {
+  delegateOrderApplyingToComparer?:boolean,
+}
+
+export function createSortInstance(opts:ICreateSortInstanceOptions) {
+  const comparer = opts.delegateOrderApplyingToComparer
+    ? opts.comparer
+    : customComparerHandler(opts.comparer);
+
   return function sortInstance<T>(ctx:T[]) {
     return {
       /**
@@ -153,4 +161,7 @@ export function createSortInstance({ comparer }:{ comparer:any }) {
   }
 }
 
-export default createSortInstance({ comparer: defaultComparer });
+export default createSortInstance({
+  comparer: defaultComparer,
+  delegateOrderApplyingToComparer: true,
+});

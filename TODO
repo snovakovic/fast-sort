@@ -18,7 +18,7 @@ RELEASE REQUIREMENTS:
 ☐ now we can do something as  sort.asc({ desc: 'aaa' }) which sorts in desc order. Is there a reason to guard against that?? There should not be a reason to complicate a code fo that
 ☐ How correct is (valA == null && valB == null) in multiPropEqualityHandler if we are going to use custom comparer??
 ☐ Update default comparer so it accepts a and b only (we can then drop customComparerHandler) and handle direction outside comparers
-
+☐ Maybe better name for delegateOrderApplyingToComparer??
 
 NICE TO DO FOR PHASE 2:
 

@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import sort from '../src/sort';
+import sort, { createSortInstance } from '../src/sort';
 
 describe('sort', () => {
   let flatArray:number[];
@@ -90,7 +90,7 @@ describe('sort', () => {
     assertOrder(['last', 'In the middle', 'FIRST'], idx => persons[idx].name);
   });
 
-  it('Should sort undefined values to the bottom', () => {
+  it('Should sort nil values to the bottom', () => {
     sort(persons).asc((p) => p.address.code);
     assertOrder([1, 3, undefined], idx => persons[idx].address.code);
 
@@ -267,5 +267,20 @@ describe('sort', () => {
     }]);
 
     assertOrder([6, 8, 9, 10, 11], idx => multiPropArray[idx].age);
+  });
+
+  it.only('Should create natural sort sorter', () => {
+    const naturalSort = createSortInstance({
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+    });
+
+    naturalSort(multiPropArray).desc('unit');
+
+    assertOrder(['C2', 'B3', 'A10', 'A1', 'A01'], idx => multiPropArray[idx].unit);
+
+    naturalSort(multiPropArray).by({ asc: 'unit' });
+
+    assertOrder(['A01', 'A1', 'B3', 'C2',], idx => multiPropArray[idx].unit);
+
   });
 });
