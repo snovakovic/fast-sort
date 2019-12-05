@@ -1,16 +1,3 @@
-// >>> COMPARERS <<<
-
-const defaultComparer = function(a, b, direction):number {
-  if (a < b) return -direction;
-  if (a === b) return 0;
-  if (a == null) return 1;
-  if (b == null) return -1;
-
-  return direction;
-};
-
-const customComparerHandler = (comparer) => (a, b, direction) => comparer(a, b, direction) * direction;
-
 // >>> SORTERS <<<
 
 const stringSorter = function(direction, sortBy, comparer, a, b) {
@@ -29,13 +16,15 @@ const multiPropStringSorter = function(sortBy, thenBy, depth, direction, compare
   return multiPropEqualityHandler(a[sortBy], b[sortBy], thenBy, depth, direction, comparer, a, b);
 };
 
-const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
-  const { sortBy, direction, comparer } = unpackObjectSorter(sortByObj);
+const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, comparer, a, b) {
+  const { sortBy, direction, comparer: objComparer } = unpackObjectSorter(sortByObj);
   const multiSorter = getMultiPropertySorter(sortBy);
-  return multiSorter(sortBy, thenBy, depth, direction, comparer, a, b);
+  return multiSorter(sortBy, thenBy, depth, direction, objComparer || comparer, a, b);
 };
 
 // >>> HELPERS <<<
+
+const customComparerHandler = (comparer) => (a, b, direction) => comparer(a, b, direction) * direction;
 
 const getMultiPropertySorter = function(sortBy) {
   switch(typeof sortBy) {
@@ -66,7 +55,7 @@ const unpackObjectSorter = function(sortByObj) {
   const direction = (sortByObj as any).asc ? 1 : -1;
   const comparer = sortByObj.comparer
     ? customComparerHandler(sortByObj.comparer)
-    : defaultComparer;
+    : undefined;
 
   if (!sortBy) {
     throw Error(`Invalid config. Expecting object with 'asc' or 'desc' keys`);
@@ -100,7 +89,7 @@ const sort = function(direction, ctx, sortBy, comparer) {
       .bind(undefined, sortBy.shift(), sortBy, 0, direction, comparer);
   } else {
     const objectSorterConfig = unpackObjectSorter(sortBy);
-    return sort(objectSorterConfig.direction, ctx, objectSorterConfig.sortBy, objectSorterConfig.comparer);
+    return sort(objectSorterConfig.direction, ctx, objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer);
   }
 
   return ctx.sort(sorter);
@@ -162,6 +151,13 @@ export function createSortInstance(opts:ICreateSortInstanceOptions) {
 }
 
 export default createSortInstance({
-  comparer: defaultComparer,
   delegateOrderApplyingToComparer: true,
+  comparer(a, b, direction:number):number {
+    if (a < b) return -direction;
+    if (a === b) return 0;
+    if (a == null) return 1;
+    if (b == null) return -1;
+
+    return direction;
+  },
 });

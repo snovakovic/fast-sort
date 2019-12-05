@@ -269,7 +269,7 @@ describe('sort', () => {
     assertOrder([6, 8, 9, 10, 11], idx => multiPropArray[idx].age);
   });
 
-  it.only('Should create natural sort sorter', () => {
+  it('Should create natural sort sorter', () => {
     const naturalSort = createSortInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
@@ -280,7 +280,6 @@ describe('sort', () => {
 
     naturalSort(multiPropArray).by({ asc: 'unit' });
 
-    assertOrder(['A01', 'A1', 'B3', 'C2',], idx => multiPropArray[idx].unit);
-
+    assertOrder(['A1', 'A01', 'A10', 'B3', 'C2'], idx => multiPropArray[idx].unit);
   });
 });
