@@ -126,7 +126,7 @@ export function createSortInstance(opts:ICreateSortInstanceOptions) {
     ? opts.comparer
     : customComparerHandler(opts.comparer);
 
-  return function sortInstance<T>(ctx:T[]) {
+  return function fastSort<T>(ctx:T[]) {
     return {
       /**
        * @example sort(users).asc(u => u.firstName)

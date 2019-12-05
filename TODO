@@ -1,25 +1,26 @@
 RELEASE REQUIREMENTS:
 
-☐ Name default exported sort function
+✔ Name default exported sort function @done(19-12-05 20:56)
 ☐ Better documentation for natural sort
-☐ Check about natural sort improving (instance that do natural sort by default)
-☐ should we rename customComparerProvider to e.g customComparerHandler (add comments for it)
+✔ Check about natural sort improving (instance that do natural sort by default) @done(19-12-05 20:55)
+✔ should we rename customComparerProvider to e.g customComparerHandler (add comments for it) @done(19-12-05 20:56)
 ✔ Shoud remove 2 almost indentical erros ("Invalid 'by' sorting") @done(19-12-04 16:09)
-☐ Check about using object resolver instead if in getMultiPropertySorter e.g sortDefinition[type] || multiPropObjectSorter, (pros/const)
+✔ Check about using object resolver instead if in getMultiPropertySorter e.g sortDefinition[type] || multiPropObjectSorter, (pros/const) @done(19-12-05 20:56)
 ☐ Initial buidl minified 1.93KB (Check can we make it lower) (after build update droped to 1.54 kb)
 ☐ Add TS specific linter rules as e.g (no space betwene type). check regarding other linter rules
-☐ Add proper interface for comparer
+✔ Add proper interface for comparer @done(19-12-05 20:56)
 ☐ Enable eslint in TS files
-☐ Rename flock naming in benchmarks to fast-sort
-☐ Examples in multiPropStringSorter and multiPropObjectSorter are wrong
-☐ We should also have tests for builds not just source code before publishing
-☐ Update depndendcy versions in benchmarks and run tbenchamrk reuslts again
+✔ Examples in multiPropStringSorter and multiPropObjectSorter are wrong @done(19-12-05 20:56)
 ☐ sort.by('name') is now valid or sort.by() so make sure to cover those new possibilities in tests
 ☐ now we can do something as  sort.asc({ desc: 'aaa' }) which sorts in desc order. Is there a reason to guard against that?? There should not be a reason to complicate a code fo that
-☐ How correct is (valA == null && valB == null) in multiPropEqualityHandler if we are going to use custom comparer??
-☐ Update default comparer so it accepts a and b only (we can then drop customComparerHandler) and handle direction outside comparers
+☐ How correct is (valA == null && valB == null) in multiPropEqualityHandler if we are going to use custom comparer?? Add tests arround that
+✔ Update default comparer so it accepts a and b only (we can then drop customComparerHandler) and handle direction outside comparers @done(19-12-05 20:57)
 ☐ Maybe better name for delegateOrderApplyingToComparer??
+☐ More test especially over new instances
 
 NICE TO DO FOR PHASE 2:
 
+☐ Rename flock naming in benchmarks to fast-sort
+☐ We should also have tests for builds not just source code before publishing
 ☐ Improve interfaces (so we don't have any in them as e.g for comparer)
+☐ Update depndendcy versions in benchmarks and run benchmark results again
