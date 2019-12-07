@@ -127,30 +127,66 @@ describe('sort', () => {
       p => p.age,
     ]);
 
-    assertOrder([10, 11, 8, 9, 6], idx => multiPropArray[idx].age);
+    const sortedArray = multiPropArray.map(arr => ({
+      name: arr.name,
+      lastName: arr.lastName,
+      age: arr.age,
+    }));
+
+    assert.deepEqual(sortedArray, [
+      { name: 'aa', lastName: 'aa', age: 10 },
+      { name: 'aa', lastName: 'bb', age: 11 },
+      { name: 'aa', lastName: undefined, age: 8 },
+      { name: 'aa', lastName: null, age: 9 },
+      { name: 'bb', lastName: 'aa', age: 6 },
+    ]);
   });
 
   it('Should sort on multiple properties by string sorter', () => {
     sort(multiPropArray).asc(['name', 'age', 'lastName']);
-    assertOrder([8, 9, 10, 11, 6], idx => multiPropArray[idx].age);
+    const sortedArray = multiPropArray.map(arr => ({
+      name: arr.name,
+      lastName: arr.lastName,
+      age: arr.age,
+    }));
+
+    assert.deepEqual(sortedArray, [
+      { name: 'aa', lastName: undefined, age: 8 },
+      { name: 'aa', lastName: null, age: 9 },
+      { name: 'aa', lastName: 'aa', age: 10 },
+      { name: 'aa', lastName: 'bb', age: 11 },
+      { name: 'bb', lastName: 'aa', age: 6 },
+    ]);
   });
 
   it('Should sort on multiple mixed properties', () => {
     sort(multiPropArray).asc(['name', p => p.lastName, 'age']);
-    assertOrder([10, 11, 8, 9, 6], idx => multiPropArray[idx].age);
+    const sortedArray = multiPropArray.map(arr => ({
+      name: arr.name,
+      lastName: arr.lastName,
+      age: arr.age,
+    }));
+
+    assert.deepEqual(sortedArray, [
+      { name: 'aa', lastName: 'aa', age: 10 },
+      { name: 'aa', lastName: 'bb', age: 11 },
+      { name: 'aa', lastName: undefined, age: 8 },
+      { name: 'aa', lastName: null, age: 9 },
+      { name: 'bb', lastName: 'aa', age: 6 },
+    ]);
   });
 
   it('Should sort with all equal values', () => {
-    const same = [{
-      name: 'a',
-      age: 1,
-    }, {
-      name: 'a',
-      age: 1,
-    }];
+    const same = [
+      { name: 'a', age: 1 },
+      { name: 'a', age: 1 },
+    ];
 
     sort(same).asc(['name', 'age']);
-    assert.equal(same[0].name, 'a');
+    assert.deepEqual(same, [
+      { name: 'a', age: 1 },
+      { name: 'a', age: 1 },
+    ])
   });
 
   it('Should sort by desc name and asc lastName', () => {
@@ -176,7 +212,14 @@ describe('sort', () => {
       { desc: 'age' },
     ]);
 
-    assertOrder([11, 10, 9, 8, 6], idx => multiPropArray[idx].age);
+    const sortedArray = multiPropArray.map(arr => ({ name: arr.name, age: arr.age }));
+    assert.deepEqual(sortedArray, [
+      { name: 'aa', age: 11 },
+      { name: 'aa', age: 10 },
+      { name: 'aa', age: 9 },
+      { name: 'aa', age: 8 },
+      { name: 'bb', age: 6},
+    ]);
   });
 
   it('Should sort by asc lastName, desc name and asc age', () => {
@@ -295,6 +338,9 @@ describe('sort', () => {
 
     naturalSort(flatArray).desc();
     assert.deepEqual(flatArray, [5, 5, 4, 3, 2, 1]);
+
+    naturalSort(flatNaturalArray).asc();
+    assert.deepEqual(flatNaturalArray, ['A2', 'A10', 'B2', 'B10']);
   });
 
   it('Should be able to override natural sort comparer', () => {
