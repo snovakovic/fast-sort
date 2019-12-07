@@ -379,13 +379,25 @@ describe('sort', () => {
       { name: 'bb', unit: 'B3' },
     ]);
 
-    naturalSort(multiPropArray).by([{ asc: 'name'}, { desc: 'unit' }]);
+    naturalSort(multiPropArray).by([{ asc: 'name' }, { desc: 'unit' }]);
     sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
     assert.deepEqual(sortedArray, [
       { name: 'aa', unit: 'C2' },
       { name: 'aa', unit: 'A10' },
       { name: 'aa', unit: 'A2' },
       { name: 'aa', unit: 'A01' },
+      { name: 'bb', unit: 'B3' },
+    ]);
+  });
+
+  it('Should sort in asc order with by sorter if object config not provided', () => {
+    sort(multiPropArray).by(['name', 'unit'] as any);
+    const sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
+    assert.deepEqual(sortedArray, [
+      { name: 'aa', unit: 'A01' },
+      { name: 'aa', unit: 'A10' },
+      { name: 'aa', unit: 'A2' },
+      { name: 'aa', unit: 'C2' },
       { name: 'bb', unit: 'B3' },
     ]);
   });
