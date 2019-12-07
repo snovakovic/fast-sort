@@ -20,6 +20,7 @@ RELEASE REQUIREMENTS:
 
 NICE TO DO FOR PHASE 2:
 
+☐ Update all test to use deepEqual to be easier to read
 ☐ Rename flock naming in benchmarks to fast-sort
 ☐ We should also have tests for builds not just source code before publishing
 ☐ Improve interfaces (so we don't have any in them as e.g for comparer)
