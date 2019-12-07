@@ -1,8 +1,8 @@
 # fast-sort
 
-[![Build Status](https://travis-ci.org/snovakovic/js-flock.svg?branch=master)](https://travis-ci.org/snovakovic/js-flock)
-[![Code quality](https://api.codacy.com/project/badge/grade/fe5f8741eaed4c628bca3761c32c3b68)](https://www.codacy.com/app/snovakovic/js-flock/dashboard?bid=4653162)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/f0ea30fd63bd4bc88ea3b0965094ced1)](https://www.codacy.com/app/snovakovic/js-flock?utm_source=github.com&utm_medium=referral&utm_content=snovakovic/js-flock&utm_campaign=Badge_Coverage)
+[![Build Status](https://travis-ci.org/snovakovic/fast-sort.svg?branch=master)](https://travis-ci.org/snovakovic/fast-sort)
+[![Code quality](https://api.codacy.com/project/badge/grade/fe5f8741eaed4c628bca3761c32c3b68)](https://www.codacy.com/app/snovakovic/fast-sort/dashboard?bid=4653162)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/f0ea30fd63bd4bc88ea3b0965094ced1)](https://www.codacy.com/app/snovakovic/fast-sort?utm_source=github.com&utm_medium=referral&utm_content=snovakovic/fast-sort&utm_campaign=Badge_Coverage)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
@@ -97,7 +97,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   console.log(sortedArr); // => [1, 2, 4]
 ```
 
-NOTE: fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module.
+NOTE: fast-sort is part of [fast-sort](https://www.npmjs.com/package/fast-sort) library exported as single module.
 
 
 ### Benchmark

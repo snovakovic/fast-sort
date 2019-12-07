@@ -4,16 +4,16 @@ module.exports.run = function({
   sortImplementation,
   testArr,
   numberOfRuns,
-  flockOnly,
+  fastSortOnly,
 }) {
   // Control array to make sure that all implementation have sorted arrays correctly
-  const controlArr = sortImplementation.flock([...testArr]);
+  const controlArr = sortImplementation.fastSort([...testArr]);
   const run = runner.bind(undefined, testArr, controlArr, numberOfRuns);
 
-  if (flockOnly) {
+  if (fastSortOnly) {
     return {
-      flock: run(sortImplementation.flock),
-      latestFlock: run(sortImplementation.latestFlock),
+      fastSort: run(sortImplementation.fastSort),
+      latestFastSort: run(sortImplementation.latestFastSort),
     };
   }
 

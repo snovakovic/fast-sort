@@ -1,17 +1,17 @@
-const jsFlock = require('js-flock');
+const fastSort = require('fast-sort');
 const arraySort = require('array-sort');
 const lodash = require('lodash');
-const latestFlockSort = require('../../dist/sort.js');
+const latestFastSortSort = require('../../dist/sort.js');
 const getRandomInt = require('../getRandomInt');
 
 const base = require('./base');
 
 const sortImplementation = {
-  flock: (arr) => jsFlock.sort(arr).asc([
+  fastSort: (arr) => fastSort(arr).asc([
     (p) => p.am1,
     (p) => p.am2,
   ]),
-  latestFlock: (arr) => latestFlockSort(arr).asc([
+  latestFastSort: (arr) => latestFastSortSort(arr).asc([
     (p) => p.am1,
     (p) => p.am2,
   ]),
@@ -22,7 +22,7 @@ const sortImplementation = {
   arraySort: (arr) => arraySort(arr, 'am1', 'am2'),
 };
 
-module.exports.run = function({ size, numberOfRuns, flockOnly }) {
+module.exports.run = function({ size, numberOfRuns, fastSortOnly }) {
   const testArr = [];
   for (let i = 0; i < size; i++) {
     testArr.push({
@@ -36,6 +36,6 @@ module.exports.run = function({ size, numberOfRuns, flockOnly }) {
     sortImplementation,
     testArr,
     numberOfRuns,
-    flockOnly,
+    fastSortOnly,
   });
 };
