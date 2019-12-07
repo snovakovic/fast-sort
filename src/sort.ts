@@ -1,46 +1,6 @@
-// >>> SORTERS <<<
-
-const multiPropFunctionSorter = function(sortBy, thenBy, depth, order, comparer, a, b) {
-  return multiPropEqualityHandler(sortBy(a), sortBy(b), thenBy, depth, order, comparer, a, b);
-};
-
-const multiPropStringSorter = function(sortBy, thenBy, depth, order, comparer, a, b) {
-  return multiPropEqualityHandler(a[sortBy], b[sortBy], thenBy, depth, order, comparer, a, b);
-};
-
-const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, comparer, a, b) {
-  const { sortBy, order, comparer: objComparer } = unpackObjectSorter(sortByObj);
-  const multiSorter = getMultiPropertySorter(sortBy);
-  return multiSorter(sortBy, thenBy, depth, order, objComparer || comparer, a, b);
-};
-
 // >>> HELPERS <<<
 
 const orderHandler = (comparer) => (a, b, order) => comparer(a, b, order) * order;
-
-const getMultiPropertySorter = function(sortBy) {
-  switch (typeof sortBy) {
-    case 'string':
-      return multiPropStringSorter;
-    case 'function':
-      return multiPropFunctionSorter;
-    default:
-      return multiPropObjectSorter;
-  }
-};
-
-const multiPropEqualityHandler = function(valA, valB, thenBy, depth, order, comparer, a, b) {
-  const equality = comparer(valA, valB, order);
-  if (
-    thenBy.length > depth &&
-    (equality === 0 || (valA == null && valB == null))
-  ) {
-    const multiSorter = getMultiPropertySorter(thenBy[depth]);
-    return multiSorter(thenBy[depth], thenBy, depth + 1, order, comparer, a, b);
-  }
-
-  return equality;
-};
 
 const unpackObjectSorter = function(sortByObj) {
   const sortBy = (sortByObj || {}).asc || (sortByObj || {}).desc;
@@ -56,9 +16,47 @@ const unpackObjectSorter = function(sortByObj) {
   return { order, sortBy, comparer };
 };
 
-/**
- * Pick sorter based on provided sortBy configuration.
- */
+// >>> SORTERS <<<
+
+const multiPropertySort = function(sortBy, thenBy, depth, order, comparer, a, b) {
+  let valA;
+  let valB;
+
+  switch (typeof sortBy) {
+    case 'string':
+      valA = a[sortBy];
+      valB = b[sortBy];
+      break;
+    case 'function':
+      valA = sortBy(a);
+      valB = sortBy(b);
+      break;
+    default: {
+      const objectSorterConfig = unpackObjectSorter(sortBy);
+      return multiPropertySort(
+        objectSorterConfig.sortBy,
+        thenBy,
+        depth,
+        objectSorterConfig.order,
+        objectSorterConfig.comparer || comparer,
+        a,
+        b,
+      );
+    }
+  }
+
+  const equality = comparer(valA, valB, order);
+
+  if (
+    thenBy.length > depth &&
+    (equality === 0 || (valA == null && valB == null))
+  ) {
+    return multiPropertySort(thenBy[depth], thenBy, depth + 1, order, comparer, a, b);
+  }
+
+  return equality;
+};
+
 const sort = function(order, ctx, sortBy, comparer) {
   if (!Array.isArray(ctx)) {
     return ctx;
@@ -77,8 +75,7 @@ const sort = function(order, ctx, sortBy, comparer) {
   } else if (typeof sortBy === 'function') {
     sorter = (a, b) => comparer(sortBy(a), sortBy(b), order);
   } else if (Array.isArray(sortBy)) {
-    sorter = getMultiPropertySorter(sortBy[0])
-      .bind(undefined, sortBy.shift(), sortBy, 0, order, comparer);
+    sorter = multiPropertySort.bind(undefined, sortBy.shift(), sortBy, 0, order, comparer);
   } else {
     const objectSorterConfig = unpackObjectSorter(sortBy);
     return sort(
