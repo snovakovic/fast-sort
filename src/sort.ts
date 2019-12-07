@@ -1,13 +1,5 @@
 // >>> SORTERS <<<
 
-const stringSorter = function(order, sortBy, comparer, a, b) {
-  return comparer(a[sortBy], b[sortBy], order);
-};
-
-const functionSorter = function(order, sortBy, comparer, a, b) {
-  return comparer(sortBy(a), sortBy(b), order);
-};
-
 const multiPropFunctionSorter = function(sortBy, thenBy, depth, order, comparer, a, b) {
   return multiPropEqualityHandler(sortBy(a), sortBy(b), thenBy, depth, order, comparer, a, b);
 };
@@ -81,9 +73,9 @@ const sort = function(order, ctx, sortBy, comparer) {
   if (sortBy === undefined || sortBy === true) {
     sorter = (a, b) => comparer(a, b, order);
   } else if (typeof sortBy === 'string') {
-    sorter = stringSorter.bind(undefined, order, sortBy, comparer);
+    sorter = (a, b) => comparer(a[sortBy], b[sortBy], order);
   } else if (typeof sortBy === 'function') {
-    sorter = functionSorter.bind(undefined, order, sortBy, comparer);
+    sorter = (a, b) => comparer(sortBy(a), sortBy(b), order);
   } else if (Array.isArray(sortBy)) {
     sorter = getMultiPropertySorter(sortBy[0])
       .bind(undefined, sortBy.shift(), sortBy, 0, order, comparer);

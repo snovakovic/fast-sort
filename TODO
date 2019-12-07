@@ -1,7 +1,7 @@
 RELEASE REQUIREMENTS:
 
 ✔ Name default exported sort function @done(19-12-05 20:56)
-☐ Better documentation for natural sort
+☐ Better documentation for natural sort (remove js-flock mentionings)
 ✔ Check about natural sort improving (instance that do natural sort by default) @done(19-12-05 20:55)
 ✔ should we rename customComparerProvider to e.g customComparerHandler (add comments for it) @done(19-12-05 20:56)
 ✔ Shoud remove 2 almost indentical erros ("Invalid 'by' sorting") @done(19-12-04 16:09)
@@ -11,11 +11,11 @@ RELEASE REQUIREMENTS:
 ✔ Add proper interface for comparer @done(19-12-05 20:56)
 ✔ Enable eslint in TS files @done(19-12-07 19:33)
 ✔ Examples in multiPropStringSorter and multiPropObjectSorter are wrong @done(19-12-05 20:56)
-☐ sort.by('name') is now valid or sort.by() so make sure to cover those new possibilities in tests
-☐ now we can do something as  sort.asc({ desc: 'aaa' }) which sorts in desc order. Is there a reason to guard against that?? There should not be a reason to complicate a code fo that
+✔ sort.by('name') is now valid or sort.by() so make sure to cover those new possibilities in tests @done(19-12-07 21:00)
+✔ now we can do something as  sort.asc({ desc: 'aaa' }) which sorts in desc order. Is there a reason to guard against that?? There should not be a reason to complicate a code fo that @done(19-12-07 21:00)
 ☐ How correct is (valA == null && valB == null) in multiPropEqualityHandler if we are going to use custom comparer?? Add tests arround that
 ✔ Update default comparer so it accepts a and b only (we can then drop customComparerHandler) and handle direction outside comparers @done(19-12-05 20:57)
-☐ Maybe better name for delegateOrderApplyingToComparer??
+✔ Maybe better name for delegateOrderApplyingToComparer?? @done(19-12-07 21:00)
 ✔ More test especially over new instances @done(19-12-07 19:35)
 ☐ Exporting min or full version by default??
 ☐ Build warning about named and default exports
