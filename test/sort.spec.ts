@@ -26,7 +26,7 @@ describe('sort', () => {
 
   beforeEach(() => {
     flatArray = [1, 5, 3, 2, 4, 5];
-    flatNaturalArray = ['A10', 'A1', 'B10', 'B2'];
+    flatNaturalArray = ['A10', 'A2', 'B10', 'B2'];
 
     persons = [{
       name: 'last',
@@ -51,7 +51,7 @@ describe('sort', () => {
       name: 'aa',
       lastName: undefined,
       age: 8,
-      unit: 'A1',
+      unit: 'A2',
     }, {
       name: 'aa',
       lastName: null,
@@ -223,7 +223,7 @@ describe('sort', () => {
     }]);
 
     assertOrder(
-      ['A1', 'A10', 'B2', 'B10'],
+      ['A2', 'A10', 'B2', 'B10'],
       idx => flatNaturalArray[idx],
     );
   });
@@ -235,7 +235,7 @@ describe('sort', () => {
     }]);
 
     assertOrder(
-      ['B10', 'B2', 'A10', 'A1'],
+      ['B10', 'B2', 'A10', 'A2'],
       idx => flatNaturalArray[idx],
     );
   });
@@ -246,7 +246,7 @@ describe('sort', () => {
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
-    assertOrder(['A1', 'A01', 'A10', 'B3', 'C2'], idx => multiPropArray[idx].unit);
+    assertOrder(['A01', 'A2', 'A10', 'B3', 'C2'], idx => multiPropArray[idx].unit);
   });
 
   it('Should sort object in desc order using custom comparer', () => {
@@ -255,7 +255,7 @@ describe('sort', () => {
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
-    assertOrder(['C2', 'B3', 'A10', 'A1', 'A01'], idx => multiPropArray[idx].unit);
+    assertOrder(['C2', 'B3', 'A10', 'A2', 'A01'], idx => multiPropArray[idx].unit);
   });
 
   it('Should sort object using multiple sorts and a comparer', () => {
@@ -266,20 +266,65 @@ describe('sort', () => {
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
-    assertOrder([6, 8, 9, 10, 11], idx => multiPropArray[idx].age);
+    const sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
+    assert.deepEqual(sortedArray, [
+      { name: 'bb', unit: 'B3'},
+      { name: 'aa', unit: 'A01'},
+      { name: 'aa', unit: 'A2'},
+      { name: 'aa', unit: 'A10'},
+      { name: 'aa', unit: 'C2'},
+    ]);
   });
 
-  it('Should create natural sort sorter', () => {
+  it('Should create natural sort instance and handle sorting correctly', () => {
     const naturalSort = createSortInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
 
     naturalSort(multiPropArray).desc('unit');
-
-    assertOrder(['C2', 'B3', 'A10', 'A1', 'A01'], idx => multiPropArray[idx].unit);
+    assertOrder(['C2', 'B3', 'A10', 'A2', 'A01'], idx => multiPropArray[idx].unit);
 
     naturalSort(multiPropArray).by({ asc: 'unit' });
+    assertOrder(['A01', 'A2', 'A10', 'B3', 'C2'], idx => multiPropArray[idx].unit);
 
-    assertOrder(['A1', 'A01', 'A10', 'B3', 'C2'], idx => multiPropArray[idx].unit);
+    naturalSort(multiPropArray).asc('lastName');
+    assertOrder(['aa', 'aa', 'bb', null, undefined], idx => multiPropArray[idx].lastName);
+
+    naturalSort(multiPropArray).desc(p => p.lastName);
+    assertOrder([undefined, null, 'bb', 'aa', 'aa'], idx => multiPropArray[idx].lastName);
+  });
+
+  it('Should be able to override natural sort comparer', () => {
+    const naturalSort = createSortInstance({
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+    });
+
+    naturalSort(multiPropArray).by([{
+      asc: 'name'
+    }, {
+      desc: 'unit',
+      comparer(a, b) { // NOTE: override natural sort
+        if (a === b) return 0;
+        return a < b ? -1: 1;
+      },
+    }]);
+
+    const sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
+    assert.deepEqual(sortedArray, [{
+      name: 'aa',
+      unit: 'C2',
+    }, {
+      name: 'aa',
+      unit: 'A2',
+    }, {
+      name: 'aa',
+      unit: 'A10',
+    }, {
+      name: 'aa',
+      unit: 'A01'
+    }, {
+      name: 'bb',
+      unit: 'B3',
+    }])
   });
 });
