@@ -405,4 +405,19 @@ describe('sort', () => {
   it('Should handle edge cases', () => {
     assert.deepEqual(sort([2, 1, 4]).asc([]), [1, 2, 4]);
   });
+
+  it('Should not mutate sort by array', () => {
+    const sortBy = [{ asc: 'name' }, { asc: 'unit' }];
+    sort(multiPropArray).by(sortBy);
+    assert.deepEqual(sortBy, [{ asc: 'name' }, { asc: 'unit' }]);
+
+    const sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
+    assert.deepEqual(sortedArray, [
+      { name: 'aa', unit: 'A01' },
+      { name: 'aa', unit: 'A10' },
+      { name: 'aa', unit: 'A2' },
+      { name: 'aa', unit: 'C2' },
+      { name: 'bb', unit: 'B3' },
+    ]);
+  });
 });
