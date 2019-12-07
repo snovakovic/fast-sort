@@ -15,10 +15,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/snovakovic/js-flock.git"
+    "url": "git+https://github.com/snovakovic/fast-sort.git"
   },
   "bugs": {
-    "url": "https://github.com/snovakovic/js-flock/issues"
+    "url": "https://github.com/snovakovic/fast-sort/issues"
   },
   "keywords": [
     "sort",
