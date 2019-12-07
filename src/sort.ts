@@ -22,27 +22,23 @@ const multiPropertySort = function(sortBy, thenBy, depth, order, comparer, a, b)
   let valA;
   let valB;
 
-  switch (typeof sortBy) {
-    case 'string':
-      valA = a[sortBy];
-      valB = b[sortBy];
-      break;
-    case 'function':
-      valA = sortBy(a);
-      valB = sortBy(b);
-      break;
-    default: {
-      const objectSorterConfig = unpackObjectSorter(sortBy);
-      return multiPropertySort(
-        objectSorterConfig.sortBy,
-        thenBy,
-        depth,
-        objectSorterConfig.order,
-        objectSorterConfig.comparer || comparer,
-        a,
-        b,
-      );
-    }
+  if (typeof sortBy === 'string') {
+    valA = a[sortBy];
+    valB = b[sortBy];
+  } else if (typeof sortBy === 'function') {
+    valA = sortBy(a);
+    valB = sortBy(b);
+  } else {
+    const objectSorterConfig = unpackObjectSorter(sortBy);
+    return multiPropertySort(
+      objectSorterConfig.sortBy,
+      thenBy,
+      depth,
+      objectSorterConfig.order,
+      objectSorterConfig.comparer || comparer,
+      a,
+      b,
+    );
   }
 
   const equality = comparer(valA, valB, order);
