@@ -292,6 +292,9 @@ describe('sort', () => {
 
     naturalSort(multiPropArray).desc(p => p.lastName);
     assertOrder([undefined, null, 'bb', 'aa', 'aa'], idx => multiPropArray[idx].lastName);
+
+    naturalSort(flatArray).desc();
+    assert.deepEqual(flatArray, [5, 5, 4, 3, 2, 1]);
   });
 
   it('Should be able to override natural sort comparer', () => {
@@ -309,22 +312,23 @@ describe('sort', () => {
       },
     }]);
 
-    const sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
-    assert.deepEqual(sortedArray, [{
-      name: 'aa',
-      unit: 'C2',
-    }, {
-      name: 'aa',
-      unit: 'A2',
-    }, {
-      name: 'aa',
-      unit: 'A10',
-    }, {
-      name: 'aa',
-      unit: 'A01'
-    }, {
-      name: 'bb',
-      unit: 'B3',
-    }])
+    let sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
+    assert.deepEqual(sortedArray, [
+      { name: 'aa', unit: 'C2' },
+      { name: 'aa', unit: 'A2' },
+      { name: 'aa', unit: 'A10' },
+      { name: 'aa', unit: 'A01' },
+      { name: 'bb', unit: 'B3' }
+    ]);
+
+    naturalSort(multiPropArray).by([{ asc: 'name'}, { desc: 'unit' }]);
+    sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
+    assert.deepEqual(sortedArray, [
+      { name: 'aa', unit: 'C2' },
+      { name: 'aa', unit: 'A10' },
+      { name: 'aa', unit: 'A2' },
+      { name: 'aa', unit: 'A01' },
+      { name: 'bb', unit: 'B3' }
+    ]);
   });
 });
