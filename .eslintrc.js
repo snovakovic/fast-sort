@@ -1,14 +1,20 @@
 module.exports = {
-  extends: ['airbnb-base'],
+  parser:  '@typescript-eslint/parser',
+  parserOptions:  {
+    ecmaVersion:  2018,
+    sourceType:  'module',
+  },
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'airbnb-base',
+  ],
   env: {
-    browser: true,
     node: true,
     es6: true,
     mocha: true
   },
   globals: {
     expect: true,
-    sinon: true,
   },
   rules: {
     'comma-dangle': ['error', 'always-multiline'],
@@ -26,5 +32,6 @@ module.exports = {
     'guard-for-in': 0,
     'no-plusplus': 0,
     'arrow-parens': 0,
+    '@typescript-eslint/type-annotation-spacing': ['error', { before: false, after: false }],
   }
 };
