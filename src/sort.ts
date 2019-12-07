@@ -51,15 +51,15 @@ const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, 
 };
 
 const unpackObjectSorter = function(sortByObj) {
-  const sortBy = sortByObj.asc || sortByObj.desc;
+  const sortBy = (sortByObj || {}).asc || (sortByObj || {}).desc;
+  if (!sortBy) {
+    throw Error('Invalid sort config');
+  }
+
   const direction = sortByObj.asc ? 1 : -1;
   const comparer = sortByObj.comparer
     ? comparerHandler(sortByObj.comparer)
     : undefined;
-
-  if (!sortBy) {
-    throw Error("Invalid config. Expecting object with 'asc' or 'desc' keys");
-  }
 
   return { direction, sortBy, comparer };
 };
@@ -78,7 +78,7 @@ const sort = function(direction, ctx, sortBy, comparer) {
   }
 
   let sorter;
-  if (!sortBy || sortBy === true) {
+  if (sortBy === undefined || sortBy === true) {
     sorter = (a, b) => comparer(a, b, direction);
   } else if (typeof sortBy === 'string') {
     sorter = stringSorter.bind(undefined, direction, sortBy, comparer);

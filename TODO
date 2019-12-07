@@ -7,16 +7,18 @@ RELEASE REQUIREMENTS:
 ✔ Shoud remove 2 almost indentical erros ("Invalid 'by' sorting") @done(19-12-04 16:09)
 ✔ Check about using object resolver instead if in getMultiPropertySorter e.g sortDefinition[type] || multiPropObjectSorter, (pros/const) @done(19-12-05 20:56)
 ☐ Initial buidl minified 1.93KB (Check can we make it lower) (after build update droped to 1.54 kb)
-☐ Add TS specific linter rules as e.g (no space betwene type). check regarding other linter rules
+✔ Add TS specific linter rules as e.g (no space betwene type). check regarding other linter rules @done(19-12-07 19:34)
 ✔ Add proper interface for comparer @done(19-12-05 20:56)
-☐ Enable eslint in TS files
+✔ Enable eslint in TS files @done(19-12-07 19:33)
 ✔ Examples in multiPropStringSorter and multiPropObjectSorter are wrong @done(19-12-05 20:56)
 ☐ sort.by('name') is now valid or sort.by() so make sure to cover those new possibilities in tests
 ☐ now we can do something as  sort.asc({ desc: 'aaa' }) which sorts in desc order. Is there a reason to guard against that?? There should not be a reason to complicate a code fo that
 ☐ How correct is (valA == null && valB == null) in multiPropEqualityHandler if we are going to use custom comparer?? Add tests arround that
 ✔ Update default comparer so it accepts a and b only (we can then drop customComparerHandler) and handle direction outside comparers @done(19-12-05 20:57)
 ☐ Maybe better name for delegateOrderApplyingToComparer??
-☐ More test especially over new instances
+✔ More test especially over new instances @done(19-12-07 19:35)
+☐ Exporting min or full version by default??
+☐ Build warning about named and default exports
 
 NICE TO DO FOR PHASE 2:
 

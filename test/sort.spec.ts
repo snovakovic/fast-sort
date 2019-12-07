@@ -233,8 +233,20 @@ describe('sort', () => {
   });
 
   it('Should throw invalid usage of by sorter exception', () => {
-    assert.throws(() => sort(multiPropArray).by([{ asci: 'name' }] as any), Error);
-    assert.throws(() => sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }] as any), Error);
+    const errorMessage = 'Invalid sort config';
+
+    assert.throws(
+      () => sort(multiPropArray).by([{ asci: 'name' }] as any),
+      Error,
+      errorMessage,
+    );
+    assert.throws(
+      () => sort(multiPropArray).by([{ asc: 'lastName' }, { ass: 'name' }] as any),
+      Error,
+      errorMessage,
+    );
+    assert.throws(() => sort([1, 2]).asc(null), Error, errorMessage);
+    assert.throws(() => sort([1, 2]).desc([1, 2, 3] as any), Error, errorMessage);
   });
 
   it('Should sort ascending with by on 1 property', () => {
@@ -376,5 +388,9 @@ describe('sort', () => {
       { name: 'aa', unit: 'A01' },
       { name: 'bb', unit: 'B3' },
     ]);
+  });
+
+  it('Should handle edge cases', () => {
+    assert.deepEqual(sort([2, 1, 4]).asc([]), [1, 2, 4]);
   });
 });
