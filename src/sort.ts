@@ -129,19 +129,44 @@ export function createSortInstance(opts:ICreateSortInstanceOptions) {
   return function fastSort<T>(ctx:T[]) {
     return {
       /**
-       * @example sort(users).asc(u => u.firstName)
+       * Sorts array in ascending order. Mutates provided array by sorting it.
+       * @example
+       * sort([3, 1, 4]).asc();
+       * sort(users).asc('firstName');
+       * sort(users).asc(u => u.address.zip);
+       * sort(users).asc([
+       *  'firstName',
+       *  'lastName',
+       *   u => u.address.zip,
+       * ]);
        */
       asc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
         return sort(1, ctx, sortBy, comparer);
       },
       /**
-       * @example sort(users).desc(u => u.firstName)
+       * Sorts array in descending order. Mutates provided array by sorting it.
+       * @example
+       * sort([3, 1, 4]).desc();
+       * sort(users).desc('firstName');
+       * sort(users).desc(u => u.address.zip);
+       * sort(users).desc([z
+       *  'firstName',
+       *  'lastName',
+       *   u => u.address.zip,
+       * ]);
        */
       desc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
         return sort(-1, ctx, sortBy, comparer);
       },
       /**
-       * @example sort(users).by([{ asc: 'firstName'}, { desc: 'lastName' }])
+       * Sorts array in ascending or descending order. It allows sorting on multiple props
+       * by different direction for each prop. Mutates provided array by sorting it.
+       * @example
+       * sort(users).by([
+       *  { asc: 'firstName' }.
+       *  { desc: u => u.address.zip }
+       * ]);
+       * sort(users).by({ desc: 'lastName' });
        */
       by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
         return sort(1, ctx, sortBy, comparer);
