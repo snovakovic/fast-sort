@@ -24,10 +24,10 @@ const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, com
 
 // >>> HELPERS <<<
 
-const customComparerHandler = (comparer) => (a, b, direction) => comparer(a, b, direction) * direction;
+const comparerHandler = (comparer) => (a, b, direction) => comparer(a, b, direction) * direction;
 
 const getMultiPropertySorter = function(sortBy) {
-  switch(typeof sortBy) {
+  switch (typeof sortBy) {
     case 'string':
       return multiPropStringSorter;
     case 'function':
@@ -35,11 +35,11 @@ const getMultiPropertySorter = function(sortBy) {
     default:
       return multiPropObjectSorter;
   }
-}
+};
 
 const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, comparer, a, b) {
   const equality = comparer(valA, valB, direction);
-  if(
+  if (
     thenBy.length > depth &&
     (equality === 0 || (valA == null && valB == null))
   ) {
@@ -54,15 +54,15 @@ const unpackObjectSorter = function(sortByObj) {
   const sortBy = sortByObj.asc || sortByObj.desc;
   const direction = sortByObj.asc ? 1 : -1;
   const comparer = sortByObj.comparer
-    ? customComparerHandler(sortByObj.comparer)
+    ? comparerHandler(sortByObj.comparer)
     : undefined;
 
   if (!sortBy) {
-    throw Error(`Invalid config. Expecting object with 'asc' or 'desc' keys`);
+    throw Error("Invalid config. Expecting object with 'asc' or 'desc' keys");
   }
 
   return { direction, sortBy, comparer };
-}
+};
 
 /**
  * Pick sorter based on provided sortBy configuration.
@@ -89,7 +89,12 @@ const sort = function(direction, ctx, sortBy, comparer) {
       .bind(undefined, sortBy.shift(), sortBy, 0, direction, comparer);
   } else {
     const objectSorterConfig = unpackObjectSorter(sortBy);
-    return sort(objectSorterConfig.direction, ctx, objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer);
+    return sort(
+      objectSorterConfig.direction,
+      ctx,
+      objectSorterConfig.sortBy,
+      objectSorterConfig.comparer || comparer,
+    );
   }
 
   return ctx.sort(sorter);
@@ -98,7 +103,7 @@ const sort = function(direction, ctx, sortBy, comparer) {
 // >>> PUBLIC <<<
 
 export interface ISortByFunction<T> {
-  (prop:T):any
+  (prop:T):any,
 }
 
 export type ISortBy<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
@@ -108,11 +113,11 @@ export interface ICustomComparer {
 }
 
 export interface ISortByAscSorter<T> extends ICustomComparer {
-  asc: boolean|ISortBy<T>,
+  asc:boolean|ISortBy<T>,
 }
 
 export interface ISortByDescSorter<T> extends ICustomComparer {
-  desc: boolean|ISortBy<T>,
+  desc:boolean|ISortBy<T>,
 }
 
 export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
@@ -124,9 +129,9 @@ export interface ICreateSortInstanceOptions extends ICustomComparer {
 export function createSortInstance(opts:ICreateSortInstanceOptions) {
   const comparer = opts.delegateOrderApplyingToComparer
     ? opts.comparer
-    : customComparerHandler(opts.comparer);
+    : comparerHandler(opts.comparer);
 
-  return function fastSort<T>(ctx:T[]) {
+  return function<T>(ctx:T[]) {
     return {
       /**
        * Sorts array in ascending order. Mutates provided array by sorting it.
@@ -170,9 +175,9 @@ export function createSortInstance(opts:ICreateSortInstanceOptions) {
        */
       by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
         return sort(1, ctx, sortBy, comparer);
-      }
+      },
     };
-  }
+  };
 }
 
 export default createSortInstance({

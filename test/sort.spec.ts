@@ -4,14 +4,14 @@ import sort, { createSortInstance } from '../src/sort';
 describe('sort', () => {
   let flatArray:number[];
   let flatNaturalArray:string[];
-  let persons: {
+  let persons:{
     name:string,
     dob:Date,
-    address: {
+    address:{
       code?:number,
-    }
+    },
   }[];
-  let multiPropArray: {
+  let multiPropArray:{
     name:string,
     lastName:string,
     age:number,
@@ -186,7 +186,7 @@ describe('sort', () => {
     assert.deepEqual(same, [
       { name: 'a', age: 1 },
       { name: 'a', age: 1 },
-    ])
+    ]);
   });
 
   it('Should sort by desc name and asc lastName', () => {
@@ -218,7 +218,7 @@ describe('sort', () => {
       { name: 'aa', age: 10 },
       { name: 'aa', age: 9 },
       { name: 'aa', age: 8 },
-      { name: 'bb', age: 6},
+      { name: 'bb', age: 6 },
     ]);
   });
 
@@ -311,11 +311,11 @@ describe('sort', () => {
 
     const sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
     assert.deepEqual(sortedArray, [
-      { name: 'bb', unit: 'B3'},
-      { name: 'aa', unit: 'A01'},
-      { name: 'aa', unit: 'A2'},
-      { name: 'aa', unit: 'A10'},
-      { name: 'aa', unit: 'C2'},
+      { name: 'bb', unit: 'B3' },
+      { name: 'aa', unit: 'A01' },
+      { name: 'aa', unit: 'A2' },
+      { name: 'aa', unit: 'A10' },
+      { name: 'aa', unit: 'C2' },
     ]);
   });
 
@@ -349,12 +349,12 @@ describe('sort', () => {
     });
 
     naturalSort(multiPropArray).by([{
-      asc: 'name'
+      asc: 'name',
     }, {
       desc: 'unit',
       comparer(a, b) { // NOTE: override natural sort
         if (a === b) return 0;
-        return a < b ? -1: 1;
+        return a < b ? -1 : 1;
       },
     }]);
 
@@ -364,7 +364,7 @@ describe('sort', () => {
       { name: 'aa', unit: 'A2' },
       { name: 'aa', unit: 'A10' },
       { name: 'aa', unit: 'A01' },
-      { name: 'bb', unit: 'B3' }
+      { name: 'bb', unit: 'B3' },
     ]);
 
     naturalSort(multiPropArray).by([{ asc: 'name'}, { desc: 'unit' }]);
@@ -374,7 +374,7 @@ describe('sort', () => {
       { name: 'aa', unit: 'A10' },
       { name: 'aa', unit: 'A2' },
       { name: 'aa', unit: 'A01' },
-      { name: 'bb', unit: 'B3' }
+      { name: 'bb', unit: 'B3' },
     ]);
   });
 });
