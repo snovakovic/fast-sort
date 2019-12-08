@@ -92,7 +92,7 @@ export interface ISortByFunction<T> {
 export type ISortBy<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
 
 export interface ISortComparer {
-  comparer?(a:any, b:any, order:number):number,
+  comparer?(a:any, b:any, order:1|-1):number,
 }
 
 export interface ISortByAscSorter<T> extends ISortComparer {
@@ -158,7 +158,7 @@ function createSortInstance(opts:ISortComparer) {
 }
 
 const defaultSort = createSortInstance({
-  comparer(a, b, order:number):number {
+  comparer(a, b, order):number {
     if (a == null) return order;
     if (b == null) return -order;
     if (a < b) return -1;
