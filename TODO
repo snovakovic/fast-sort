@@ -18,12 +18,12 @@ RELEASE REQUIREMENTS:
 ✔ Maybe better name for delegateOrderApplyingToComparer?? @done(19-12-07 21:00)
 ✔ More test especially over new instances @done(19-12-07 19:35)
 ☐ Exporting min or full version by default??
+☐ We should also have tests for builds not just source code before publishing
 ✔ Build warning about named and default exports @done(19-12-08 09:53)
 
 NICE TO DO FOR PHASE 2:
 
 ☐ Update all test to use deepEqual to be easier to read
 ✔ Rename fastSort naming in benchmarks to fast-sort @done(19-12-07 20:26)
-☐ We should also have tests for builds not just source code before publishing
 ☐ Improve interfaces (so we don't have any in them as e.g for comparer)
 ☐ Update depndendcy versions in benchmarks and run benchmark results again
