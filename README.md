@@ -97,16 +97,28 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 
   // Same as with asc/desc sorters we can use string shorthand for root object properties
   sort(users).by([{ asc: 'name' }, { desc: 'age' }]);
+
+  // Sort users by city using custom comparer
+  sort(users).by([
+    asc: u => u.address.city
+    comparer: (a, b) => a.localeCompare(b)
+  ]);
+
+  // We can override default comparer just for some properties
+  sort(users).by([
+    { asc: 'age' },
+    {
+      desc: 'city',
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+    },
+  ]);
 ```
 
 ### Natural sorting / Language sensitive sorting
 
 By default `fast-sort` is not doing language sensitive sorting of strings.
 e.g `image-11.jpg` will be sorted before `image-2.jpg` (in ascending sorting).
-If we want to have natural sorting of strings where `image-11.jpg`
-will be sorted after `image-2.jpg` (in ascending order) we can ether create new sort instance
-or override default `comparer` with `by` sorter and provide it e.g
-[Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) comparer.
+We can provide custom [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) comparer to fast-sort for language sensitive sorting of strings.
 Keep in mind that natural sort is slower then default sorting so recommendation is to use it
 only when needed.
 
@@ -193,6 +205,8 @@ and more flexibility by upgrading to `v2`.
 
 ### Things to know
 
+When using custom compares as e.g [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) it's up to you to ensure those features are available in all the platforms you intend to support. (In above example you can check browser compatibility for Intl.Collator)
+
 ```javascript
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
@@ -209,15 +223,6 @@ and more flexibility by upgrading to `v2`.
   const sortedArr = sort([...arr]).asc();
   console.log(arr); // => [1, 4, 2]
   console.log(sortedArr); // => [1, 2, 4]
-
-  // We can override default comparer just for some properties
-  sort(users).by([
-    { asc: 'age' },
-    {
-      desc: 'profileImage',
-      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
-    },
-  ]);
 ```
 
 ### Benchmark
