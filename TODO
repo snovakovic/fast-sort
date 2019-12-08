@@ -23,6 +23,7 @@ RELEASE REQUIREMENTS:
 ☐ Check about removing preventDefaultOrderHandling
 ☐ Is there anything we can do wit undefoined values been ignored??
 ☐ Include readme in tests to make sure they are correct
+☐ Throw error from by if we don't provide array or object (with tests)
 
 NICE TO DO FOR PHASE 2:
 

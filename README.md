@@ -68,7 +68,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort(users).asc('firstName');
 
   // Sort by nested object properties
-  // NOTE: for nested object properties we can't use string shorthand('address.city' is not valid syntax).
+  // NOTE: for nested object properties we can't use string shorthand ('address.city' is not valid syntax).
   sort(users).asc(u => u.address.city);
 
   // Sort by multiple properties
@@ -82,8 +82,8 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 ```
 
 * `by` sorter can do anything that `asc` / `desc` sorters can with addition to some more advance
-  sort handling. With `by` sorter we can sort by multiple properties in different directions.
-  We can also override default `comparer` for e.g natural sort purposes
+  sort handling. With `by` sorter we can sort by multiple properties in different directions and
+  we can override default `comparer` for e.g natural sort purposes
   (for example on overriding default `comparer` check natural sort section).
 
 ```javascript
@@ -106,9 +106,9 @@ e.g `image-11.jpg` will be sorted before `image-2.jpg` (in ascending sorting).
 If we want to have natural sorting of strings where `image-11.jpg`
 will be sorted after `image-2.jpg` (in ascending order) we can ether create new sort instance
 or override default `comparer` with `by` sorter and provide it e.g
-[Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) comparer. Check the code below for both examples.
+[Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) comparer.
 Keep in mind that natural sort is slower then default sorting so recommendation is to use it
-only when needed and not for every sorting.
+only when needed.
 
 ```javascript
   import sort from 'fast-sort';
@@ -140,36 +140,35 @@ Fast sort can be tailored to fit any sorting need or use case by:
   * creating custom sorting instances
   * overriding default comparer in `by` sorter
   * custom handling in provided callback function
-  * combine any of the above together
+  * combination of any from above
 
 For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of greater importance then `captain` tag).
 
 ```javascript
-    import sort from 'fast-sort';
+  import sort from 'fast-sort';
 
-    const tagsImportance = { vip: 3, influencer: 2, captain: 1 }; // Any domain specific logic
-    const tags = ['influencer', 'unknown', 'vip', 'captain'];
+  const tagsImportance = { vip: 3, influencer: 2, captain: 1 }; // Some domain specific logic
+  const tags = ['influencer', 'unknown', 'vip', 'captain'];
 
-    // Sort tags in ascending order by custom tags values
-    sort(tags).asc(tag => tagImportance[tag] || 0); // => ['unknown', 'captain', 'influencer', 'vip'];
-    sort(tags).desc(tag => tagImportance[tag] || 0); // => ['vip', 'influencer', 'captain', 'unknown'];
+  // Sort tags in ascending order by custom tags values
+  sort(tags).asc(tag => tagImportance[tag] || 0); // => ['unknown', 'captain', 'influencer', 'vip'];
+  sort(tags).desc(tag => tagImportance[tag] || 0); // => ['vip', 'influencer', 'captain', 'unknown'];
 
-    // If we will use tags sorter in multiple places we can als create specialized tagSorter instance
-    // and reuse it across the application
-    const tagSorter = sort.createNewInstance({
-      comparer: (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0)
-    });
+  // We can also create specialized tagSorter instance and reuse it across the application
+  const tagSorter = sort.createNewInstance({
+    comparer: (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0)
+  });
 
-    tagSorter(tags).asc(); // => ['unknown', 'captain', 'influencer', 'vip'];
-    tagSorter(tags).desc(); // => ['vip', 'influencer', 'captain', 'unknown'];
+  tagSorter(tags).asc(); // => ['unknown', 'captain', 'influencer', 'vip'];
+  tagSorter(tags).desc(); // => ['vip', 'influencer', 'captain', 'unknown'];
 
-    // Default sorter will sort tags by string comparison
-    sort(tags).asc(); // => ['captain', 'influencer', 'unknown' 'vip']
+  // Default sorter will sort tags by string comparison
+  sort(tags).asc(); // => ['captain', 'influencer', 'unknown' 'vip']
 ```
 
-### Things to know
+### Fast sort versions
 
- * There is no breaking changes in `v2` version of library. Take advantage of better editor support
+There is no breaking changes in `v2` version of library. Take advantage of better editor support
 and more flexibility by upgrading to `v2`.
 
 * features by versions
@@ -188,16 +187,18 @@ and more flexibility by upgrading to `v2`.
   const naturalSort = sort.createNewInstance({
     comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
   });
+
+  // TypeScript support available from [v2.0.0]
 ```
 
-* Random
+### Things to know
 
 ```javascript
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
   sort(33).desc(); // => 33
 
-  // By default sort is mutating input array,
+  // By default sort will mutate input array (by sorting it),
   const arr = [1, 4, 2];
   const sortedArr = sort(arr).asc();
   console.log(sortedArr); // => [1, 2, 4]
@@ -208,12 +209,6 @@ and more flexibility by upgrading to `v2`.
   const sortedArr = sort([...arr]).asc();
   console.log(arr); // => [1, 4, 2]
   console.log(sortedArr); // => [1, 2, 4]
-
-  // If object config is not provided to `by` sorter it will behave exactly
-  // the same as when using `asc` sorter.
-  // NOTE: Note recommended to use by sorter like this as that can change down the line
-  sort([1, 4, 2]).by(); // => [1, 2, 4] same as when we use `asc` sorter
-  sort(users).by('firstName'); // same as doing sort(users).asc('firstName')
 
   // We can override default comparer just for some properties
   sort(users).by([
