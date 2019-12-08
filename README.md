@@ -7,7 +7,7 @@
 [![NPM Package](https://nodei.co/npm/fast-sort.png)](https://www.npmjs.com/package/fast-sort)
 
 Fast easy to use and flexible sorting with TypeScript support.
-For speed comparison of sorting with `fast-sort` vs other popular sort libraries check [benchmark](#benchmark) section.
+For speed comparison of `fast-sort` vs other popular sort libraries check [benchmark](#benchmark) section.
 For list of all available features check [highlights](#highlights) section.
 
 ### Quick examples
@@ -33,15 +33,15 @@ For list of all available features check [highlights](#highlights) section.
   ]);
 ```
 
-### highlights
+### Highlights
 
 * Sort flat arrays
 * Sort array of objects by one or more properties
 * Sort in multiple directions
-* Natural sort support
-* Support for custom sort instances
+* [Natural sort](#natural-sorting-/-language-sensitive-sorting) support
+* Support for [custom sort](#custom-sorting) instances
 * Easy to read syntax
-* Faster than other popular sort alternatives
+* [Faster](#benchmark) than other popular sort alternatives
 * Undefined and null values are always sorted to bottom (with option to override)
 * TypeScript support
 * Small footprint with 0 dependencies (~ 1.4 kb minified)
@@ -49,7 +49,7 @@ For list of all available features check [highlights](#highlights) section.
 Under the hood sort is using [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
 Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
 
-### Fast sort API examples
+### More examples
 
 * `asc` / `desc` sorters. In below examples we will use `asc` sorter but keep in mind that both `asc` and `desc` sorters have exactly the same API so all the examples below can be applied for `desc` sorter.
 
@@ -80,8 +80,8 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort(users).asc(['age', 'firstName']);
 ```
 
-* `by` sorter can do anything that `asc` / `desc` can do with addition to some more advance
-  sort handling that is not possible with `asc` / `desc` sorters. With `by` sorter we can sort by multiple properties.
+* `by` sorter can do anything that `asc` / `desc` sorters can with addition to some more advance
+  sort handling. With `by` sorter we can sort by multiple properties.
   We can also override default `comparer` for e.g natural sort purposes
   (for example on overriding default `comparer` check natural sort section).
 
@@ -99,7 +99,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort(users).by([{ asc: 'name' }, { desc: 'age' }]);
 ```
 
-* Natural sort / Language sensitive sort
+### Natural sorting / Language sensitive sorting
 
 By default `fast-sort` is not doing language sensitive sorting of strings.
 e.g `image-11.jpg` will be sorted before `image-2.jpg` (in ascending sorting).
@@ -134,7 +134,7 @@ only when needed and not for every sorting.
   naturalSort(testArr).desc(); // => ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']
 ```
 
-* Custom sorting
+### Custom sorting
 
 Fast sort can be tailored to fit any sorting need or use case by creating custom sorting instances or
 overriding default comparer in `by` sorter or with handling through callback functions. For example we will sort
