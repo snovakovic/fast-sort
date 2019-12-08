@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import sort, { createSortInstance } from '../src/sort';
+import sort from '../src/sort';
 
 describe('sort', () => {
   let flatArray:number[];
@@ -332,7 +332,7 @@ describe('sort', () => {
   });
 
   it('Should create natural sort instance and handle sorting correctly', () => {
-    const naturalSort = createSortInstance({
+    const naturalSort = sort.createNewInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
 
@@ -356,7 +356,7 @@ describe('sort', () => {
   });
 
   it('Should be able to override natural sort comparer', () => {
-    const naturalSort = createSortInstance({
+    const naturalSort = sort.createNewInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
 

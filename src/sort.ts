@@ -112,7 +112,7 @@ export interface ICreateSortInstanceOptions extends ICustomComparer {
   preventDefaultOrderHandling?:boolean,
 }
 
-export function createSortInstance(opts:ICreateSortInstanceOptions) {
+function createSortInstance(opts:ICreateSortInstanceOptions) {
   const comparer = opts.preventDefaultOrderHandling
     ? opts.comparer
     : orderHandler(opts.comparer);
@@ -166,7 +166,7 @@ export function createSortInstance(opts:ICreateSortInstanceOptions) {
   };
 }
 
-export default createSortInstance({
+const defaultSort = createSortInstance({
   preventDefaultOrderHandling: true,
   comparer(a, b, order:number):number {
     if (a < b) return -order;
@@ -177,3 +177,15 @@ export default createSortInstance({
     return order;
   },
 });
+
+// Attach createNewInstance to sort function
+
+defaultSort['createNewInstance'] = createSortInstance;
+
+type ISortFunction = typeof defaultSort;
+
+interface ISortExport extends ISortFunction {
+  createNewInstance:typeof createSortInstance,
+}
+
+export default defaultSort as any as ISortExport;

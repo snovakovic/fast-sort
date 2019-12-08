@@ -18,7 +18,7 @@ RELEASE REQUIREMENTS:
 ✔ Maybe better name for delegateOrderApplyingToComparer?? @done(19-12-07 21:00)
 ✔ More test especially over new instances @done(19-12-07 19:35)
 ☐ Exporting min or full version by default??
-☐ Build warning about named and default exports
+✔ Build warning about named and default exports @done(19-12-08 09:53)
 
 NICE TO DO FOR PHASE 2:
 

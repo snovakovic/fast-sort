@@ -25,6 +25,8 @@
     "sortBy",
     "order",
     "orderBy",
+    "array sort",
+    "object sort",
     "natural sort"
   ],
   "devDependencies": {
