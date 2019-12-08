@@ -83,8 +83,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 
 * `by` sorter can do anything that `asc` / `desc` sorters can with addition to some more advance
   sort handling. With `by` sorter we can sort by multiple properties in different directions and
-  we can override default `comparer` for e.g natural sort purposes
-  (for example on overriding default `comparer` check natural sort section).
+  we can override default `comparer` for e.g natural sort purposes.
 
 ```javascript
   import sort from 'fast-sort';
@@ -104,11 +103,11 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
     comparer: (a, b) => a.localeCompare(b)
   ]);
 
-  // We can override default comparer just for some properties
+  // We users ascending by age using default comparer and then by lastName using language sensitive comparer
   sort(users).by([
     { asc: 'age' },
     {
-      desc: 'city',
+      asc: 'lastName',
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     },
   ]);
@@ -130,7 +129,7 @@ only when needed.
   // By default fast-sort is not doing natural sort
   sort(testArr).desc(); // => ['image-3.jpg', 'image-2.jpg', 'image-11.jpg']
 
-  // We can use `by` sort to override default comparer with the one that do language sensitive comparison
+  // We can use `by` sort to override default comparer with the one that are doing language sensitive comparison
   sort(testArr).by({
     desc: true,
     comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
@@ -174,7 +173,7 @@ For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of 
   tagSorter(tags).asc(); // => ['unknown', 'captain', 'influencer', 'vip'];
   tagSorter(tags).desc(); // => ['vip', 'influencer', 'captain', 'unknown'];
 
-  // Default sorter will sort tags by string comparison
+  // Default sorter will sort tags by string comparison and not "tag" importance
   sort(tags).asc(); // => ['captain', 'influencer', 'unknown' 'vip']
 ```
 
@@ -187,7 +186,7 @@ and more flexibility by upgrading to `v2`.
 
 ```javascript
  // Sorting in multiple directions is available from [v1.5.0]
- sort(users).by([{ asc: 'age', desc: 'firstName' }]);
+ sort(users).by([{ asc: 'age' }, { desc: 'firstName' }]);
 
  // Overriding of default comparer in `by` sorter is available from [v1.6.0]
   sort(testArr).by({
@@ -200,12 +199,12 @@ and more flexibility by upgrading to `v2`.
     comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
   });
 
-  // TypeScript support available from [v2.0.0]
+  // TypeScript support is available from [v2.0.0]
 ```
 
 ### Things to know
 
-When using custom compares as e.g [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) it's up to you to ensure those features are available in all the platforms you intend to support. (In above example you can check browser compatibility for Intl.Collator)
+When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) it's up to you to ensure those features are available in all the platforms you intend to support. (You can check browser compatibility for Intl.Collator by following link above)
 
 ```javascript
   // Sorting values that are not sortable will return same value back

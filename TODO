@@ -30,7 +30,7 @@ NICE TO DO FOR PHASE 2:
 ☐ Update all test to use deepEqual to be easier to read
 ✔ Rename fastSort naming in benchmarks to fast-sort @done(19-12-07 20:26)
 ☐ Improve interfaces (so we don't have any in them as e.g for comparer)
-☐ Update depndendcy versions in benchmarks and run benchmark results again
+☐ Update depndendcy versions in benchmarks and run benchmark results again (also update docs)
 ☐ Add more badges to readme (as code coverage)
 ☐ update fast-sort in js-flock??
 ☐ Add info what feature is available from which version.
