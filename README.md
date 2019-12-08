@@ -88,14 +88,14 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 ```javascript
   import sort from 'fast-sort';
 
-  // Sort users by name in ascending order and age in descending order
+  // Sort users by firstName in ascending order and age in descending order
   sort(users).by([
-    { asc: u => u.name },
+    { asc: u => u.firstName },
     { desc: u => u.age }
   ]);
 
   // Same as with asc/desc sorters we can use string shorthand for root object properties
-  sort(users).by([{ asc: 'name' }, { desc: 'age' }]);
+  sort(users).by([{ asc: 'firstName' }, { desc: 'age' }]);
 
   // Sort users by city using custom comparer
   sort(users).by([
@@ -103,7 +103,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
     comparer: (a, b) => a.localeCompare(b)
   ]);
 
-  // We users ascending by age using default comparer and then by lastName using language sensitive comparer
+  // Sort users ascending by age using default comparer and then by lastName using language sensitive comparer
   sort(users).by([
     { asc: 'age' },
     {
