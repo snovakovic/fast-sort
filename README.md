@@ -13,6 +13,8 @@ For list of all available features check [highlights](#highlights) section.
 ### Quick examples
 
 ```javascript
+  import sort from 'fast-sort';
+
   // Sort flat arrays
   sort([1,4,2]).asc(); // => [1, 2, 4]
   sort([1, 4, 2]).desc(); // => [4, 2, 1]
@@ -42,7 +44,7 @@ For list of all available features check [highlights](#highlights) section.
 * Support for [custom sort](#custom-sorting) instances
 * Easy to read syntax
 * [Faster](#benchmark) than other popular sort alternatives
-* Undefined and null values are always sorted to bottom (with option to override)
+* Undefined and null values are always sorted to bottom
 * TypeScript support
 * Small footprint with 0 dependencies (~ 1.4 kb minified)
 
@@ -62,12 +64,11 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   // Sort array of objects by single object property
   sort(users).asc(u => u.firstName);
 
-  // If we are sorting by root object property we can use string shorthand (same output as above)
-  // NOTE: string shorthand does not support nested object properties
+  // For root object properties we can use string shorthand (same as example above)
   sort(users).asc('firstName');
 
-  // Sort by nested object property
-  // NOTE: we can't use string shorthand for nested properties('address.city' is not valid syntax)
+  // Sort by nested object properties
+  // NOTE: for nested object properties we can't use string shorthand('address.city' is not valid syntax).
   sort(users).asc(u => u.address.city);
 
   // Sort by multiple properties
@@ -81,7 +82,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 ```
 
 * `by` sorter can do anything that `asc` / `desc` sorters can with addition to some more advance
-  sort handling. With `by` sorter we can sort by multiple properties.
+  sort handling. With `by` sorter we can sort by multiple properties in different directions.
   We can also override default `comparer` for e.g natural sort purposes
   (for example on overriding default `comparer` check natural sort section).
 
