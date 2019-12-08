@@ -3,12 +3,11 @@
 [![Total Downloads](https://img.shields.io/npm/dt/fast-sort.svg)](https://img.shields.io/npm/dt/fast-sort.svg)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
-
 [![NPM Package](https://nodei.co/npm/fast-sort.png)](https://www.npmjs.com/package/fast-sort)
 
 Fast easy to use and flexible sorting with TypeScript support.
-For speed comparison of fast-sort and other popular sort libraries check benchmark section.
-For list of all available features check fast-sort highlights section.
+For speed comparison of `fast-sort` with other popular sort libraries check [benchmark](#benchmark) section.
+For list of all available features check [highlights](#highlights) section.
 
 ### Quick examples
 
@@ -33,24 +32,25 @@ For list of all available features check fast-sort highlights section.
   ]);
 ```
 
-### Fast sort highlights
+### highlights
 
 * Sort flat arrays
 * Sort array of objects by one or more properties
 * Sort in multiple directions
+* Natural sort support
+* Support for custom sort instances
 * Easy to read syntax
 * Faster than other popular sort alternatives
 * Undefined and null values are always sorted to bottom (with option to override)
-* Natural sort support
-* Support for custom sort instances
 * TypeScript support
+* Small footprint with 0 dependencies (~ 1.4 kb minified or)
 
-Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+Under the hood sort is using[native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
 Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
 
 ### Fast sort API examples
 
-* `asc` / `desc` sorting. Both of those sorters have exactly same API. In below examples we will use `asc` sorting. To sort it in desc order jut replace `asc` with `desc`.
+* `asc` / `desc` sorting. In below examples we will use `asc` sorting but keep in mind that both `asc` and `desc` sorters have exactly the same API so all the examples below can be applied for `desc` sorter.
 
 ```javascript
   import sort from 'fast-sort';
@@ -85,8 +85,9 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   ]);
 ```
 
-* `by` sorting. Think of `asc` and `desc` sorters as aliases of `by` sorter. They cover most of
-  the sorting requirements and they provide more compact API. `by` sorter can do everything `asc` and `desc` sorters do but it also provides a way to do more complex sorting tasks as sorting by multiple properties in multiple directions and it allows overriding of default comparer with any custom one (e.g for purpose of natural sorting)
+* `by` sorting. `by` sorter can do anything that `asc` / `desc` can do with addition to some more advance
+  sorting handling that is not possible with `asc` / `desc` sorters. With `by` sorter we can sort by multiple properties in different direction and we can also override default `comparer`.
+  For overriding of default `comparer` check natural sort section.
 
 ```javascript
   import sort from 'fast-sort';
