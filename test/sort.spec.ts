@@ -97,8 +97,15 @@ describe('sort', () => {
     sort(persons).desc((p) => p.address.code);
     assertOrder([3, 1, undefined], idx => persons[idx].address.code);
 
-    const sorted = sort([1, undefined, 3, null, 2]).desc();
-    assert.deepEqual(sorted, [3, 2, 1, null, undefined]);
+    assert.deepEqual(
+      sort([1, undefined, 3, null, 2]).asc(),
+      [1, 2, 3, null, undefined],
+    );
+
+    assert.deepEqual(
+      sort([1, undefined, 3, null, 2]).desc(),
+      [3, 2, 1, null, undefined],
+    );
   });
 
   it('Should ignore values that are not sortable', () => {

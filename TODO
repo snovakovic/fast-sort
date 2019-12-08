@@ -1,12 +1,12 @@
 RELEASE REQUIREMENTS:
 
 ✔ Name default exported sort function @done(19-12-05 20:56)
-☐ Better documentation for natural sort (remove js-flock mentionings)
+✔ Better documentation for natural sort (remove js-flock mentionings) @done(19-12-08 18:47)
 ✔ Check about natural sort improving (instance that do natural sort by default) @done(19-12-05 20:55)
 ✔ should we rename customComparerProvider to e.g customComparerHandler (add comments for it) @done(19-12-05 20:56)
 ✔ Shoud remove 2 almost indentical erros ("Invalid 'by' sorting") @done(19-12-04 16:09)
 ✔ Check about using object resolver instead if in getMultiPropertySorter e.g sortDefinition[type] || multiPropObjectSorter, (pros/const) @done(19-12-05 20:56)
-☐ Initial buidl minified 1.93KB (Check can we make it lower) (after build update droped to 1.54 kb) (1.47 latest)
+✔ Initial buidl minified 1.93KB (Check can we make it lower) (updates: 1.54, 1.47, 1.41) @done(19-12-08 18:47)
 ✔ Add TS specific linter rules as e.g (no space betwene type). check regarding other linter rules @done(19-12-07 19:34)
 ✔ Add proper interface for comparer @done(19-12-05 20:56)
 ✔ Enable eslint in TS files @done(19-12-07 19:33)
@@ -21,9 +21,10 @@ RELEASE REQUIREMENTS:
 ☐ We should also have tests for builds not just source code before publishing
 ✔ Build warning about named and default exports @done(19-12-08 09:53)
 ☐ Check about removing preventDefaultOrderHandling
-☐ Is there anything we can do wit undefoined values been ignored??
+☐ Is there anything we can do wit undefoined values been ignored?? (is it just for flat arrays or is case with objects??)
+if not the case wiht objects add in documentation how to override that for objects
 ☐ Include readme in tests to make sure they are correct
-☐ Throw error from by if we don't provide array or object (with tests)
+☐ Throw error from by if we don't provide array or object (with tests)??
 
 NICE TO DO FOR PHASE 2:
 

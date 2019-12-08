@@ -9,9 +9,7 @@ const unpackObjectSorter = function(sortByObj) {
   }
 
   const order = sortByObj.asc ? 1 : -1;
-  const comparer = sortByObj.comparer
-    ? orderHandler(sortByObj.comparer)
-    : undefined;
+  const comparer = sortByObj.comparer && orderHandler(sortByObj.comparer);
 
   return { order, sortBy, comparer };
 };
@@ -93,29 +91,22 @@ export interface ISortByFunction<T> {
 
 export type ISortBy<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
 
-export interface ICustomComparer {
+export interface ISortComparer {
   comparer?(a:any, b:any, order:number):number,
 }
 
-export interface ISortByAscSorter<T> extends ICustomComparer {
+export interface ISortByAscSorter<T> extends ISortComparer {
   asc:boolean|ISortBy<T>,
 }
 
-export interface ISortByDescSorter<T> extends ICustomComparer {
+export interface ISortByDescSorter<T> extends ISortComparer {
   desc:boolean|ISortBy<T>,
 }
 
 export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 
-export interface ICreateSortInstanceOptions extends ICustomComparer {
-  // Delegate applying of correct order to comparer function
-  preventDefaultOrderHandling?:boolean,
-}
-
-function createSortInstance(opts:ICreateSortInstanceOptions) {
-  const comparer = opts.preventDefaultOrderHandling
-    ? opts.comparer
-    : orderHandler(opts.comparer);
+function createSortInstance(opts:ISortComparer) {
+  const comparer = orderHandler(opts.comparer);
 
   return function<T>(ctx:T[]) {
     return {
@@ -167,14 +158,13 @@ function createSortInstance(opts:ICreateSortInstanceOptions) {
 }
 
 const defaultSort = createSortInstance({
-  preventDefaultOrderHandling: true,
   comparer(a, b, order:number):number {
-    if (a < b) return -order;
+    if (a == null) return order;
+    if (b == null) return -order;
+    if (a < b) return -1;
     if (a === b) return 0;
-    if (a == null) return 1;
-    if (b == null) return -1;
 
-    return order;
+    return 1;
   },
 });
 
