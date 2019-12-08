@@ -6,9 +6,9 @@
 
 [![NPM Package](https://nodei.co/npm/fast-sort.png)](https://www.npmjs.com/package/fast-sort)
 
-Fast, easy and fully flexible sorting. Sort by nested object properties, sort by multiple properties
-in different directions, natural sort... It's all covered just keep reading.
-Interesting in sorting speed check benchmark sections for comparison with other popular sort libraries.
+Fast easy to use and flexible sorting with TypeScript support.
+For speed comparison of fast-sort and other popular sort libraries check benchmark section.
+For list of all available features check fast-sort highlights section.
 
 ### Quick examples
 
@@ -43,11 +43,12 @@ Interesting in sorting speed check benchmark sections for comparison with other 
 * Undefined and null values are always sorted to bottom (with option to override)
 * Natural sort support
 * Support for custom sort instances
+* TypeScript support
 
 Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
 Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
 
-### Full API Examples
+### Fast sort API examples
 
 * `asc` / `desc` sorting. Both of those sorters have exactly same API. In below examples we will use `asc` sorting. To sort it in desc order jut replace `asc` with `desc`.
 
@@ -188,7 +189,7 @@ overriding default comparer with `by`. For example we will create custom tags so
   const arr = [1, 4, 2];
   const sortedArr = sort([...arr]).asc();
   console.log(arr); // => [1, 4, 2]
-  **console**.log(sortedArr); // => [1, 2, 4]
+  console.log(sortedArr); // => [1, 2, 4]
 ```
 
 ### Benchmark
