@@ -20,6 +20,8 @@ RELEASE REQUIREMENTS:
 ☐ Exporting min or full version by default??
 ☐ We should also have tests for builds not just source code before publishing
 ✔ Build warning about named and default exports @done(19-12-08 09:53)
+☐ Check about removing preventDefaultOrderHandling
+☐ Is there anything we can do wit undefoined values been ignored??
 
 NICE TO DO FOR PHASE 2:
 

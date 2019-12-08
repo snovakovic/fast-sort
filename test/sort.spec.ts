@@ -355,6 +355,19 @@ describe('sort', () => {
     assert.deepEqual(flatNaturalArray, ['A2', 'A10', 'B2', 'B10']);
   });
 
+  it('Should create custom tag sorter instance', () => {
+    const tagImportance = { vip: 3, influencer: 2, captain: 1 };
+    const customTagComparer = (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0);
+
+    const tags = ['influencer', 'unknown', 'vip', 'captain'];
+
+    const tagSorter = sort.createNewInstance({ comparer: customTagComparer });
+    assert.deepEqual(tagSorter(tags).asc(), ['unknown', 'captain', 'influencer', 'vip']);
+    assert.deepEqual(tagSorter(tags).desc(), ['vip', 'influencer', 'captain', 'unknown']);
+
+    assert.deepEqual(sort(tags).asc(tag => tagImportance[tag] || 0), ['unknown', 'captain', 'influencer', 'vip']);
+  });
+
   it('Should be able to override natural sort comparer', () => {
     const naturalSort = sort.createNewInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,

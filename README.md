@@ -146,13 +146,22 @@ Documentation for more info on string sensitive comparisons.
 * Custom sorting
 
 Fast sort can be tailored to fit any sorting need or use case as strange as it is by creating custom sorting instances or
-overriding default comparer with `by` sorting. We will provide custom examples to give the idea of flexibility.
-
-You love fast-sort but hate decision that by default fast-sort sorts null/undefined values to the bottom
-no matter is sorting asc or desc. In this example we will create fast sort instance that sorts null/undefined
-values to the bottom in ascending sorting and to the top in desc sorting.
+overriding default comparer with `by`. For example we will create custom tags sorters that gives custom value to tag
 
 ```javascript
+    const tagsImportance = { vip: 3, influencer: 2, captain: 1 };
+    const tags = ['influencer', 'unknown', 'vip', 'captain'];
+
+    // Sort tags in ascending order by custom tags values
+    sort(tags).asc(tag => tagImportance[tag] || 0); // => ['unknown', 'captain', 'influencer', 'vip']);
+
+    // If we are going ot use tags sorter in multiple places we can create specialized tagsSorter sorter
+    const tagSorter = sort.createNewInstance({
+      comparer: (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0)
+    });
+
+    tagSorter(tags).asc(); // => ['unknown', 'captain', 'influencer', 'vip']);
+    tagSorter(tags).desc(); // => ['vip', 'influencer', 'captain', 'unknown']);
 ```
 
 * Things to know
@@ -162,17 +171,24 @@ values to the bottom in ascending sorting and to the top in desc sorting.
   sort(null).asc(); // => null
   sort(33).desc(); // => 33
 
+  // If object config is not provided to `by` sorter it will behave exactly
+  // the same as when suing `asc` sorter.
+  // NOTE: It's not recommended for by sorter to be used in this way as that
+  // that can change in the future
+  sort([1, 4, 2]).by(); // => [1, 2, 4] same as when we use `asc` sorter
+  sort(users).by('firstName'); // same as doing sort(users).asc('firstName')
+
   // By default sort is mutating input array,
   const arr = [1, 4, 2];
   const sortedArr = sort(arr).asc();
   console.log(sortedArr); // => [1, 2, 4]
   console.log(arr); // => [1, 2, 4]
 
-  // TO prevent that we can use ES6 destructor (or ES5 equivalents)
+  // To prevent that we can use ES6 destructor (or ES5 equivalents)
   const arr = [1, 4, 2];
   const sortedArr = sort([...arr]).asc();
   console.log(arr); // => [1, 4, 2]
-  console.log(sortedArr); // => [1, 2, 4]
+  **console**.log(sortedArr); // => [1, 2, 4]
 ```
 
 ### Benchmark
