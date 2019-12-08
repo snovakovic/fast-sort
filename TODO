@@ -22,6 +22,7 @@ RELEASE REQUIREMENTS:
 ✔ Build warning about named and default exports @done(19-12-08 09:53)
 ☐ Check about removing preventDefaultOrderHandling
 ☐ Is there anything we can do wit undefoined values been ignored??
+☐ Include readme in tests to make sure they are correct
 
 NICE TO DO FOR PHASE 2:
 
@@ -31,3 +32,7 @@ NICE TO DO FOR PHASE 2:
 ☐ Update depndendcy versions in benchmarks and run benchmark results again
 ☐ Add more badges to readme (as code coverage)
 ☐ update fast-sort in js-flock??
+☐ Add info what feature is available from which version.
+Sort by in multiple directions (1.5.0). Overriding of default comparer in by sorter 1.6.0
+creating new instance 2.0.0
+

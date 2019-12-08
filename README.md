@@ -89,7 +89,6 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   import sort from 'fast-sort';
 
   // Sort users by name in ascending order and age in descending order
-  // NOTE: Available from version [1.5.0]
   sort(users).by([
     { asc: u => u.name },
     { desc: u => u.age }
@@ -136,22 +135,26 @@ only when needed and not for every sorting.
 
 ### Custom sorting
 
-Fast sort can be tailored to fit any sorting need or use case by creating custom sorting instances or
-overriding default comparer in `by` sorter or with handling through callback functions. For example we will sort
-tags by specific tag value with creating new instance and with callback function to give idea of different
-possibilities.
+Fast sort can be tailored to fit any sorting need or use case by:
+  * creating custom sorting instances
+  * overriding default comparer in `by` sorter
+  * custom handling in provided callback function
+  * combine any of the above together
+
+For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of greater importance then `captain` tag).
 
 ```javascript
     import sort from 'fast-sort';
 
-    const tagsImportance = { vip: 3, influencer: 2, captain: 1 }; // Map of custom tag values
+    const tagsImportance = { vip: 3, influencer: 2, captain: 1 }; // Any domain specific logic
     const tags = ['influencer', 'unknown', 'vip', 'captain'];
 
     // Sort tags in ascending order by custom tags values
     sort(tags).asc(tag => tagImportance[tag] || 0); // => ['unknown', 'captain', 'influencer', 'vip'];
     sort(tags).desc(tag => tagImportance[tag] || 0); // => ['vip', 'influencer', 'captain', 'unknown'];
 
-    // If we are going ot use tags sorter in multiple places we can create specialized tagsSorter instance
+    // If we will use tags sorter in multiple places we can als create specialized tagSorter instance
+    // and reuse it across the application
     const tagSorter = sort.createNewInstance({
       comparer: (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0)
     });
@@ -159,11 +162,34 @@ possibilities.
     tagSorter(tags).asc(); // => ['unknown', 'captain', 'influencer', 'vip'];
     tagSorter(tags).desc(); // => ['vip', 'influencer', 'captain', 'unknown'];
 
-    // Note if we use default sort it will perform default string sorting
+    // Default sorter will sort tags by string comparison
     sort(tags).asc(); // => ['captain', 'influencer', 'unknown' 'vip']
 ```
 
-* Things to know
+### Things to know
+
+ * There is no breaking changes in `v2` version of library. Take advantage of better editor support
+and more flexibility by upgrading to `v2`.
+
+* features by versions
+
+```javascript
+ // Sorting in multiple directions is available from [v1.5.0]
+ sort(users).by([{ asc: 'age', desc: 'firstName' }]);
+
+ // Overriding of default comparer in `by` sorter is available from [v1.6.0]
+  sort(testArr).by({
+    desc: true,
+    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+  });
+
+  // Creating new custom sort instances is available from [v2.0.0]
+  const naturalSort = sort.createNewInstance({
+    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+  });
+```
+
+* Random
 
 ```javascript
   // Sorting values that are not sortable will return same value back
