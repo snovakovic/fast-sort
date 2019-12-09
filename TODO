@@ -20,11 +20,12 @@ RELEASE REQUIREMENTS:
 ☐ Exporting min or full version by default??
 ☐ We should also have tests for builds not just source code before publishing
 ✔ Build warning about named and default exports @done(19-12-08 09:53)
-☐ Check about removing preventDefaultOrderHandling
+✔ Check about removing preventDefaultOrderHandling @done(19-12-08 19:12)
 ☐ Is there anything we can do wit undefoined values been ignored?? (is it just for flat arrays or is case with objects??)
 if not the case wiht objects add in documentation how to override that for objects
 ☐ Include readme in tests to make sure they are correct
-☐ Throw error from by if we don't provide array or object (with tests)??
+☐ Throw error from by if we don't provide array or object (with tests)?? What if we provodde both asc/desc in sort by
+Do we want throw on those - const makes code havier, pros can guard on unitentional issues when e.g dynamicly building sort condition
 
 NICE TO DO FOR PHASE 2:
 
@@ -35,6 +36,7 @@ NICE TO DO FOR PHASE 2:
 ☐ Add more badges to readme (as code coverage)
 ☐ update fast-sort in js-flock??
 ☐ Add info what feature is available from which version.
+☐ Add example for computed property as in https://www.npmjs.com/package/sort-array
 Sort by in multiple directions (1.5.0). Overriding of default comparer in by sorter 1.6.0
 creating new instance 2.0.0
 
