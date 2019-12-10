@@ -3,7 +3,7 @@
 process.chdir(__dirname); // Enable running from package script
 
 const assert = require('assert');
-const exec = require('child_process').exec;
+const { exec } = require('child_process');
 
 function run(err) {
   if (err) {

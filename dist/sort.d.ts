@@ -2,20 +2,17 @@ export interface ISortByFunction<T> {
     (prop: T): any;
 }
 export declare type ISortBy<T> = string | ISortByFunction<T> | (string | ISortByFunction<T>)[];
-export interface ICustomComparer {
-    comparer?(a: any, b: any, order: number): number;
+export interface ISortComparer {
+    comparer?(a: any, b: any, order: 1 | -1): number;
 }
-export interface ISortByAscSorter<T> extends ICustomComparer {
+export interface ISortByAscSorter<T> extends ISortComparer {
     asc: boolean | ISortBy<T>;
 }
-export interface ISortByDescSorter<T> extends ICustomComparer {
+export interface ISortByDescSorter<T> extends ISortComparer {
     desc: boolean | ISortBy<T>;
 }
 export declare type ISortByObjectSorter<T> = ISortByAscSorter<T> | ISortByDescSorter<T>;
-export interface ICreateSortInstanceOptions extends ICustomComparer {
-    preventDefaultOrderHandling?: boolean;
-}
-declare function createSortInstance(opts: ICreateSortInstanceOptions): <T>(ctx: T[]) => {
+declare function createSortInstance(opts: ISortComparer): <T>(ctx: T[]) => {
     /**
      * Sort array in ascending order. Mutates provided array by sorting it.
      * @example

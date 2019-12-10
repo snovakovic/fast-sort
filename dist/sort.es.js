@@ -6,9 +6,7 @@ var unpackObjectSorter = function (sortByObj) {
         throw Error('Invalid sort config');
     }
     var order = sortByObj.asc ? 1 : -1;
-    var comparer = sortByObj.comparer
-        ? orderHandler(sortByObj.comparer)
-        : undefined;
+    var comparer = sortByObj.comparer && orderHandler(sortByObj.comparer);
     return { order: order, sortBy: sortBy, comparer: comparer };
 };
 // >>> SORTERS <<<
@@ -63,9 +61,7 @@ var sort = function (order, ctx, sortBy, comparer) {
     return ctx.sort(sorter);
 };
 function createSortInstance(opts) {
-    var comparer = opts.preventDefaultOrderHandling
-        ? opts.comparer
-        : orderHandler(opts.comparer);
+    var comparer = orderHandler(opts.comparer);
     return function (ctx) {
         return {
             /**
@@ -115,17 +111,16 @@ function createSortInstance(opts) {
     };
 }
 var defaultSort = createSortInstance({
-    preventDefaultOrderHandling: true,
     comparer: function (a, b, order) {
-        if (a < b)
+        if (a == null)
+            return order;
+        if (b == null)
             return -order;
+        if (a < b)
+            return -1;
         if (a === b)
             return 0;
-        if (a == null)
-            return 1;
-        if (b == null)
-            return -1;
-        return order;
+        return 1;
     },
 });
 // Attach createNewInstance to sort function

@@ -17,7 +17,7 @@ RELEASE REQUIREMENTS:
 ✔ Update default comparer so it accepts a and b only (we can then drop customComparerHandler) and handle direction outside comparers @done(19-12-05 20:57)
 ✔ Maybe better name for delegateOrderApplyingToComparer?? @done(19-12-07 21:00)
 ✔ More test especially over new instances @done(19-12-07 19:35)
-☐ Exporting min or full version by default??
+✔ Exporting min or full version by default?? @done(19-12-10 13:07)
 ☐ We should also have tests for builds not just source code before publishing
 ✔ Build warning about named and default exports @done(19-12-08 09:53)
 ✔ Check about removing preventDefaultOrderHandling @done(19-12-08 19:12)
@@ -26,16 +26,17 @@ if not the case wiht objects add in documentation how to override that for objec
 ☐ Include readme in tests to make sure they are correct
 ☐ Throw error from by if we don't provide array or object (with tests)?? What if we provodde both asc/desc in sort by
 Do we want throw on those - const makes code havier, pros can guard on unitentional issues when e.g dynamicly building sort condition
+☐ Maybe keep "Blazing fast array sorting." for package description
 
 NICE TO DO FOR PHASE 2:
 
-☐ Update all test to use deepEqual to be easier to read
+✔ Update all test to use deepEqual to be easier to read @done(19-12-09 21:01)
 ✔ Rename fastSort naming in benchmarks to fast-sort @done(19-12-07 20:26)
 ☐ Improve interfaces (so we don't have any in them as e.g for comparer)
 ☐ Update depndendcy versions in benchmarks and run benchmark results again (also update docs)
 ☐ Add more badges to readme (as code coverage)
-☐ update fast-sort in js-flock??
-☐ Add info what feature is available from which version.
+☐ update fast-sort in js-flock?? (or depricate it) (code coverage with codacity)
+✔ Add info what feature is available from which version. @done(19-12-09 21:02)
 ☐ Add example for computed property as in https://www.npmjs.com/package/sort-array
 Sort by in multiple directions (1.5.0). Overriding of default comparer in by sorter 1.6.0
 creating new instance 2.0.0
