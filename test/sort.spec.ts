@@ -375,7 +375,6 @@ describe('sort', () => {
     const tagSorter = sort.createNewInstance({ comparer: customTagComparer });
     assert.deepEqual(tagSorter(tags).asc(), ['unknown', 'captain', 'influencer', 'vip']);
     assert.deepEqual(tagSorter(tags).desc(), ['vip', 'influencer', 'captain', 'unknown']);
-
     assert.deepEqual(sort(tags).asc(tag => tagImportance[tag] || 0), ['unknown', 'captain', 'influencer', 'vip']);
   });
 
@@ -430,6 +429,28 @@ describe('sort', () => {
     assert.deepEqual(sort([2, 1, 4]).asc([]), [1, 2, 4]);
   });
 
+  it('Should sort by computed property', () => {
+    const repos = [
+      { openIssues: 0, closedIssues: 5 },
+      { openIssues: 4, closedIssues: 4 },
+      { openIssues: 3, closedIssues: 3 },
+    ];
+
+    sort(repos).asc(r => r.openIssues + r.closedIssues);
+    assert.deepEqual(repos, [
+      { openIssues: 0, closedIssues: 5 },
+      { openIssues: 3, closedIssues: 3 },
+      { openIssues: 4, closedIssues: 4 },
+    ]);
+
+    sort(repos).desc(r => r.openIssues + r.closedIssues);
+    assert.deepEqual(repos, [
+      { openIssues: 4, closedIssues: 4 },
+      { openIssues: 3, closedIssues: 3 },
+      { openIssues: 0, closedIssues: 5 },
+    ]);
+  });
+
   it('Should not mutate sort by array', () => {
     const sortBy = [{ asc: 'name' }, { asc: 'unit' }];
     sort(multiPropArray).by(sortBy);
@@ -443,5 +464,30 @@ describe('sort', () => {
       { name: 'aa', unit: 'C2' },
       { name: 'bb', unit: 'B3' },
     ]);
+  });
+
+  it('Should sort readme example for natural sort correctly', () => {
+    const testArr = ['image-2.jpg', 'image-11.jpg', 'image-3.jpg'];
+
+    // By default fast-sort is not doing natural sort
+    sort(testArr).desc(); // =>
+    assert.deepEqual(testArr, ['image-3.jpg', 'image-2.jpg', 'image-11.jpg']);
+
+    sort(testArr).by({
+      desc: true,
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+    });
+    assert.deepEqual(testArr, ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']);
+
+    // If we want to reuse natural sort in multiple places we can create new sort instance
+    const naturalSort = sort.createNewInstance({
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+    });
+
+    naturalSort(testArr).asc();
+    assert.deepEqual(testArr, ['image-2.jpg', 'image-3.jpg', 'image-11.jpg']);
+
+    naturalSort(testArr).desc();
+    assert.deepEqual(testArr, ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']);
   });
 });

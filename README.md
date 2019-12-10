@@ -75,7 +75,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   // Sort by multiple properties
   sort(users).asc([
     u => u.age,
-    u => u.firstName
+    u => u.firstName,
   ]);
 
   // Same as above but using string shorthand
@@ -96,7 +96,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   // Sort users by firstName in ascending order and age in descending order
   sort(users).by([
     { asc: u => u.firstName },
-    { desc: u => u.age }
+    { desc: u => u.age },
   ]);
 
   // Same as with asc/desc sorters we can use string shorthand for root object properties
@@ -104,8 +104,8 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 
   // Sort users by city using custom comparer
   sort(users).by([
-    asc: u => u.address.city
-    comparer: (a, b) => a.localeCompare(b)
+    asc: u => u.address.city,
+    comparer: (a, b) => a.localeCompare(b),
   ]);
 
   // Sort users ascending by age using default comparer and then by lastName using language sensitive comparer
@@ -117,6 +117,8 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
     },
   ]);
 ```
+
+* Fore even more examples check unit tests `test/sort.spec.ts` in the github repo.
 
 ### Natural sorting / Language sensitive sorting
 
