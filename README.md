@@ -179,8 +179,15 @@ For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of 
 
 ### Fast sort versions
 
-There is no breaking changes in `v2` version of library. Take advantage of better editor support
-and more flexibility by upgrading to `v2`.
+ * `v2` version
+
+  There is no breaking changes in API between `v2` and `v1` version of library.
+  You should be able to upgrade and take advantage of better editor support
+  and more flexibility without any problem.
+  Only consideration to take in mind is that some `dist` import file names have been changed. Based on how you used library there is small chance you might need to update those imports as:
+
+    * from: `require('fast-sort/sort.es5')` to: `require('fast-sort')` (es5 is now exported as default)
+    * from: `require('fast-sort/sort.es5.min')` to: `require('fast-sort/sort.min')`
 
 * features by versions
 
