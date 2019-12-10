@@ -26,7 +26,6 @@ if not the case wiht objects add in documentation how to override that for objec
 ☐ Include readme in tests to make sure they are correct
 ☐ Throw error from by if we don't provide array or object (with tests)?? What if we provodde both asc/desc in sort by
 Do we want throw on those - const makes code havier, pros can guard on unitentional issues when e.g dynamicly building sort condition
-☐ Maybe keep "Blazing fast array sorting." for package description
 
 NICE TO DO FOR PHASE 2:
 
@@ -34,8 +33,8 @@ NICE TO DO FOR PHASE 2:
 ✔ Rename fastSort naming in benchmarks to fast-sort @done(19-12-07 20:26)
 ☐ Improve interfaces (so we don't have any in them as e.g for comparer)
 ☐ Update depndendcy versions in benchmarks and run benchmark results again (also update docs)
-☐ Add more badges to readme (as code coverage)
-☐ update fast-sort in js-flock?? (or depricate it) (code coverage with codacity)
+☐ Add more badges to readme (as code coverage) (code coverage with codacity)
+☐ update fast-sort in js-flock?? (or depricate it)
 ✔ Add info what feature is available from which version. @done(19-12-09 21:02)
 ☐ Add example for computed property as in https://www.npmjs.com/package/sort-array
 Sort by in multiple directions (1.5.0). Overriding of default comparer in by sorter 1.6.0

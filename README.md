@@ -46,7 +46,8 @@ For list of all available features check [highlights](#highlights) section.
 * [Faster](#benchmark) than other popular sort alternatives
 * Undefined and null values are always sorted to bottom
 * TypeScript support
-* Small footprint with 0 dependencies (~ 1.4 kb minified)
+* Small footprint with 0 dependencies (~ 650 bytes gzip)
+* Compatible with any JS environment as Node, Web, etc..
 
 Under the hood sort is using [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
 Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
@@ -79,6 +80,10 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 
   // Same as above but using string shorthand
   sort(users).asc(['age', 'firstName']);
+
+  // Sort based on computed property
+  // For example sort repositories by total number of issues (summary of open and closed issues)
+  sort(repositories).desc(r => r.openIssues + r.closedIssues);
 ```
 
 * `by` sorter can do anything that `asc` / `desc` sorters can with addition to some more advance
