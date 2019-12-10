@@ -18,7 +18,7 @@ RELEASE REQUIREMENTS:
 ✔ Maybe better name for delegateOrderApplyingToComparer?? @done(19-12-07 21:00)
 ✔ More test especially over new instances @done(19-12-07 19:35)
 ✔ Exporting min or full version by default?? @done(19-12-10 13:07)
-☐ We should also have tests for builds not just source code before publishing
+✔ We should also have tests for builds not just source code before publishing @done(19-12-10 14:27)
 ✔ Build warning about named and default exports @done(19-12-08 09:53)
 ✔ Check about removing preventDefaultOrderHandling @done(19-12-08 19:12)
 ☐ Is there anything we can do wit undefoined values been ignored?? (is it just for flat arrays or is case with objects??)

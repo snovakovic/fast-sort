@@ -5,6 +5,9 @@
   "main": "dist/sort.js",
   "module": "dist/sort.es.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
+  "contributors": [
+    "Tony Gutierrez: https://github.com/tony-gutierrez"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/snovakovic/fast-sort#readme",
   "scripts": {
@@ -13,7 +16,8 @@
     "test:integration:dist": "node test/integration/dist.test.js",
     "test:integration:npm": "node test/integration/npm.test.js",
     "build": "npm run test  && rm -rf dist && rollup -c",
-    "prepublish": "npm run build && npm run test:integration:dist"
+    "prepublish": "npm run build && npm run test:integration:dist",
+    "postpublish": "npm run test:integration:npm"
   },
   "repository": {
     "type": "git",
@@ -31,6 +35,7 @@
     "object sort",
     "natural sort"
   ],
+  "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.2.5",
     "@types/mocha": "^5.2.7",
@@ -47,8 +52,5 @@
     "ts-node": "^8.5.4",
     "typescript": "^3.7.3",
     "watch": "^1.0.2"
-  },
-  "contributors": [
-    "Tony Gutierrez: https://github.com/tony-gutierrez"
-  ]
+  }
 }
