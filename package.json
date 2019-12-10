@@ -10,8 +10,10 @@
   "scripts": {
     "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha -r ts-node/register test/*.spec.ts",
     "test:watch": "watch 'npm run test' ./src",
+    "test:integration:dist": "node test/integration/dist.test.js",
+    "test:integration:npm": "node test/integration/npm.test.js",
     "build": "npm run test  && rm -rf dist && rollup -c",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build && npm run test:integration:dist"
   },
   "repository": {
     "type": "git",
