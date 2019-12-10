@@ -177,41 +177,9 @@ For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of 
   sort(tags).asc(); // => ['captain', 'influencer', 'unknown' 'vip']
 ```
 
-### Fast sort versions
-
- * `v2` version
-
-  There is no breaking changes in API between `v2` and `v1` version of library.
-  You should be able to upgrade and take advantage of better editor support
-  and more flexibility without any problem.
-  Only consideration to take in mind is that some `dist` import file names have been changed. Based on how you used library there is small chance you might need to update those imports as:
-
-    * from: `require('fast-sort/sort.es5')` to: `require('fast-sort')` (es5 is now exported as default)
-    * from: `require('fast-sort/sort.es5.min')` to: `require('fast-sort/sort.min')`
-
-* features by versions
-
-```javascript
- // Sorting in multiple directions is available from [v1.5.0]
- sort(users).by([{ asc: 'age' }, { desc: 'firstName' }]);
-
- // Overriding of default comparer in `by` sorter is available from [v1.6.0]
-  sort(testArr).by({
-    desc: true,
-    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
-  });
-
-  // Creating new custom sort instances is available from [v2.0.0]
-  const naturalSort = sort.createNewInstance({
-    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
-  });
-
-  // TypeScript support is available from [v2.0.0]
-```
-
 ### Things to know
 
-When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) it's up to you to ensure those features are available in all the platforms you intend to support. (You can check browser compatibility for Intl.Collator by following link above)
+When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) it's up to you to ensure those features are available in all the platforms you intend to support. (You can check browser compatibility for Intl.Collator by following link above). Same applies for any other custom comparer.
 
 ```javascript
   // Sorting values that are not sortable will return same value back
@@ -229,6 +197,38 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
   const sortedArr = sort([...arr]).asc();
   console.log(arr); // => [1, 4, 2]
   console.log(sortedArr); // => [1, 2, 4]
+```
+
+### Fast sort versions
+
+#### `v2` version
+
+  There is no breaking changes in API between `v2` and `v1` version of library.
+  You should be able to upgrade and take advantage of better editor support
+  and more flexibility without any problem.
+  Only consideration to take in mind is that some `dist` import file names have been changed. Based on how you used library there is small chance you might need to update those imports as:
+
+  * `require('fast-sort/sort.es5')` should be updated to: `require('fast-sort')` (es5 is now default export)
+  * from: `require('fast-sort/sort.es5.min')` should be updated to: `require('fast-sort/sort.min')`
+
+#### Features by version:
+
+```javascript
+ // Sorting in multiple directions is available from [v1.5.0]
+ sort(users).by([{ asc: 'age' }, { desc: 'firstName' }]);
+
+ // Overriding of default comparer in `by` sorter is available from [v1.6.0]
+  sort(testArr).by({
+    desc: true,
+    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+  });
+
+  // Creating new custom sort instances is available from [v2.0.0]
+  const naturalSort = sort.createNewInstance({
+    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+  });
+
+  // TypeScript support is available from [v2.0.0]
 ```
 
 ### Benchmark
