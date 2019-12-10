@@ -1,7 +1,7 @@
 # fast-sort
 
 [![Start](https://img.shields.io/github/stars/snovakovic/fast-sort?style=flat-square)](https://github.com/snovakovic/fast-sort/stargazers)
-[![Total Downloads](https://img.shields.io/npm/dt/fast-sort.svg)](https://img.shields.io/npm/dt/fast-sort.svg)
+[![Total Downloads](https://img.shields.io/npm/dt/fast-sort.svg)](https://www.npmjs.com/package/fast-sort)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/742359206e0143e79ce74f04bc196101)](https://www.codacy.com/manual/snovakovic/fast-sort?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=snovakovic/fast-sort&amp;utm_campaign=Badge_Grade)
 [![Known Vulnerabilities](https://snyk.io/test/github/snovakovic/fast-sort/badge.svg)](https://snyk.io/test/github/snovakovic/fast-sort)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
@@ -219,7 +219,7 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
   Only consideration to take in mind is that some `dist` import file names have been changed. Based on how you used library there is small chance you might need to update those imports as:
 
   * `require('fast-sort/sort.es5')` should be updated to: `require('fast-sort')` (es5 is now default export)
-  * from: `require('fast-sort/sort.es5.min')` should be updated to: `require('fast-sort/sort.min')`
+  * `require('fast-sort/sort.es5.min')` should be updated to: `require('fast-sort/sort.min')`
 
 #### Features by version
 
