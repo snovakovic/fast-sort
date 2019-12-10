@@ -10,7 +10,7 @@ Fast easy to use and flexible sorting with TypeScript support.
 For speed comparison of `fast-sort` vs other popular sort libraries check [benchmark](#benchmark) section.
 For list of all available features check [highlights](#highlights) section.
 
-### Quick examples
+## Quick examples
 
 ```javascript
   import sort from 'fast-sort';
@@ -35,26 +35,26 @@ For list of all available features check [highlights](#highlights) section.
   ]);
 ```
 
-### Highlights
+## Highlights
 
-* Sort flat arrays
-* Sort array of objects by one or more properties
-* Sort in multiple directions
-* [Natural sort](#natural-sorting-/-language-sensitive-sorting) support
-* Support for [custom sort](#custom-sorting) instances
-* Easy to read syntax
-* [Faster](#benchmark) than other popular sort alternatives
-* Undefined and null values are always sorted to bottom
-* TypeScript support
-* Small footprint with 0 dependencies (~ 650 bytes gzip)
-* Compatible with any JS environment as Node, Web, etc..
+  * Sort flat arrays
+  * Sort array of objects by one or more properties
+  * Sort in multiple directions
+  * [Natural sort](#natural-sorting-/-language-sensitive-sorting) support
+  * Support for [custom sort](#custom-sorting) instances
+  * Easy to read syntax
+  * [Faster](#benchmark) than other popular sort alternatives
+  * Undefined and null values are always sorted to bottom
+  * TypeScript support
+  * Small footprint with 0 dependencies (~ 650 bytes gzip)
+  * Compatible with any JS environment as Node, Web, etc..
 
 Under the hood sort is using [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
 Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
 
-### More examples
+## More examples
 
-* `asc` / `desc` sorters. In below examples we will use `asc` sorter but keep in mind that both `asc` and `desc` sorters have exactly the same API so all the examples below can be applied for `desc` sorter.
+  * `asc` / `desc` sorters. In below examples we will use `asc` sorter but keep in mind that both `asc` and `desc` sorters have exactly the same API so all the examples below can be applied for `desc` sorter.
 
 ```javascript
   import sort from 'fast-sort';
@@ -86,7 +86,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort(repositories).desc(r => r.openIssues + r.closedIssues);
 ```
 
-* `by` sorter can do anything that `asc` / `desc` sorters can with addition to some more advance
+  * `by` sorter can do anything that `asc` / `desc` sorters can with addition to some more advance
   sort handling. With `by` sorter we can sort by multiple properties in different directions and
   we can override default `comparer` for e.g natural sort purposes.
 
@@ -118,7 +118,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   ]);
 ```
 
-* Fore even more examples check unit tests `test/sort.spec.ts` in the github repo.
+  * Fore even more examples check unit tests `test/sort.spec.ts` in the github repo.
 
 ### Natural sorting / Language sensitive sorting
 
@@ -218,7 +218,7 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
   * `require('fast-sort/sort.es5')` should be updated to: `require('fast-sort')` (es5 is now default export)
   * from: `require('fast-sort/sort.es5.min')` should be updated to: `require('fast-sort/sort.min')`
 
-#### Features by version:
+#### Features by version
 
 ```javascript
  // Sorting in multiple directions is available from [v1.5.0]
@@ -238,25 +238,23 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
   // TypeScript support is available from [v2.0.0]
 ```
 
-### Benchmark
+## Benchmark
 
 Five different benchmarks have been created to get better insight of how fast-sort perform under different scenarios.
 Each benchmark is run with different array sizes raging from small 100 items to large 100 000 items.
 
 Every run of benchmark outputs different results but the results are constantly showing better scores compared to similar popular sorting libraries.
 
-
 #### Benchmark scores
 
 Benchmark has been run on:
 
-* 16 GB Ram
-* Intel® Core™ i5-4570 CPU @ 3.20GHz × 4
-* Ubuntu 16.04
-* Node 8.9.1
+  * 16 GB Ram
+  * Intel® Core™ i5-4570 CPU @ 3.20GHz × 4
+  * Ubuntu 16.04
+  * Node 8.9.1
 
 ![benchmark results](https://github.com/snovakovic/fast-sort/raw/master/benchmark.jpg)
-
 
 #### Running benchmark
 
