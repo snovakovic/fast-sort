@@ -216,7 +216,7 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
 
   // If above is not intended behaviour you can always create new sort instance that will sort null
   // or undefined values the way you intended it to be. For example of exactly that you can check unit test
-  // "Should create sort instance that sorts nil value to the top in desc order" in test/sort.spec.ts ()
+  // "Should create sort instance that sorts nil value to the top in desc order" in 'test/sort.spec.ts'
 ```
 
 ### Fast sort versions
