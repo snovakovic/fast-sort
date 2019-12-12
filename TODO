@@ -21,8 +21,8 @@ RELEASE REQUIREMENTS:
 ✔ We should also have tests for builds not just source code before publishing @done(19-12-10 14:27)
 ✔ Build warning about named and default exports @done(19-12-08 09:53)
 ✔ Check about removing preventDefaultOrderHandling @done(19-12-08 19:12)
-☐ Is there anything we can do with undefoined values been ignored?? (is it just for flat arrays or is case with objects??)
-if not the case wiht objects add in documentation how to override that for objects
+✔ Is there anything we can do with undefoined values been ignored?? (is it just for flat arrays or is case with objects??) @done(19-12-12 20:14)
+✔ if not the case wiht objects add in documentation how to override that for objects @done(19-12-12 20:14)
 ✔ Include readme in tests to make sure they are correct @done(19-12-10 19:23)
 ☐ Throw error from by if we don't provide array or object (with tests)?? What if we provodde both asc/desc in sort by
 what if we provide string sorter with nested properties eg. 'address.city' => add test for those cases before doing anything
@@ -33,9 +33,10 @@ NICE TO DO FOR PHASE 2:
 ✔ Update all test to use deepEqual to be easier to read @done(19-12-09 21:01)
 ✔ Rename fastSort naming in benchmarks to fast-sort @done(19-12-07 20:26)
 ☐ Improve interfaces (so we don't have any in them as e.g for comparer)
-☐ Update depndendcy versions in benchmarks and run benchmark results again (also update docs)
+☐ Update depndendcy versions in benchmarks and run benchmark results again (also update docs and have average in first sentance)
 ☐ Add more badges to readme (as code coverage) (code coverage with codacity)
 ☐ update fast-sort in js-flock?? (or depricate it??)
+☐ Guard in TS that string key have to be keyof object
 ✔ Add info what feature is available from which version. @done(19-12-09 21:02)
 ✔ Add example for computed property as in https://www.npmjs.com/package/sort-array @done(19-12-10 19:35)
 Sort by in multiple directions (1.5.0). Overriding of default comparer in by sorter 1.6.0

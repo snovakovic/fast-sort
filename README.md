@@ -47,7 +47,7 @@ For list of all available features check [highlights](#highlights) section.
   * Support for [custom sort](#custom-sorting) instances
   * Easy to read syntax
   * [Faster](#benchmark) than other popular sort alternatives
-  * Undefined and null values are always sorted to bottom
+  * Undefined and null values are always sorted to bottom (with default comparer)
   * TypeScript support
   * Small footprint with 0 dependencies (~ 650 bytes gzip)
   * Compatible with any JS environment as Node, Web, etc..
@@ -207,6 +207,16 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
   const sortedArr = sort([...arr]).asc();
   console.log(arr); // => [1, 4, 2]
   console.log(sortedArr); // => [1, 2, 4]
+
+  // As stated in highlights fast-sort sorts null and undefined values to the
+  // bottom no matter if sorting is asc or decs order.
+  const addresses = [{ city: 'Split' }, { city: undefined }, { city: 'Zagreb'}];
+  sort(addresses).asc(a => a.city); // => Split, Zagreb, undefined
+  sort(addresses).asc(a => a.city); // => Zagreb, Split, undefined
+
+  // If above is not intended behaviour you can always create new sort instance that will behave
+  // the way you intend it to behave. For example of doing so you can check unit test
+  // "Should create sort instance that sorts nil value to the top in desc order" is sort.spec.ts
 ```
 
 ### Fast sort versions

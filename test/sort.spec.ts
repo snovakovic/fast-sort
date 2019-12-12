@@ -490,4 +490,23 @@ describe('sort', () => {
     naturalSort(testArr).desc();
     assert.deepEqual(testArr, ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']);
   });
+
+  it('Should create sort instance that sorts nil value to the top in desc order', () => {
+    const nilSort = sort.createNewInstance({
+      comparer(a, b):number {
+        if (a == null) return 1;
+        if (b == null) return -1;
+        if (a < b) return -1;
+        if (a === b) return 0;
+
+        return 1;
+      },
+    });
+
+    nilSort(multiPropArray).asc(p => p.lastName);
+    assert.deepEqual(['aa', 'aa', 'bb', null, undefined], multiPropArray.map(p => p.lastName));
+
+    nilSort(multiPropArray).desc(p => p.lastName);
+    assert.deepEqual([null, undefined, 'bb', 'aa', 'aa'], multiPropArray.map(p => p.lastName));
+  });
 });
