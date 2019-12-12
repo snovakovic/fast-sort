@@ -209,14 +209,14 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
   console.log(sortedArr); // => [1, 2, 4]
 
   // As stated in highlights fast-sort sorts null and undefined values to the
-  // bottom no matter if sorting is asc or decs order.
+  // bottom no matter if sorting is in asc or decs order.
   const addresses = [{ city: 'Split' }, { city: undefined }, { city: 'Zagreb'}];
   sort(addresses).asc(a => a.city); // => Split, Zagreb, undefined
-  sort(addresses).asc(a => a.city); // => Zagreb, Split, undefined
+  sort(addresses).desc(a => a.city); // => Zagreb, Split, undefined
 
-  // If above is not intended behaviour you can always create new sort instance that will behave
-  // the way you intend it to behave. For example of doing so you can check unit test
-  // "Should create sort instance that sorts nil value to the top in desc order" is sort.spec.ts
+  // If above is not intended behaviour you can always create new sort instance that will sort null
+  // or undefined values the way you intended it to be. For example of exactly that you can check unit test
+  // "Should create sort instance that sorts nil value to the top in desc order" in test/sort.spec.ts ()
 ```
 
 ### Fast sort versions
