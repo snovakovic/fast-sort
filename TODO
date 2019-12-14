@@ -34,11 +34,10 @@ NICE TO DO FOR PHASE 2:
 ✔ Rename fastSort naming in benchmarks to fast-sort @done(19-12-07 20:26)
 ☐ Improve interfaces (so we don't have any in them as e.g for comparer)
 ☐ Update depndendcy versions in benchmarks and run benchmark results again (also update docs and have average in first sentance)
+☐ Add note that new fast-sort is arround 20% faster
 ☐ Add more badges to readme (as code coverage) (code coverage with codacity)
 ☐ update fast-sort in js-flock?? (or depricate it??)
 ✔ Guard in TS that string key have to be keyof object @done(19-12-14 16:28)
 ✔ Add info what feature is available from which version. @done(19-12-09 21:02)
 ✔ Add example for computed property as in https://www.npmjs.com/package/sort-array @done(19-12-10 19:35)
-Sort by in multiple directions (1.5.0). Overriding of default comparer in by sorter 1.6.0
-creating new instance 2.0.0
 
