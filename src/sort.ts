@@ -2,10 +2,18 @@
 
 const orderHandler = (comparer) => (a, b, order) => comparer(a, b, order) * order;
 
+const throwInvalidConfigError = function(context) {
+  throw Error(`Invalid sort config: ${context}`);
+};
+
 const unpackObjectSorter = function(sortByObj) {
-  const sortBy = (sortByObj || {}).asc || (sortByObj || {}).desc;
+  const { asc, desc } = sortByObj || {};
+  const sortBy = asc || desc;
+  if (asc && desc) {
+    throw throwInvalidConfigError('Ambiguous object with `asc` and `desc` config properties');
+  }
   if (!sortBy) {
-    throw Error('Invalid sort config');
+    throwInvalidConfigError('Expected `asc` or `desc` property');
   }
 
   const order = sortByObj.asc ? 1 : -1;
@@ -65,6 +73,9 @@ const sort = function(order, ctx, sortBy, comparer) {
   if (sortBy === undefined || sortBy === true) {
     sorter = (a, b) => comparer(a, b, order);
   } else if (typeof sortBy === 'string') {
+    if (sortBy.includes('.')) {
+      throw throwInvalidConfigError('String syntax not allowed for nested properties.');
+    }
     sorter = (a, b) => comparer(a[sortBy], b[sortBy], order);
   } else if (typeof sortBy === 'function') {
     sorter = (a, b) => comparer(sortBy(a), sortBy(b), order);

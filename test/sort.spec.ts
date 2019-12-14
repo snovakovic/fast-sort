@@ -258,8 +258,8 @@ describe('sort', () => {
     ]);
   });
 
-  it('Should throw invalid usage of by sorter exception', () => {
-    const errorMessage = 'Invalid sort config';
+  it('Should throw error if asc or desc props not provided with object config', () => {
+    const errorMessage = 'Invalid sort config: Expected `asc` or `desc` property';
 
     assert.throws(
       () => sort(multiPropArray).by([{ asci: 'name' }] as any),
@@ -273,6 +273,24 @@ describe('sort', () => {
     );
     assert.throws(() => sort([1, 2]).asc(null), Error, errorMessage);
     assert.throws(() => sort([1, 2]).desc([1, 2, 3] as any), Error, errorMessage);
+  });
+
+  it('Should throw error if both asc and dsc props provided with object config', () => {
+    const errorMessage = 'Invalid sort config: Ambiguous object with `asc` and `desc` config properties';
+
+    assert.throws(
+      () => sort(multiPropArray).by([{ asc: 'name', desc: 'lastName' }] as any),
+      Error,
+      errorMessage,
+    );
+  });
+
+  it('Should throw error if using nested property with string syntax', () => {
+    assert.throw(
+      () => sort(persons).desc('address.code'),
+      Error,
+      'Invalid sort config: String syntax not allowed for nested properties.',
+    );
   });
 
   it('Should sort ascending with by on 1 property', () => {

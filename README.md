@@ -49,7 +49,7 @@ For list of all available features check [highlights](#highlights) section.
   * [Faster](#benchmark) than other popular sort alternatives
   * Undefined and null values are always sorted to bottom (with default comparer)
   * TypeScript support
-  * Small footprint with 0 dependencies (~ 650 bytes gzip)
+  * Small footprint with 0 dependencies (~ 750 bytes gzip)
   * Compatible with any JS environment as Node, Web, etc..
 
 Under the hood sort is using [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
