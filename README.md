@@ -223,12 +223,8 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
 #### `v2` version
 
   There is no breaking changes in API between `v2` and `v1` version of library.
-  You should be able to upgrade and take advantage of better editor support
-  and more flexibility without any problem.
-  Only consideration to take in mind is that some `dist` import file names have been changed. Based on how you used library there is small chance you might need to update those imports as:
-
-  * `require('fast-sort/sort.es5')` should be updated to: `require('fast-sort')` (es5 is now default export)
-  * `require('fast-sort/sort.es5.min')` should be updated to: `require('fast-sort/sort.min')`
+  Some import files have been removed so if you haven't import it using default import
+  you might need to update imports. For more info check [v2 release notes](https://github.com/snovakovic/fast-sort/releases/tag/v2.0.0)
 
 #### Features by version
 
