@@ -115,7 +115,7 @@ describe('sort', () => {
     assert.equal(sort(null).desc(), null);
     assert.equal(sort(33 as any).asc(), 33 as any);
     assert.deepEqual(sort({ name: 'test' } as any).desc(), { name: 'test' } as any);
-    assert.equal((sort(33 as any) as any).by(), 33 as any);
+    assert.equal((sort(33 as any) as any).by({ asc: true }), 33 as any);
   });
 
   it('Should sort dates correctly', () => {
