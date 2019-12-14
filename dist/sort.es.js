@@ -1,11 +1,18 @@
 // >>> HELPERS <<<
 var orderHandler = function (comparer) { return function (a, b, order) { return comparer(a, b, order) * order; }; };
+var throwInvalidConfigError = function (context) {
+    throw Error("Invalid sort config: " + context);
+};
 var unpackObjectSorter = function (sortByObj) {
-    var sortBy = (sortByObj || {}).asc || (sortByObj || {}).desc;
-    if (!sortBy) {
-        throw Error('Invalid sort config');
+    var _a = sortByObj || {}, asc = _a.asc, desc = _a.desc;
+    var order = asc ? 1 : -1;
+    var sortBy = asc || desc;
+    if (asc && desc) {
+        throw throwInvalidConfigError('Ambiguous object with `asc` and `desc` config properties');
     }
-    var order = sortByObj.asc ? 1 : -1;
+    if (!sortBy) {
+        throwInvalidConfigError('Expected `asc` or `desc` property');
+    }
     var comparer = sortByObj.comparer && orderHandler(sortByObj.comparer);
     return { order: order, sortBy: sortBy, comparer: comparer };
 };
@@ -46,6 +53,9 @@ var sort = function (order, ctx, sortBy, comparer) {
         sorter = function (a, b) { return comparer(a, b, order); };
     }
     else if (typeof sortBy === 'string') {
+        if (sortBy.includes('.')) {
+            throw throwInvalidConfigError('String syntax not allowed for nested properties.');
+        }
         sorter = function (a, b) { return comparer(a[sortBy], b[sortBy], order); };
     }
     else if (typeof sortBy === 'function') {

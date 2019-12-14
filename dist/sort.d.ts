@@ -1,7 +1,7 @@
 export interface ISortByFunction<T> {
     (prop: T): any;
 }
-export declare type ISortBy<T> = string | ISortByFunction<T> | (string | ISortByFunction<T>)[];
+export declare type ISortBy<T> = keyof T | ISortByFunction<T> | (keyof T | ISortByFunction<T>)[];
 export interface ISortComparer {
     comparer?(a: any, b: any, order: 1 | -1): number;
 }
@@ -25,7 +25,7 @@ declare function createSortInstance(opts: ISortComparer): <T>(ctx: T[]) => {
      *   u => u.address.zip,
      * ]);
      */
-    asc(sortBy?: string | ISortByFunction<T> | (string | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    asc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
     /**
      * Sort array in descending order. Mutates provided array by sorting it.
      * @example
@@ -38,7 +38,7 @@ declare function createSortInstance(opts: ISortComparer): <T>(ctx: T[]) => {
      *   u => u.address.zip,
      * ]);
      */
-    desc(sortBy?: string | ISortByFunction<T> | (string | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    desc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
     /**
      * Sort array in ascending or descending order. It allows sorting on multiple props
      * in different order for each of them. Mutates provided array by sorting it.
@@ -64,7 +64,7 @@ declare const defaultSort: <T>(ctx: T[]) => {
      *   u => u.address.zip,
      * ]);
      */
-    asc(sortBy?: string | ISortByFunction<T> | (string | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    asc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
     /**
      * Sort array in descending order. Mutates provided array by sorting it.
      * @example
@@ -77,7 +77,7 @@ declare const defaultSort: <T>(ctx: T[]) => {
      *   u => u.address.zip,
      * ]);
      */
-    desc(sortBy?: string | ISortByFunction<T> | (string | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    desc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
     /**
      * Sort array in ascending or descending order. It allows sorting on multiple props
      * in different order for each of them. Mutates provided array by sorting it.
