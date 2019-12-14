@@ -1,37 +1,56 @@
 {
   "name": "fast-sort",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "description": "Fast and powerful array sorting. Sort by any property in any direction with easy to read syntax.",
-  "main": "dist/sort.es5.js",
+  "main": "dist/sort.js",
+  "module": "dist/sort.es.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
+  "contributors": [
+    "Tony Gutierrez: https://github.com/tony-gutierrez"
+  ],
   "license": "MIT",
-  "homepage": "https://github.com/snovakovic/fast-sort#readme",
+  "homepage": "https://github.com/snovakovic/fast-sort",
   "scripts": {
-    "test": "node integration_test/index.js",
-    "publish": "node publish"
+    "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha -r ts-node/register test/*.spec.ts",
+    "test:watch": "watch 'npm run test' ./src",
+    "test:integration:dist": "node test/integration/dist.test.js",
+    "test:integration:npm": "node test/integration/npm.test.js",
+    "build": "npm run test  && rm -rf dist && rollup -c",
+    "prepublish": "npm run build && npm run test:integration:dist",
+    "postpublish": "npm run test:integration:npm"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/snovakovic/js-flock.git"
+    "url": "git+https://github.com/snovakovic/fast-sort.git"
   },
   "bugs": {
-    "url": "https://github.com/snovakovic/js-flock/issues"
+    "url": "https://github.com/snovakovic/fast-sort/issues"
   },
   "keywords": [
     "sort",
     "sortBy",
     "order",
-    "orderBy"
+    "orderBy",
+    "array sort",
+    "object sort",
+    "natural sort"
   ],
+  "dependencies": {},
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^11.3.1",
-    "eslint-plugin-import": "^2.7.0",
-    "fs-extra": "^4.0.1"
-  },
-  "contributors": [
-    "Tony Gutierrez: https://github.com/tony-gutierrez"
-  ],
-  "//": "WARNING: Do not remove!. Private is used to prevent accidental npm publish. Publish should be done only with npm run publish",
-  "private": true
+    "@types/chai": "^4.2.5",
+    "@types/mocha": "^5.2.7",
+    "@typescript-eslint/eslint-plugin": "^2.10.0",
+    "@typescript-eslint/parser": "^2.10.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.7.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "mocha": "^6.2.2",
+    "rollup": "^1.27.5",
+    "rollup-plugin-typescript2": "^0.25.2",
+    "rollup-plugin-uglify": "^6.0.3",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3",
+    "watch": "^1.0.2"
+  }
 }

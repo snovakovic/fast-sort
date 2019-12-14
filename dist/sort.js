@@ -1,166 +1,147 @@
-/* eslint no-use-before-define: 0 */
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = global || self, global['fast-sort'] = factory());
+}(this, (function () { 'use strict';
 
-// >>> SORTERS <<<
-
-const defaultComparer = function(direction, a, b) {
-  if (a === b) return 0;
-  if (a < b) return -direction;
-  if (a == null) return 1;
-  if (b == null) return -1;
-
-  return direction;
-};
-
-const customComparerProvider = function(comparer) {
-  return function(direction, a, b) {
-    return comparer(a, b) * direction;
+  // >>> HELPERS <<<
+  var orderHandler = function (comparer) { return function (a, b, order) { return comparer(a, b, order) * order; }; };
+  var throwInvalidConfigError = function (context) {
+      throw Error("Invalid sort config: " + context);
   };
-};
-
-/**
- * stringSorter does not support nested property.
- * For nested properties or value transformation (e.g toLowerCase) we should use functionSorter
- * Based on benchmark testing using stringSorter is bit faster then using equivalent function sorter
- * @example sort(users).asc('firstName')
- */
-const stringSorter = function(direction, sortBy, comparer, a, b) {
-  return comparer(direction, a[sortBy], b[sortBy]);
-};
-
-/**
- * @example sort(users).asc(p => p.address.city)
- */
-const functionSorter = function(direction, sortBy, comparer, a, b) {
-  return comparer(direction, sortBy(a), sortBy(b));
-};
-
-/**
- * Used when we have sorting by multyple properties and when current sorter is function
- * @example sort(users).asc([p => p.address.city, p => p.firstName])
- */
-const multiPropFunctionSorter = function(sortBy, thenBy, depth, direction, comparer, a, b) {
-  return multiPropEqualityHandler(sortBy(a), sortBy(b), thenBy, depth, direction, comparer, a, b);
-};
-
-/**
- * Used when we have sorting by multiple properties and when current sorter is string
- * @example sort(users).asc(['firstName', 'lastName'])
- */
-const multiPropStringSorter = function(sortBy, thenBy, depth, direction, comparer, a, b) {
-  return multiPropEqualityHandler(a[sortBy], b[sortBy], thenBy, depth, direction, comparer, a, b);
-};
-
-/**
- * Used with 'by' sorter when we have sorting in multiple direction
- * @example sort(users).asc(['firstName', 'lastName'])
- */
-const multiPropObjectSorter = function(sortByObj, thenBy, depth, _direction, _comparer, a, b) {
-  const sortBy = sortByObj.asc || sortByObj.desc;
-  const direction = sortByObj.asc ? 1 : -1;
-  const comparer = sortByObj.comparer
-    ? customComparerProvider(sortByObj.comparer)
-    : defaultComparer;
-
-  if (!sortBy) {
-    throw Error(`sort: Invalid 'by' sorting configuration.
-      Expecting object with 'asc' or 'desc' key`);
-  }
-
-  const multiSorter = getMultiPropertySorter(sortBy);
-  return multiSorter(sortBy, thenBy, depth, direction, comparer, a, b);
-};
-
-// >>> HELPERS <<<
-
-/**
- * Return multiProperty sort hanrdler based on sortBy value
- */
-const getMultiPropertySorter = function(sortBy) {
-  const type = typeof sortBy;
-  if (type === 'string') {
-    return multiPropStringSorter;
-  }
-  if (type === 'function') {
-    return multiPropFunctionSorter;
-  }
-
-  return multiPropObjectSorter;
-};
-
-const multiPropEqualityHandler = function(valA, valB, thenBy, depth, direction, comparer, a, b) {
-  if (valA === valB || (valA == null && valB == null)) {
-    if (thenBy.length > depth) {
-      const multiSorter = getMultiPropertySorter(thenBy[depth]);
-      return multiSorter(thenBy[depth], thenBy, depth + 1, direction, comparer, a, b);
-    }
-    return 0;
-  }
-
-  return comparer(direction, valA, valB);
-};
-
-/**
- * Pick sorter based on provided sortBy value
- */
-const sort = function(direction, ctx, sortBy, comparer) {
-  if (!Array.isArray(ctx)) return ctx;
-
-  // Unwrap sortBy if array with only 1 value
-  if (Array.isArray(sortBy) && sortBy.length < 2) {
-    [sortBy] = sortBy;
-  }
-
-  let _sorter;
-
-  if (!sortBy || sortBy === true) {
-    _sorter = comparer.bind(undefined, direction);
-  } else if (typeof sortBy === 'string') {
-    _sorter = stringSorter.bind(undefined, direction, sortBy, comparer);
-  } else if (typeof sortBy === 'function') {
-    _sorter = functionSorter.bind(undefined, direction, sortBy, comparer);
-  } else {
-    _sorter = getMultiPropertySorter(sortBy[0])
-      .bind(undefined, sortBy.shift(), sortBy, 0, direction, comparer);
-  }
-
-  return ctx.sort(_sorter);
-};
-
-// >>> PUBLIC <<<
-
-module.exports = function(ctx) {
-  return {
-    asc: (sortBy) => sort(1, ctx, sortBy, defaultComparer),
-    desc: (sortBy) => sort(-1, ctx, sortBy, defaultComparer),
-    by: (sortBy) => {
-      if (!Array.isArray(ctx)) return ctx;
-
-      let sortByInSingleDirection;
-      if (!Array.isArray(sortBy)) {
-        sortByInSingleDirection = sortBy;
-      } else if (sortBy.length === 1) {
-        [sortByInSingleDirection] = sortBy;
+  var unpackObjectSorter = function (sortByObj) {
+      var _a = sortByObj || {}, asc = _a.asc, desc = _a.desc;
+      var order = asc ? 1 : -1;
+      var sortBy = asc || desc;
+      if (asc && desc) {
+          throw throwInvalidConfigError('Ambiguous object with `asc` and `desc` config properties');
       }
-
-      // Unwrap sort by to faster path for dedicated single direction sorters
-      if (sortByInSingleDirection) {
-        const direction = sortByInSingleDirection.asc ? 1 : -1;
-        const singleDirectionSortBy = sortByInSingleDirection.asc || sortByInSingleDirection.desc;
-        const comparer = sortByInSingleDirection.comparer
-          ? customComparerProvider(sortByInSingleDirection.comparer)
-          : defaultComparer;
-
-        if (!singleDirectionSortBy) {
-          throw Error(`sort: Invalid 'by' sorting configuration.
-            Expecting object with 'asc' or 'desc' key`);
-        }
-        return sort(direction, ctx, singleDirectionSortBy, comparer);
+      if (!sortBy) {
+          throwInvalidConfigError('Expected `asc` or `desc` property');
       }
-
-      const _sorter = multiPropObjectSorter
-        .bind(undefined, sortBy.shift(), sortBy, 0, undefined, undefined);
-
-      return ctx.sort(_sorter);
-    }
+      var comparer = sortByObj.comparer && orderHandler(sortByObj.comparer);
+      return { order: order, sortBy: sortBy, comparer: comparer };
   };
-};
+  // >>> SORTERS <<<
+  var multiPropertySorter = function (sortBy, sortByArray, depth, order, comparer, a, b) {
+      var valA;
+      var valB;
+      if (typeof sortBy === 'string') {
+          valA = a[sortBy];
+          valB = b[sortBy];
+      }
+      else if (typeof sortBy === 'function') {
+          valA = sortBy(a);
+          valB = sortBy(b);
+      }
+      else {
+          var objectSorterConfig = unpackObjectSorter(sortBy);
+          return multiPropertySorter(objectSorterConfig.sortBy, sortByArray, depth, objectSorterConfig.order, objectSorterConfig.comparer || comparer, a, b);
+      }
+      var equality = comparer(valA, valB, order);
+      if (sortByArray.length > depth &&
+          (equality === 0 || (valA == null && valB == null))) {
+          return multiPropertySorter(sortByArray[depth], sortByArray, depth + 1, order, comparer, a, b);
+      }
+      return equality;
+  };
+  var sort = function (order, ctx, sortBy, comparer) {
+      var _a;
+      if (!Array.isArray(ctx)) {
+          return ctx;
+      }
+      // Unwrap sortBy if array with only 1 value
+      if (Array.isArray(sortBy) && sortBy.length < 2) {
+          _a = sortBy, sortBy = _a[0];
+      }
+      var sorter;
+      if (sortBy === undefined || sortBy === true) {
+          sorter = function (a, b) { return comparer(a, b, order); };
+      }
+      else if (typeof sortBy === 'string') {
+          if (sortBy.includes('.')) {
+              throw throwInvalidConfigError('String syntax not allowed for nested properties.');
+          }
+          sorter = function (a, b) { return comparer(a[sortBy], b[sortBy], order); };
+      }
+      else if (typeof sortBy === 'function') {
+          sorter = function (a, b) { return comparer(sortBy(a), sortBy(b), order); };
+      }
+      else if (Array.isArray(sortBy)) {
+          sorter = multiPropertySorter.bind(undefined, sortBy[0], sortBy, 1, order, comparer);
+      }
+      else {
+          var objectSorterConfig = unpackObjectSorter(sortBy);
+          return sort(objectSorterConfig.order, ctx, objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer);
+      }
+      return ctx.sort(sorter);
+  };
+  function createSortInstance(opts) {
+      var comparer = orderHandler(opts.comparer);
+      return function (ctx) {
+          return {
+              /**
+               * Sort array in ascending order. Mutates provided array by sorting it.
+               * @example
+               * sort([3, 1, 4]).asc();
+               * sort(users).asc('firstName');
+               * sort(users).asc(u => u.address.zip);
+               * sort(users).asc([
+               *  'firstName',
+               *  'lastName',
+               *   u => u.address.zip,
+               * ]);
+               */
+              asc: function (sortBy) {
+                  return sort(1, ctx, sortBy, comparer);
+              },
+              /**
+               * Sort array in descending order. Mutates provided array by sorting it.
+               * @example
+               * sort([3, 1, 4]).desc();
+               * sort(users).desc('firstName');
+               * sort(users).desc(u => u.address.zip);
+               * sort(users).desc([z
+               *  'firstName',
+               *  'lastName',
+               *   u => u.address.zip,
+               * ]);
+               */
+              desc: function (sortBy) {
+                  return sort(-1, ctx, sortBy, comparer);
+              },
+              /**
+               * Sort array in ascending or descending order. It allows sorting on multiple props
+               * in different order for each of them. Mutates provided array by sorting it.
+               * @example
+               * sort(users).by([
+               *  { asc: 'firstName' }.
+               *  { desc: u => u.address.zip }
+               * ]);
+               * sort(users).by({ desc: 'lastName' });
+               */
+              by: function (sortBy) {
+                  return sort(1, ctx, sortBy, comparer);
+              },
+          };
+      };
+  }
+  var defaultSort = createSortInstance({
+      comparer: function (a, b, order) {
+          if (a == null)
+              return order;
+          if (b == null)
+              return -order;
+          if (a < b)
+              return -1;
+          if (a === b)
+              return 0;
+          return 1;
+      },
+  });
+  // Attach createNewInstance to sort function
+  defaultSort['createNewInstance'] = createSortInstance;
+
+  return defaultSort;
+
+})));

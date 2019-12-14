@@ -12,21 +12,21 @@ const multiProperty = require('./implementations/multiProperty.js');
 const flatArray = require('./implementations/flatArray.js');
 
 const argv = minimist((process.argv.slice(2)));
-const flockOnly = Boolean(argv.flock);
+const fastSortOnly = Boolean(argv.latest);
 
-const libraries = ['flock'];
+const libraries = ['fastSort'];
 
-if (flockOnly) {
-  libraries.push('latestFlock');
+if (fastSortOnly) {
+  libraries.push('latestFastSort');
 } else {
   libraries.push('lodash', 'arraySort', 'sortArray', 'native');
 }
 
 const runConfiguration = [
-  { size: 1000, numberOfRuns: 100, flockOnly },
-  { size: 5000, numberOfRuns: 50, flockOnly },
-  { size: 20000, numberOfRuns: 25, flockOnly },
-  { size: 100000, numberOfRuns: 5, flockOnly }
+  { size: 1000, numberOfRuns: 100, fastSortOnly },
+  { size: 5000, numberOfRuns: 50, fastSortOnly },
+  { size: 20000, numberOfRuns: 25, fastSortOnly },
+  { size: 100000, numberOfRuns: 5, fastSortOnly },
 ];
 
 const headerItems = [chalk.hex('f49b42')('Library')];
@@ -37,18 +37,18 @@ function getRowValue(name, run) {
     return chalk.red('NOT SUPPORTED');
   }
 
-  const flock = run.flock.average;
+  const fastSort = run.fastSort.average;
   const lib = run[name].average;
   let comparison = '';
-  if (flock !== lib) {
-    const color = flock < lib ? 'red' : 'green';
-    const comparedToFlock = (Math.max(flock, lib) / Math.min(flock, lib)).toFixed(2);
-    comparison = chalk[color](`${flock < lib ? '↓' : '↑'} ${comparedToFlock}x `);
+  if (fastSort !== lib) {
+    const color = fastSort < lib ? 'red' : 'green';
+    const comparedTofastSort = (Math.max(fastSort, lib) / Math.min(fastSort, lib)).toFixed(2);
+    comparison = chalk[color](`${fastSort < lib ? '↓' : '↑'} ${comparedTofastSort}x `);
     comparison = `(${comparison})`;
   }
 
   const result = `${run[name].average.toFixed(4)}ms ${comparison}`;
-  return name === 'flock'
+  return name === 'fastSort'
     ? chalk.blue(result)
     : result;
 }
@@ -56,7 +56,7 @@ function getRowValue(name, run) {
 function addRow(libName, result, table) {
   const value = getRowValue.bind(null, libName);
 
-  if (libName === 'flock') libName = chalk.blue(libName);
+  if (libName === 'fastSort') libName = chalk.blue(libName);
   table.push([libName, ...result.map((r) => value(r))]);
 }
 

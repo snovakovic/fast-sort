@@ -1,1 +1,4 @@
-publish.js
+**
+!dist/**
+!package.json
+!README.md

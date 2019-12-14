@@ -1,0 +1,43 @@
+RELEASE REQUIREMENTS:
+
+✔ Name default exported sort function @done(19-12-05 20:56)
+✔ Better documentation for natural sort (remove js-flock mentionings) @done(19-12-08 18:47)
+✔ Check about natural sort improving (instance that do natural sort by default) @done(19-12-05 20:55)
+✔ should we rename customComparerProvider to e.g customComparerHandler (add comments for it) @done(19-12-05 20:56)
+✔ Shoud remove 2 almost indentical erros ("Invalid 'by' sorting") @done(19-12-04 16:09)
+✔ Check about using object resolver instead if in getMultiPropertySorter e.g sortDefinition[type] || multiPropObjectSorter, (pros/const) @done(19-12-05 20:56)
+✔ Initial buidl minified 1.93KB (Check can we make it lower) (updates: 1.54, 1.47, 1.41) @done(19-12-08 18:47)
+✔ Add TS specific linter rules as e.g (no space betwene type). check regarding other linter rules @done(19-12-07 19:34)
+✔ Add proper interface for comparer @done(19-12-05 20:56)
+✔ Enable eslint in TS files @done(19-12-07 19:33)
+✔ Examples in multiPropStringSorter and multiPropObjectSorter are wrong @done(19-12-05 20:56)
+✔ sort.by('name') is now valid or sort.by() so make sure to cover those new possibilities in tests @done(19-12-07 21:00)
+✔ now we can do something as  sort.asc({ desc: 'aaa' }) which sorts in desc order. Is there a reason to guard against that?? There should not be a reason to complicate a code fo that @done(19-12-07 21:00)
+✔ How correct is (valA == null && valB == null) in multiPropEqualityHandler if we are going to use custom comparer?? Add tests arround that @done(19-12-14 16:28)
+✔ Update default comparer so it accepts a and b only (we can then drop customComparerHandler) and handle direction outside comparers @done(19-12-05 20:57)
+✔ Maybe better name for delegateOrderApplyingToComparer?? @done(19-12-07 21:00)
+✔ More test especially over new instances @done(19-12-07 19:35)
+✔ Exporting min or full version by default?? @done(19-12-10 13:07)
+✔ We should also have tests for builds not just source code before publishing @done(19-12-10 14:27)
+✔ Build warning about named and default exports @done(19-12-08 09:53)
+✔ Check about removing preventDefaultOrderHandling @done(19-12-08 19:12)
+✔ Is there anything we can do with undefoined values been ignored?? (is it just for flat arrays or is case with objects??) @done(19-12-12 20:14)
+✔ if not the case wiht objects add in documentation how to override that for objects @done(19-12-12 20:14)
+✔ Include readme in tests to make sure they are correct @done(19-12-10 19:23)
+✔ Throw error from by if we don't provide array or object (with tests)?? What if we provodde both asc/desc in sort by @done(19-12-14 15:51)
+✔ what if we provide string sorter with nested properties eg. 'address.city' => add test for those cases before doing anything @done(19-12-14 15:51)
+✔ Do we want throw on those - const makes code havier, pros can guard on unditentional issues when e.g dynamicly building sort condition (nicer from user perspective as lib is poinitn) @done(19-12-14 15:51)
+
+NICE TO DO FOR PHASE 2:
+
+✔ Update all test to use deepEqual to be easier to read @done(19-12-09 21:01)
+✔ Rename fastSort naming in benchmarks to fast-sort @done(19-12-07 20:26)
+☐ Improve interfaces (so we don't have any in them as e.g for comparer)
+☐ Update depndendcy versions in benchmarks and run benchmark results again (also update docs and have average in first sentance)
+☐ Add note that new fast-sort is arround 20% faster
+☐ Add more badges to readme (as code coverage) (code coverage with codacity)
+☐ update fast-sort in js-flock?? (or depricate it??)
+✔ Guard in TS that string key have to be keyof object @done(19-12-14 16:28)
+✔ Add info what feature is available from which version. @done(19-12-09 21:02)
+✔ Add example for computed property as in https://www.npmjs.com/package/sort-array @done(19-12-10 19:35)
+

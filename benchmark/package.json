@@ -1,13 +1,13 @@
 {
   "name": "sort-benchmark",
   "version": "1.0.0",
-  "description": "benchmark for js-flock sort",
+  "description": "benchmark for fast-sort library",
   "main": "index.js",
   "dependencies": {
     "array-sort": "^1.0.0",
     "chalk": "^2.4.2",
     "cli-table2": "^0.2.0",
-    "js-flock": "^3.6.1",
+    "fast-sort": "^1.6.0",
     "lodash": "^4.17.15",
     "minimist": "^1.2.0",
     "single-line-log": "^1.1.2",

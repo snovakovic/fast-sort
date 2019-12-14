@@ -1,124 +1,272 @@
 # fast-sort
 
-[![Build Status](https://travis-ci.org/snovakovic/js-flock.svg?branch=master)](https://travis-ci.org/snovakovic/js-flock)
-[![Code quality](https://api.codacy.com/project/badge/grade/fe5f8741eaed4c628bca3761c32c3b68)](https://www.codacy.com/app/snovakovic/js-flock/dashboard?bid=4653162)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/f0ea30fd63bd4bc88ea3b0965094ced1)](https://www.codacy.com/app/snovakovic/js-flock?utm_source=github.com&utm_medium=referral&utm_content=snovakovic/js-flock&utm_campaign=Badge_Coverage)
+[![Start](https://img.shields.io/github/stars/snovakovic/fast-sort?style=flat-square)](https://github.com/snovakovic/fast-sort/stargazers)
+[![Total Downloads](https://img.shields.io/npm/dt/fast-sort.svg)](https://www.npmjs.com/package/fast-sort)
+[![Known Vulnerabilities](https://snyk.io/test/github/snovakovic/fast-sort/badge.svg)](https://snyk.io/test/github/snovakovic/fast-sort)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 [![NPM Package](https://nodei.co/npm/fast-sort.png)](https://www.npmjs.com/package/fast-sort)
 
+Fast easy to use and flexible sorting with TypeScript support.
+For speed comparison of `fast-sort` vs other popular sort libraries check [benchmark](#benchmark) section.
+For list of all available features check [highlights](#highlights) section.
 
-Blazing fast array sorting that **outperforms other popular sort libraries even up to 20x.**
-Take a look at the benchmark section for more information about performance.
-
-### Quick example
+## Quick examples
 
 ```javascript
-  // Sort flat array
-  sort([1,4,2]).asc(); // => [1, 2, 4]
+  import sort from 'fast-sort';
 
-  // Sort array of objects
+  // Sort flat arrays
+  sort([1,4,2]).asc(); // => [1, 2, 4]
+  sort([1, 4, 2]).desc(); // => [4, 2, 1]
+
+  // Sort users (array of objects) by firstName in descending order
   sort(users).desc(u => u.firstName);
 
-  // Sort on multiple properties
+  // Sort users in ascending order by firstName and lastName
   sort(users).asc([
     u => u.firstName,
     u => u.lastName
   ]);
 
-  // Sort in multiple directions
+  // Sort users ascending by firstName and descending by age
   sort(users).by([
-    { asc: u => u.name },
+    { asc: u => u.firstName },
     { desc: u => u.age }
   ]);
 ```
 
-### Fast sort highlights
+## Highlights
 
-* Sort array of objects by one or more properties
-* Sort flat arrays
-* Sort in multiple directions
-* Easy to read syntax
-* Faster than other popular sort alternatives
-* Undefined and null values are always sorted to bottom
+  * Sort flat arrays
+  * Sort array of objects by one or more properties
+  * Sort in multiple directions
+  * [Natural sort](#natural-sorting-/-language-sensitive-sorting) support
+  * Support for [custom sort](#custom-sorting) instances
+  * Easy to read syntax
+  * [Faster](#benchmark) than other popular sort alternatives
+  * Undefined and null values are always sorted to bottom (with default comparer)
+  * TypeScript support
+  * Small footprint with 0 dependencies (~ 750 bytes gzip)
+  * Compatible with any JS environment as Node, Web, etc..
 
-Under the hood sort use a [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+Under the hood sort is using [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
 Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
 
-### Example
+## More examples
+
+  * `asc` / `desc` sorters. In below examples we will use `asc` sorter but keep in mind that both `asc` and `desc` sorters have exactly the same API so all the examples below can be applied for `desc` sorter.
 
 ```javascript
   import sort from 'fast-sort';
 
+  // Sort flat arrays
   sort([1,4,2]).asc(); // => [1, 2, 4]
-  sort([1,4,2]).desc(); // => [4, 2, 1]
 
-  // Sort users Object[] ascending by firstName
+  // Sort array of objects by single object property
   sort(users).asc(u => u.firstName);
 
-  // If sorting by single property we can use string syntax
-  // NOTE: sorting by string is available from version [1.3.0]
+  // For root object properties we can use string shorthand (same as example above)
   sort(users).asc('firstName');
 
-  // For sorting by nested property we have to provide sort function
-  sort(users).desc(u => u.address.city);
+  // Sort by nested object properties
+  // NOTE: for nested object properties we can't use string shorthand ('address.city' is not valid syntax).
+  sort(users).asc(u => u.address.city);
 
-  // Sort users by firstName, lastName and city
-  sort(users).desc([
-    'firstName',
-    'lastName',
-    u => u.address.city // String syntax is not available for nested properties
+  // Sort by multiple properties
+  sort(users).asc([
+    u => u.age,
+    u => u.firstName,
   ]);
 
-  // Sort in multiple directions
-  // NOTE: Available from version [1.5.0]
+  // Same as above but using string shorthand
+  sort(users).asc(['age', 'firstName']);
+
+  // Sort based on computed property
+  // For example sort repositories by total number of issues (summary of open and closed issues)
+  sort(repositories).desc(r => r.openIssues + r.closedIssues);
+```
+
+  * `by` sorter can do anything that `asc` / `desc` sorters can with addition to some more advance
+  sort handling. With `by` sorter we can sort by multiple properties in different directions and
+  we can override default `comparer` for e.g natural sort purposes.
+
+```javascript
+  import sort from 'fast-sort';
+
+  // Sort users by firstName in ascending order and age in descending order
   sort(users).by([
-    { asc: 'name' },
-    { desc: 'age' }
+    { asc: u => u.firstName },
+    { desc: u => u.age },
   ]);
 
-  // Sort by any custom logic e.g sort vip users first
-  sort(users).asc(u => u.tags === 'vip' ? 1 : -1);
+  // Same as with asc/desc sorters we can use string shorthand for root object properties
+  sort(users).by([{ asc: 'firstName' }, { desc: 'age' }]);
 
+  // Sort users by city using custom comparer
+  sort(users).by([
+    asc: u => u.address.city,
+    comparer: (a, b) => a.localeCompare(b),
+  ]);
+
+  // Sort users ascending by age using default comparer and then by lastName using language sensitive comparer
+  sort(users).by([
+    { asc: 'age' },
+    {
+      asc: 'lastName',
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+    },
+  ]);
+```
+
+  * Fore even more examples check unit tests `test/sort.spec.ts` in the github repo.
+
+### Natural sorting / Language sensitive sorting
+
+By default `fast-sort` is not doing language sensitive sorting of strings.
+e.g `image-11.jpg` will be sorted before `image-2.jpg` (in ascending sorting).
+We can provide custom [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) comparer to fast-sort for language sensitive sorting of strings.
+Keep in mind that natural sort is slower then default sorting so recommendation is to use it
+only when needed.
+
+```javascript
+  import sort from 'fast-sort';
+
+  const testArr = ['image-2.jpg', 'image-11.jpg', 'image-3.jpg'];
+
+  // By default fast-sort is not doing natural sort
+  sort(testArr).desc(); // => ['image-3.jpg', 'image-2.jpg', 'image-11.jpg']
+
+  // We can use `by` sort to override default comparer with the one that are doing language sensitive comparison
+  sort(testArr).by({
+    desc: true,
+    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+  }); // => ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']
+
+
+  // If we want to reuse natural sort in multiple places we can create new sort instance
+  const naturalSort = sort.createNewInstance({
+    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+  });
+
+  naturalSort(testArr).asc(); // => ['image-2.jpg', 'image-3.jpg', 'image-11.jpg']
+  naturalSort(testArr).desc(); // => ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']
+```
+
+### Custom sorting
+
+Fast sort can be tailored to fit any sorting need or use case by:
+  * creating custom sorting instances
+  * overriding default comparer in `by` sorter
+  * custom handling in provided callback function
+  * combination of any from above
+
+For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of greater importance then `captain` tag).
+
+```javascript
+  import sort from 'fast-sort';
+
+  const tagsImportance = { vip: 3, influencer: 2, captain: 1 }; // Some domain specific logic
+  const tags = ['influencer', 'unknown', 'vip', 'captain'];
+
+  // Sort tags in ascending order by custom tags values
+  sort(tags).asc(tag => tagImportance[tag] || 0); // => ['unknown', 'captain', 'influencer', 'vip'];
+  sort(tags).desc(tag => tagImportance[tag] || 0); // => ['vip', 'influencer', 'captain', 'unknown'];
+
+  // We can also create specialized tagSorter instance and reuse it across the application
+  const tagSorter = sort.createNewInstance({
+    comparer: (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0)
+  });
+
+  tagSorter(tags).asc(); // => ['unknown', 'captain', 'influencer', 'vip'];
+  tagSorter(tags).desc(); // => ['vip', 'influencer', 'captain', 'unknown'];
+
+  // Default sorter will sort tags by string comparison and not "tag" importance
+  sort(tags).asc(); // => ['captain', 'influencer', 'unknown' 'vip']
+```
+
+### Things to know
+
+When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) it's up to you to ensure those features are available in all the platforms you intend to support. (You can check browser compatibility for Intl.Collator by following link above). Same applies for any other custom comparer.
+
+```javascript
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
   sort(33).desc(); // => 33
 
-  // By default sort is mutating input array,
+  // By default sort will mutate input array (by sorting it),
   const arr = [1, 4, 2];
   const sortedArr = sort(arr).asc();
+  console.log(sortedArr); // => [1, 2, 4]
   console.log(arr); // => [1, 2, 4]
 
-  // We can easily prevent mutating of input array by using ES6 spread operator
+  // To prevent that we can use ES6 destructor (or ES5 equivalents)
   const arr = [1, 4, 2];
   const sortedArr = sort([...arr]).asc();
   console.log(arr); // => [1, 4, 2]
   console.log(sortedArr); // => [1, 2, 4]
+
+  // As stated in highlights fast-sort sorts null and undefined values to the
+  // bottom no matter if sorting is in asc or decs order.
+  const addresses = [{ city: 'Split' }, { city: undefined }, { city: 'Zagreb'}];
+  sort(addresses).asc(a => a.city); // => Split, Zagreb, undefined
+  sort(addresses).desc(a => a.city); // => Zagreb, Split, undefined
+
+  // If above is not intended behaviour you can always create new sort instance that will sort null
+  // or undefined values the way you intended it to be. For example of exactly that you can check unit test
+  // "Should create sort instance that sorts nil value to the top in desc order" in 'test/sort.spec.ts'
 ```
 
-NOTE: fast-sort is part of [js-flock](https://www.npmjs.com/package/js-flock) library exported as single module.
+### Fast sort versions
 
+#### `v2` version
 
-### Benchmark
+  There is no breaking changes in API between `v2` and `v1` version of library.
+  You should be able to upgrade and take advantage of better editor support
+  and more flexibility without any problem.
+  Only consideration to take in mind is that some `dist` import file names have been changed. Based on how you used library there is small chance you might need to update those imports as:
+
+  * `require('fast-sort/sort.es5')` should be updated to: `require('fast-sort')` (es5 is now default export)
+  * `require('fast-sort/sort.es5.min')` should be updated to: `require('fast-sort/sort.min')`
+
+#### Features by version
+
+```javascript
+ // Sorting in multiple directions is available from [v1.5.0]
+ sort(users).by([{ asc: 'age' }, { desc: 'firstName' }]);
+
+ // Overriding of default comparer in `by` sorter is available from [v1.6.0]
+  sort(testArr).by({
+    desc: true,
+    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+  });
+
+  // Creating new custom sort instances is available from [v2.0.0]
+  const naturalSort = sort.createNewInstance({
+    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+  });
+
+  // TypeScript support is available from [v2.0.0]
+```
+
+## Benchmark
 
 Five different benchmarks have been created to get better insight of how fast-sort perform under different scenarios.
 Each benchmark is run with different array sizes raging from small 100 items to large 100 000 items.
 
 Every run of benchmark outputs different results but the results are constantly showing better scores compared to similar popular sorting libraries.
 
-
 #### Benchmark scores
 
 Benchmark has been run on:
 
-* 16 GB Ram
-* Intel® Core™ i5-4570 CPU @ 3.20GHz × 4
-* Ubuntu 16.04
-* Node 8.9.1
+  * 16 GB Ram
+  * Intel® Core™ i5-4570 CPU @ 3.20GHz × 4
+  * Ubuntu 16.04
+  * Node 8.9.1
 
 ![benchmark results](https://github.com/snovakovic/fast-sort/raw/master/benchmark.jpg)
-
 
 #### Running benchmark
 
