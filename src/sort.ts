@@ -8,6 +8,7 @@ const throwInvalidConfigError = function(context) {
 
 const unpackObjectSorter = function(sortByObj) {
   const { asc, desc } = sortByObj || {};
+  const order = asc ? 1 : -1;
   const sortBy = asc || desc;
   if (asc && desc) {
     throw throwInvalidConfigError('Ambiguous object with `asc` and `desc` config properties');
@@ -16,7 +17,6 @@ const unpackObjectSorter = function(sortByObj) {
     throwInvalidConfigError('Expected `asc` or `desc` property');
   }
 
-  const order = sortByObj.asc ? 1 : -1;
   const comparer = sortByObj.comparer && orderHandler(sortByObj.comparer);
 
   return { order, sortBy, comparer };

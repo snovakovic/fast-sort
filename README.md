@@ -2,7 +2,6 @@
 
 [![Start](https://img.shields.io/github/stars/snovakovic/fast-sort?style=flat-square)](https://github.com/snovakovic/fast-sort/stargazers)
 [![Total Downloads](https://img.shields.io/npm/dt/fast-sort.svg)](https://www.npmjs.com/package/fast-sort)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/742359206e0143e79ce74f04bc196101)](https://www.codacy.com/manual/snovakovic/fast-sort?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=snovakovic/fast-sort&amp;utm_campaign=Badge_Grade)
 [![Known Vulnerabilities](https://snyk.io/test/github/snovakovic/fast-sort/badge.svg)](https://snyk.io/test/github/snovakovic/fast-sort)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
