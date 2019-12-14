@@ -287,7 +287,7 @@ describe('sort', () => {
 
   it('Should throw error if using nested property with string syntax', () => {
     assert.throw(
-      () => sort(persons).desc('address.code'),
+      () => sort(persons).desc('address.code' as any),
       Error,
       'Invalid sort config: String syntax not allowed for nested properties.',
     );
@@ -471,7 +471,7 @@ describe('sort', () => {
 
   it('Should not mutate sort by array', () => {
     const sortBy = [{ asc: 'name' }, { asc: 'unit' }];
-    sort(multiPropArray).by(sortBy);
+    sort(multiPropArray).by(sortBy as any);
     assert.deepEqual(sortBy, [{ asc: 'name' }, { asc: 'unit' }]);
 
     const sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));

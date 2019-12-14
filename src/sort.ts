@@ -100,7 +100,7 @@ export interface ISortByFunction<T> {
   (prop:T):any,
 }
 
-export type ISortBy<T> = string|ISortByFunction<T>|(string|ISortByFunction<T>)[];
+export type ISortBy<T> = keyof T|ISortByFunction<T>|(keyof T|ISortByFunction<T>)[];
 
 export interface ISortComparer {
   comparer?(a:any, b:any, order:1|-1):number,

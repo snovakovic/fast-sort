@@ -24,9 +24,9 @@ RELEASE REQUIREMENTS:
 ✔ Is there anything we can do with undefoined values been ignored?? (is it just for flat arrays or is case with objects??) @done(19-12-12 20:14)
 ✔ if not the case wiht objects add in documentation how to override that for objects @done(19-12-12 20:14)
 ✔ Include readme in tests to make sure they are correct @done(19-12-10 19:23)
-☐ Throw error from by if we don't provide array or object (with tests)?? What if we provodde both asc/desc in sort by
-what if we provide string sorter with nested properties eg. 'address.city' => add test for those cases before doing anything
-Do we want throw on those - const makes code havier, pros can guard on unitentional issues when e.g dynamicly building sort condition (nicer from user perspective as lib is poinitn)
+✔ Throw error from by if we don't provide array or object (with tests)?? What if we provodde both asc/desc in sort by @done(19-12-14 15:51)
+✔ what if we provide string sorter with nested properties eg. 'address.city' => add test for those cases before doing anything @done(19-12-14 15:51)
+✔ Do we want throw on those - const makes code havier, pros can guard on unditentional issues when e.g dynamicly building sort condition (nicer from user perspective as lib is poinitn) @done(19-12-14 15:51)
 
 NICE TO DO FOR PHASE 2:
 
