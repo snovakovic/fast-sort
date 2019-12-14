@@ -384,6 +384,32 @@ describe('sort', () => {
     assert.deepEqual(flatNaturalArray, ['A2', 'A10', 'B2', 'B10']);
   });
 
+  it('Should handle sorting on multiples props with custom sorter instance', () => {
+    const naturalSort = sort.createNewInstance({
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+    });
+
+    const arr = [
+      { a: 'a', b: 'A2' },
+      { a: 'a', b: 'A20' },
+      { a: 'a', b: null },
+      { a: 'a', b: 'A3' },
+      { a: 'a', b: undefined },
+    ];
+
+    naturalSort(arr).asc('b');
+    assert.deepEqual(arr.map(a => a.b), ['A2', 'A3', 'A20', null, undefined]);
+
+    naturalSort(arr).asc(['a', 'b']);
+    assert.deepEqual(arr.map(a => a.b), ['A2', 'A3', 'A20', null, undefined]);
+
+    naturalSort(arr).desc('b');
+    assert.deepEqual(arr.map(a => a.b), [undefined, null, 'A20', 'A3', 'A2']);
+
+    naturalSort(arr).desc(['a', 'b']);
+    assert.deepEqual(arr.map(a => a.b), [undefined, null, 'A20', 'A3', 'A2']);
+  });
+
   it('Should create custom tag sorter instance', () => {
     const tagImportance = { vip: 3, influencer: 2, captain: 1 };
     const customTagComparer = (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0);

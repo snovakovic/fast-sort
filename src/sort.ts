@@ -2,7 +2,7 @@
 
 const orderHandler = (comparer) => (a, b, order) => comparer(a, b, order) * order;
 
-const throwInvalidConfigError = function(context) {
+const throwInvalidConfigError = function(context:string) {
   throw Error(`Invalid sort config: ${context}`);
 };
 
