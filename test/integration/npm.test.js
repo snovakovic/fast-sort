@@ -21,7 +21,9 @@ function run(err) {
   }
 
   runTests(require('fast-sort'));
-  runTests(require('fast-sort/sort.min'));
+  runTests(require('fast-sort/dist/sort.min'));
+
+  console.log('npm integration test success');
 }
 
 exec('npm uninstall fast-sort && npm install --no-save fast-sort', run);

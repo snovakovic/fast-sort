@@ -10,6 +10,8 @@ function runTests(sort) {
   assert.deepEqual(sort([1, 4, 2]).by({ asc: true }), [1, 2, 4]);
   assert.deepEqual(sort([1, 4, 2]).desc(), [4, 2, 1]);
   assert.deepEqual(sort([1, 4, 2]).by({ desc: true }), [4, 2, 1]);
+
+  console.log('dist integration test success');
 }
 
 runTests(sortFull);
