@@ -9,7 +9,7 @@
     "Tony Gutierrez: https://github.com/tony-gutierrez"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/snovakovic/fast-sort#readme",
+  "homepage": "https://github.com/snovakovic/fast-sort",
   "scripts": {
     "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha -r ts-node/register test/*.spec.ts",
     "test:watch": "watch 'npm run test' ./src",
