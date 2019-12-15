@@ -42,7 +42,7 @@ For list of all available features check [highlights](#highlights) section.
   * Sort flat arrays
   * Sort array of objects by one or more properties
   * Sort in multiple directions
-  * [Natural sort](#natural-sorting-/-language-sensitive-sorting) support
+  * [Natural sort](#natural-sorting--language-sensitive-sorting) support
   * Support for [custom sort](#custom-sorting) instances
   * Easy to read syntax
   * [Faster](#benchmark) than other popular sort alternatives
