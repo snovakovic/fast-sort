@@ -138,14 +138,15 @@ only when needed.
   // By default fast-sort is not doing natural sort
   sort(testArr).desc(); // => ['image-3.jpg', 'image-2.jpg', 'image-11.jpg']
 
-  // We can use `by` sort to override default comparer with the one that are doing language sensitive comparison
+  // We can use `by` sort to override default comparer with the one that is doing language sensitive comparison
   sort(testArr).by({
     desc: true,
     comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
   }); // => ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']
 
 
-  // If we want to reuse natural sort in multiple places we can create new sort instance
+  // Or we can create new sort instance with language sensitive comparer.
+  //Recommended if used in multiple places
   const naturalSort = sort.createNewInstance({
     comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
   });
