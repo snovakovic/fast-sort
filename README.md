@@ -146,7 +146,7 @@ only when needed.
 
 
   // Or we can create new sort instance with language sensitive comparer.
-  //Recommended if used in multiple places
+  // Recommended if used in multiple places
   const naturalSort = sort.createNewInstance({
     comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
   });

@@ -11,7 +11,7 @@
     "lodash": "^4.17.15",
     "minimist": "^1.2.0",
     "single-line-log": "^1.1.2",
-    "sort-array": "^2.0.0"
+    "sort-array": "^4.0.1"
   },
   "devDependencies": {},
   "scripts": {
