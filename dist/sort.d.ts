@@ -17,12 +17,10 @@ declare function createSortInstance(opts: ISortComparer): <T>(ctx: T[]) => {
      * Sort array in ascending order. Mutates provided array by sorting it.
      * @example
      * sort([3, 1, 4]).asc();
-     * sort(users).asc('firstName');
-     * sort(users).asc(u => u.address.zip);
+     * sort(users).asc(u => u.firstName);
      * sort(users).asc([
-     *  'firstName',
-     *  'lastName',
-     *   u => u.address.zip,
+     *   U => u.firstName
+     *   u => u.lastName,
      * ]);
      */
     asc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
@@ -30,12 +28,10 @@ declare function createSortInstance(opts: ISortComparer): <T>(ctx: T[]) => {
      * Sort array in descending order. Mutates provided array by sorting it.
      * @example
      * sort([3, 1, 4]).desc();
-     * sort(users).desc('firstName');
-     * sort(users).desc(u => u.address.zip);
-     * sort(users).desc([z
-     *  'firstName',
-     *  'lastName',
-     *   u => u.address.zip,
+     * sort(users).desc(u => u.firstName);
+     * sort(users).desc([
+     *   U => u.firstName
+     *   u => u.lastName,
      * ]);
      */
     desc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
@@ -44,10 +40,9 @@ declare function createSortInstance(opts: ISortComparer): <T>(ctx: T[]) => {
      * in different order for each of them. Mutates provided array by sorting it.
      * @example
      * sort(users).by([
-     *  { asc: 'firstName' }.
-     *  { desc: u => u.address.zip }
+     *  { asc: u => u.score }
+     *  { desc: u => u.age }
      * ]);
-     * sort(users).by({ desc: 'lastName' });
      */
     by(sortBy: ISortByAscSorter<T> | ISortByDescSorter<T> | ISortByObjectSorter<T>[]): T[];
 };
@@ -56,12 +51,10 @@ declare const defaultSort: <T>(ctx: T[]) => {
      * Sort array in ascending order. Mutates provided array by sorting it.
      * @example
      * sort([3, 1, 4]).asc();
-     * sort(users).asc('firstName');
-     * sort(users).asc(u => u.address.zip);
+     * sort(users).asc(u => u.firstName);
      * sort(users).asc([
-     *  'firstName',
-     *  'lastName',
-     *   u => u.address.zip,
+     *   U => u.firstName
+     *   u => u.lastName,
      * ]);
      */
     asc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
@@ -69,12 +62,10 @@ declare const defaultSort: <T>(ctx: T[]) => {
      * Sort array in descending order. Mutates provided array by sorting it.
      * @example
      * sort([3, 1, 4]).desc();
-     * sort(users).desc('firstName');
-     * sort(users).desc(u => u.address.zip);
-     * sort(users).desc([z
-     *  'firstName',
-     *  'lastName',
-     *   u => u.address.zip,
+     * sort(users).desc(u => u.firstName);
+     * sort(users).desc([
+     *   U => u.firstName
+     *   u => u.lastName,
      * ]);
      */
     desc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
@@ -83,10 +74,9 @@ declare const defaultSort: <T>(ctx: T[]) => {
      * in different order for each of them. Mutates provided array by sorting it.
      * @example
      * sort(users).by([
-     *  { asc: 'firstName' }.
-     *  { desc: u => u.address.zip }
+     *  { asc: u => u.score }
+     *  { desc: u => u.age }
      * ]);
-     * sort(users).by({ desc: 'lastName' });
      */
     by(sortBy: ISortByAscSorter<T> | ISortByDescSorter<T> | ISortByObjectSorter<T>[]): T[];
 };
