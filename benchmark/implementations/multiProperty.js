@@ -22,7 +22,7 @@ const sortImplementation = {
   arraySort: (arr) => arraySort(arr, 'am1', 'am2'),
 };
 
-module.exports.run = function({ size, numberOfRuns, fastSortOnly }) {
+module.exports.run = function({ size, numberOfRuns, librariesToRun }) {
   const testArr = [];
   for (let i = 0; i < size; i++) {
     testArr.push({
@@ -36,6 +36,6 @@ module.exports.run = function({ size, numberOfRuns, fastSortOnly }) {
     sortImplementation,
     testArr,
     numberOfRuns,
-    fastSortOnly,
+    librariesToRun,
   });
 };

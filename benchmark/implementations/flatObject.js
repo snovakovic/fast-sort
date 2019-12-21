@@ -25,7 +25,7 @@ const sortImplementation = {
 module.exports.run = function({
   size,
   numberOfRuns,
-  fastSortOnly,
+  librariesToRun,
   randomizer = Math.random,
 }) {
   const testArr = [];
@@ -40,6 +40,6 @@ module.exports.run = function({
     sortImplementation,
     testArr,
     numberOfRuns,
-    fastSortOnly,
+    librariesToRun,
   });
 };

@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 
 const chalk = require('chalk');
-const minimist = require('minimist');
 const Table = require('cli-table2');
 const log = require('single-line-log').stdout;
 
@@ -11,22 +10,20 @@ const deepObject = require('./implementations/deepObject.js');
 const multiProperty = require('./implementations/multiProperty.js');
 const flatArray = require('./implementations/flatArray.js');
 
-const argv = minimist((process.argv.slice(2)));
-const fastSortOnly = Boolean(argv.latest);
-
-const libraries = ['fastSort'];
-
-if (fastSortOnly) {
-  libraries.push('latestFastSort');
-} else {
-  libraries.push('lodash', 'arraySort', 'sortArray', 'native');
-}
+const librariesToRun = [
+  'fastSort',
+  'latestFastSort',
+  'lodash',
+  'arraySort',
+  'sortArray',
+  'native',
+];
 
 const runConfiguration = [
-  { size: 1000, numberOfRuns: 100, fastSortOnly },
-  { size: 5000, numberOfRuns: 50, fastSortOnly },
-  { size: 20000, numberOfRuns: 25, fastSortOnly },
-  { size: 100000, numberOfRuns: 5, fastSortOnly },
+  { size: 1000, numberOfRuns: 10, librariesToRun },
+  { size: 5000, numberOfRuns: 50, librariesToRun },
+  { size: 20000, numberOfRuns: 25, librariesToRun },
+  { size: 100000, numberOfRuns: 5, librariesToRun },
 ];
 
 const headerItems = [chalk.hex('f49b42')('Library')];
@@ -73,7 +70,7 @@ const run = function(implementation, randomizer) {
   log('');
 
   const table = new Table({ head: headerItems });
-  libraries.forEach((lib) => addRow(lib, res, table));
+  librariesToRun.forEach((lib) => addRow(lib, res, table));
 
   console.log(table.toString());
 };
