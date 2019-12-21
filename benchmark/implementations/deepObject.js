@@ -10,7 +10,13 @@ const sortImplementation = {
   fastSort: (arr) => fastSort(arr).asc((p) => p.level1.level2.amount),
   latestFastSort: (arr) => latestFastSortSort(arr).asc((p) => p.level1.level2.amount),
   lodash: (arr) => lodash.sortBy(arr, [(p) => p.level1.level2.amount]),
-  sortArray: (arr) => sortArray(arr, 'level1.level2.amount'),
+  sortArray: (arr) => sortArray(arr, {
+    by: 'amount',
+    order: 'asc',
+    computed: {
+      amount: p => p.level1.level2.amount,
+    },
+  }),
   arraySort: (arr) => arraySort(arr, 'level1.level2.amount'),
   native: (arr) => arr.sort((a, b) => {
     if (a.level1.level2.amount == null) return 1;

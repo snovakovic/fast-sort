@@ -1,6 +1,7 @@
 const fastSort = require('fast-sort');
 const arraySort = require('array-sort');
 const lodash = require('lodash');
+const sortArray = require('sort-array');
 const latestFastSortSort = require('../../dist/sort.js');
 const getRandomInt = require('../getRandomInt');
 
@@ -20,6 +21,9 @@ const sortImplementation = {
     (p) => p.am2,
   ]),
   arraySort: (arr) => arraySort(arr, 'am1', 'am2'),
+  sortArray: (arr) => sortArray(arr, {
+    by: ['am1', 'am2'],
+  }),
 };
 
 module.exports.run = function({ size, numberOfRuns, librariesToRun }) {

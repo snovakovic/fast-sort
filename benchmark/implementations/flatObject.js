@@ -10,7 +10,7 @@ const sortImplementation = {
   fastSort: (arr) => fastSort(arr).asc('amount'),
   latestFastSort: (arr) => latestFastSortSort(arr).asc('amount'),
   lodash: (arr) => lodash.sortBy(arr, [(p) => p.amount]),
-  sortArray: (arr) => sortArray(arr, 'amount'),
+  sortArray: (arr) => sortArray(arr, { by: 'amount', order: 'asc' }),
   arraySort: (arr) => arraySort(arr, 'amount'),
   native: (arr) => arr.sort((a, b) => {
     if (a.amount == null) return 1;
