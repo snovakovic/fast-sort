@@ -24,39 +24,41 @@ const unpackObjectSorter = function(sortByObj) {
 
 // >>> SORTERS <<<
 
-const multiPropertySorter = function(sortBy, sortByArray, depth, order, comparer, a, b) {
-  let valA;
-  let valB;
+const multiPropertySorterProvider = function(defaultComparer) {
+  return function multiPropertySorter(sortBy, sortByArray, depth, order, comparer, a, b) {
+    let valA;
+    let valB;
 
-  if (typeof sortBy === 'string') {
-    valA = a[sortBy];
-    valB = b[sortBy];
-  } else if (typeof sortBy === 'function') {
-    valA = sortBy(a);
-    valB = sortBy(b);
-  } else {
-    const objectSorterConfig = unpackObjectSorter(sortBy);
-    return multiPropertySorter(
-      objectSorterConfig.sortBy,
-      sortByArray,
-      depth,
-      objectSorterConfig.order,
-      objectSorterConfig.comparer || comparer,
-      a,
-      b,
-    );
-  }
+    if (typeof sortBy === 'string') {
+      valA = a[sortBy];
+      valB = b[sortBy];
+    } else if (typeof sortBy === 'function') {
+      valA = sortBy(a);
+      valB = sortBy(b);
+    } else {
+      const objectSorterConfig = unpackObjectSorter(sortBy);
+      return multiPropertySorter(
+        objectSorterConfig.sortBy,
+        sortByArray,
+        depth,
+        objectSorterConfig.order,
+        objectSorterConfig.comparer || defaultComparer,
+        a,
+        b,
+      );
+    }
 
-  const equality = comparer(valA, valB, order);
+    const equality = comparer(valA, valB, order);
 
-  if (
-    sortByArray.length > depth &&
-    (equality === 0 || (valA == null && valB == null))
-  ) {
-    return multiPropertySorter(sortByArray[depth], sortByArray, depth + 1, order, comparer, a, b);
-  }
+    if (
+      sortByArray.length > depth &&
+      (equality === 0 || (valA == null && valB == null))
+    ) {
+      return multiPropertySorter(sortByArray[depth], sortByArray, depth + 1, order, comparer, a, b);
+    }
 
-  return equality;
+    return equality;
+  };
 };
 
 const sort = function(order, ctx, sortBy, comparer) {
@@ -80,7 +82,8 @@ const sort = function(order, ctx, sortBy, comparer) {
   } else if (typeof sortBy === 'function') {
     sorter = (a, b) => comparer(sortBy(a), sortBy(b), order);
   } else if (Array.isArray(sortBy)) {
-    sorter = multiPropertySorter.bind(undefined, sortBy[0], sortBy, 1, order, comparer);
+    sorter = multiPropertySorterProvider(comparer)
+      .bind(undefined, sortBy[0], sortBy, 1, order, comparer);
   } else {
     const objectSorterConfig = unpackObjectSorter(sortBy);
     return sort(
