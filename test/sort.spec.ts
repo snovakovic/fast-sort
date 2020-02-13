@@ -360,6 +360,30 @@ describe('sort', () => {
     ]);
   });
 
+  // BUG repo case: https://github.com/snovakovic/fast-sort/issues/18
+  it('Sort by comparer should not override default sort of other array property', () => {
+    const rows = [
+      { status: 0, title: 'A' },
+      { status: 0, title: 'D' },
+      { status: 0, title: 'B' },
+      { status: 1, title: 'C' },
+    ];
+
+    sort(rows).by([{
+      asc: row => row.status,
+      comparer: (a, b) => a - b,
+    }, {
+      asc: row => row.title,
+    }]);
+
+    assert.deepEqual(rows, [
+      { status: 0, title: 'A' },
+      { status: 0, title: 'B' },
+      { status: 0, title: 'D' },
+      { status: 1, title: 'C' },
+    ]);
+  });
+
   it('Should create natural sort instance and handle sorting correctly', () => {
     const naturalSort = sort.createNewInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
