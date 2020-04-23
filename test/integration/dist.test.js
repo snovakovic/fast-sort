@@ -14,5 +14,5 @@ function runTests(sort) {
   console.log('dist integration test success');
 }
 
-runTests(sortFull);
-runTests(sortMin);
+runTests(sortFull.sort);
+runTests(sortMin.sort);

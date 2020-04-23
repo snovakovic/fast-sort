@@ -20,8 +20,8 @@ function run(err) {
     return;
   }
 
-  runTests(require('fast-sort'));
-  runTests(require('fast-sort/dist/sort.min'));
+  runTests(require('fast-sort').sort);
+  runTests(require('fast-sort/dist/sort.min').sort);
 
   console.log('npm integration test success');
 }

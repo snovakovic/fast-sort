@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import sort from '../src/sort';
+import { sort } from '../src/sort';
 
 describe('sort', () => {
   let flatArray:number[];

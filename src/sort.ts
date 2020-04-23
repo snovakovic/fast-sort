@@ -61,7 +61,7 @@ const multiPropertySorterProvider = function(defaultComparer) {
   };
 };
 
-const sort = function(order, ctx, sortBy, comparer) {
+const _sort = function(order, ctx, sortBy, comparer) {
   if (!Array.isArray(ctx)) {
     return ctx;
   }
@@ -86,7 +86,7 @@ const sort = function(order, ctx, sortBy, comparer) {
       .bind(undefined, sortBy[0], sortBy, 1, order, comparer);
   } else {
     const objectSorterConfig = unpackObjectSorter(sortBy);
-    return sort(
+    return _sort(
       objectSorterConfig.order,
       ctx,
       objectSorterConfig.sortBy,
@@ -135,7 +135,7 @@ function createSortInstance(opts:ISortComparer) {
        * ]);
        */
       asc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
-        return sort(1, ctx, sortBy, comparer);
+        return _sort(1, ctx, sortBy, comparer);
       },
       /**
        * Sort array in descending order. Mutates provided array by sorting it.
@@ -148,7 +148,7 @@ function createSortInstance(opts:ISortComparer) {
        * ]);
        */
       desc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
-        return sort(-1, ctx, sortBy, comparer);
+        return _sort(-1, ctx, sortBy, comparer);
       },
       /**
        * Sort array in ascending or descending order. It allows sorting on multiple props
@@ -160,7 +160,7 @@ function createSortInstance(opts:ISortComparer) {
        * ]);
        */
       by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
-        return sort(1, ctx, sortBy, comparer);
+        return _sort(1, ctx, sortBy, comparer);
       },
     };
   };
@@ -187,4 +187,4 @@ interface ISortExport extends ISortFunction {
   createNewInstance:typeof createSortInstance,
 }
 
-export default defaultSort as any as ISortExport;
+export const sort = defaultSort as any as ISortExport;
