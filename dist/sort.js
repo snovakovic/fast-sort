@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global['fast-sort'] = factory());
-}(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = global || self, factory(global['fast-sort'] = {}));
+}(this, (function (exports) { 'use strict';
 
   // >>> HELPERS <<<
   var orderHandler = function (comparer) { return function (a, b, order) { return comparer(a, b, order) * order; }; };
@@ -47,7 +47,7 @@
           return equality;
       };
   };
-  var sort = function (order, ctx, sortBy, comparer) {
+  var _sort = function (order, ctx, sortBy, comparer) {
       var _a;
       if (!Array.isArray(ctx)) {
           return ctx;
@@ -75,7 +75,7 @@
       }
       else {
           var objectSorterConfig = unpackObjectSorter(sortBy);
-          return sort(objectSorterConfig.order, ctx, objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer);
+          return _sort(objectSorterConfig.order, ctx, objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer);
       }
       return ctx.sort(sorter);
   };
@@ -94,7 +94,7 @@
                * ]);
                */
               asc: function (sortBy) {
-                  return sort(1, ctx, sortBy, comparer);
+                  return _sort(1, ctx, sortBy, comparer);
               },
               /**
                * Sort array in descending order. Mutates provided array by sorting it.
@@ -107,7 +107,7 @@
                * ]);
                */
               desc: function (sortBy) {
-                  return sort(-1, ctx, sortBy, comparer);
+                  return _sort(-1, ctx, sortBy, comparer);
               },
               /**
                * Sort array in ascending or descending order. It allows sorting on multiple props
@@ -119,7 +119,7 @@
                * ]);
                */
               by: function (sortBy) {
-                  return sort(1, ctx, sortBy, comparer);
+                  return _sort(1, ctx, sortBy, comparer);
               },
           };
       };
@@ -139,7 +139,10 @@
   });
   // Attach createNewInstance to sort function
   defaultSort['createNewInstance'] = createSortInstance;
+  var sort = defaultSort;
 
-  return defaultSort;
+  exports.sort = sort;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
 
 })));

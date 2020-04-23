@@ -41,7 +41,7 @@ var multiPropertySorterProvider = function (defaultComparer) {
         return equality;
     };
 };
-var sort = function (order, ctx, sortBy, comparer) {
+var _sort = function (order, ctx, sortBy, comparer) {
     var _a;
     if (!Array.isArray(ctx)) {
         return ctx;
@@ -69,7 +69,7 @@ var sort = function (order, ctx, sortBy, comparer) {
     }
     else {
         var objectSorterConfig = unpackObjectSorter(sortBy);
-        return sort(objectSorterConfig.order, ctx, objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer);
+        return _sort(objectSorterConfig.order, ctx, objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer);
     }
     return ctx.sort(sorter);
 };
@@ -88,7 +88,7 @@ function createSortInstance(opts) {
              * ]);
              */
             asc: function (sortBy) {
-                return sort(1, ctx, sortBy, comparer);
+                return _sort(1, ctx, sortBy, comparer);
             },
             /**
              * Sort array in descending order. Mutates provided array by sorting it.
@@ -101,7 +101,7 @@ function createSortInstance(opts) {
              * ]);
              */
             desc: function (sortBy) {
-                return sort(-1, ctx, sortBy, comparer);
+                return _sort(-1, ctx, sortBy, comparer);
             },
             /**
              * Sort array in ascending or descending order. It allows sorting on multiple props
@@ -113,7 +113,7 @@ function createSortInstance(opts) {
              * ]);
              */
             by: function (sortBy) {
-                return sort(1, ctx, sortBy, comparer);
+                return _sort(1, ctx, sortBy, comparer);
             },
         };
     };
@@ -133,5 +133,6 @@ var defaultSort = createSortInstance({
 });
 // Attach createNewInstance to sort function
 defaultSort['createNewInstance'] = createSortInstance;
+var sort = defaultSort;
 
-export default defaultSort;
+export { sort };

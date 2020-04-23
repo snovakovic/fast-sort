@@ -15,7 +15,8 @@
     "test:watch": "watch 'npm run test' ./src",
     "test:integration:dist": "node test/integration/dist.test.js",
     "test:integration:npm": "node test/integration/npm.test.js",
-    "build": "npm run test  && rm -rf dist && rollup -c",
+    "rollup": "rm -rf dist && rollup -c",
+    "build": "npm run test && npm run rollup",
     "prepublish": "npm run build && npm run test:integration:dist",
     "postpublish": "npm run test:integration:npm"
   },

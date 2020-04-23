@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable import/prefer-default-export */
 // >>> HELPERS <<<
 
 const orderHandler = (comparer) => (a, b, order) => comparer(a, b, order) * order;

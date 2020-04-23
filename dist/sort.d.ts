@@ -84,5 +84,5 @@ declare type ISortFunction = typeof defaultSort;
 interface ISortExport extends ISortFunction {
     createNewInstance: typeof createSortInstance;
 }
-declare const _default: ISortExport;
-export default _default;
+export declare const sort: ISortExport;
+export {};
