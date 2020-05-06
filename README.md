@@ -219,6 +219,26 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
   // "Should create sort instance that sorts nil value to the top in desc order" in 'test/sort.spec.ts'
 ```
 
+### Usage with ts-node
+
+In a nodeJS environment, when fast-sort is being imported with ts-node, you might see an error along the lines of:
+
+```
+TypeError {
+  message: 'fast_sort_1.default is not a function',
+}
+```
+
+In this case just add this to your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "esModuleInterop": true
+  }
+}
+```
+
 ### Fast sort versions
 
 #### `v2` version
