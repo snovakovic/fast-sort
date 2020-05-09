@@ -10,6 +10,7 @@
     "declarationDir": "./dist",
     "outDir": "./dist",
     "baseUrl": ".",
+    "lib": ["es6", "es2017"],
     "typeRoots": [
       "./node_modules/@types"
     ]
