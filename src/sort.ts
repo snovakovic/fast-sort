@@ -2,12 +2,6 @@
 
 type IOrder = 1|-1;
 
-export interface ISortByFunction<T> {
-  (prop:T):any,
-}
-
-export type ISortBy<T> = keyof T|ISortByFunction<T>|(keyof T|ISortByFunction<T>)[];
-
 export interface IComparer {
   (a:any, b:any, order:1|-1):number,
 }
@@ -15,6 +9,12 @@ export interface IComparer {
 export interface ISortInstanceOptions {
   comparer?:IComparer,
 }
+
+export interface ISortByFunction<T> {
+  (prop:T):any,
+}
+
+export type ISortBy<T> = keyof T|ISortByFunction<T>|(keyof T|ISortByFunction<T>)[];
 
 export interface ISortByAscSorter<T> extends ISortInstanceOptions {
   asc:boolean|ISortBy<T>,
@@ -38,10 +38,10 @@ const throwInvalidConfigErrorIfTrue = function(condition:boolean, context:string
   if (condition) throw Error(`Invalid sort config: ${context}`);
 };
 
-const unpackObjectSorter = function(sortByObj) {
-  const { asc, desc } = sortByObj || {};
+const unpackObjectSorter = function(sortByObj:ISortByObjectSorter<any>) {
+  const { asc, desc } = sortByObj as any || {};
   const order = asc ? 1 : -1 as IOrder;
-  const sortBy = asc || desc;
+  const sortBy = (asc || desc) as boolean|ISortBy<any>;
 
   // Validate object config
   throwInvalidConfigErrorIfTrue(!sortBy, 'Expected `asc` or `desc` property');
@@ -62,7 +62,7 @@ const multiPropertySorterProvider = function(defaultComparer:IComparer) {
     comparer:IComparer,
     a,
     b,
-  ) {
+  ):number {
     let valA;
     let valB;
 
@@ -73,7 +73,7 @@ const multiPropertySorterProvider = function(defaultComparer:IComparer) {
       valA = sortBy(a);
       valB = sortBy(b);
     } else {
-      const objectSorterConfig = unpackObjectSorter(sortBy);
+      const objectSorterConfig = unpackObjectSorter(sortBy as ISortByObjectSorter<any>);
       return multiPropertySorter(
         objectSorterConfig.sortBy,
         sortByArr,
@@ -98,7 +98,11 @@ const multiPropertySorterProvider = function(defaultComparer:IComparer) {
   };
 };
 
-function getSortStrategy(order:IOrder, sortBy:IAnySortBy, comparer:IComparer) {
+function getSortStrategy(
+  sortBy:IAnySortBy,
+  comparer:IComparer,
+  order:IOrder,
+):(a, b)=>number {
   // Flat array sorter
   if (sortBy === undefined || sortBy === true) {
     return (a, b) => comparer(a, b, order);
@@ -117,16 +121,16 @@ function getSortStrategy(order:IOrder, sortBy:IAnySortBy, comparer:IComparer) {
 
   // Sort by multiple properties
   if (Array.isArray(sortBy)) {
-    return multiPropertySorterProvider(comparer)
-      .bind(undefined, sortBy[0], sortBy, 1, order, comparer);
+    const multiPropSorter = multiPropertySorterProvider(comparer);
+    return (a, b) => multiPropSorter(sortBy[0], sortBy, 1, order, comparer, a, b);
   }
 
-  // Unpack object config to get actual sorter
-  const objectSorterConfig = unpackObjectSorter(sortBy);
+  // Unpack object config to get actual sorter strategy
+  const objectSorterConfig = unpackObjectSorter(sortBy as ISortByObjectSorter<any>);
   return getSortStrategy(
-    objectSorterConfig.order,
     objectSorterConfig.sortBy,
     objectSorterConfig.comparer || comparer,
+    objectSorterConfig.order,
   );
 }
 
@@ -140,7 +144,7 @@ const sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComp
     [sortBy] = sortBy;
   }
 
-  return ctx.sort(getSortStrategy(order, sortBy, comparer));
+  return ctx.sort(getSortStrategy(sortBy, comparer, order));
 };
 
 // >>> Public <<<
