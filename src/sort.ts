@@ -1,6 +1,6 @@
 // >>> HELPERS <<<
 
-const orderHandler = (comparer) => (a, b, order) => comparer(a, b, order) * order;
+const castComparer = (comparer) => (a, b, order) => comparer(a, b, order) * order;
 
 const throwInvalidConfigErrorIfTrue = function(condition:boolean, context:string) {
   if (condition) throw Error(`Invalid sort config: ${context}`);
@@ -15,7 +15,7 @@ const unpackObjectSorter = function(sortByObj) {
   throwInvalidConfigErrorIfTrue(!sortBy, 'Expected `asc` or `desc` property');
   throwInvalidConfigErrorIfTrue(asc && desc, 'Ambiguous object with `asc` and `desc` config properties');
 
-  const comparer = sortByObj.comparer && orderHandler(sortByObj.comparer);
+  const comparer = sortByObj.comparer && castComparer(sortByObj.comparer);
   return { order, sortBy, comparer };
 };
 
@@ -64,7 +64,7 @@ function getSortStrategy(order, sortBy, comparer) {
     return (a, b) => comparer(a, b, order);
   }
 
-  // Sort list of objects by single string key
+  // Sort list of objects by single object key
   if (typeof sortBy === 'string') {
     throwInvalidConfigErrorIfTrue(sortBy.includes('.'), 'String syntax not allowed for nested properties.');
     return (a, b) => comparer(a[sortBy], b[sortBy], order);
@@ -95,7 +95,7 @@ const sort = function(order, ctx, sortBy, comparer) {
     return ctx;
   }
 
-  // Unwrap sortBy if array with only 1 value to get faster sort path
+  // Unwrap sortBy if array with only 1 value to get faster sort strategy
   if (Array.isArray(sortBy) && sortBy.length < 2) {
     [sortBy] = sortBy;
   }
@@ -126,7 +126,7 @@ export interface ISortByDescSorter<T> extends ISortComparer {
 export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 
 function createSortInstance(opts:ISortComparer) {
-  const comparer = orderHandler(opts.comparer);
+  const comparer = castComparer(opts.comparer);
 
   return function<T>(ctx:T[]) {
     return {

@@ -22,6 +22,7 @@ module.exports = {
     'no-param-reassign': 0,
     'arrow-parens': 0,
     'dot-notation': 0,
+    'operator-linebreak': 0,
     '@typescript-eslint/no-use-before-define': 0,
     '@typescript-eslint/type-annotation-spacing': ['error', { before: false, after: false }],
     '@typescript-eslint/interface-name-prefix': ['error', 'always'],
