@@ -3,7 +3,7 @@
 type IOrder = 1|-1;
 
 export interface IComparer {
-  (a:any, b:any, order:1|-1):number,
+  (a:any, b:any, order:IOrder):number,
 }
 
 export interface ISortInstanceOptions {
@@ -88,8 +88,8 @@ const multiPropertySorterProvider = function(defaultComparer:IComparer) {
     const equality = comparer(valA, valB, order);
 
     if (
-      sortByArr.length > depth &&
-      (equality === 0 || (valA == null && valB == null))
+      (equality === 0 || (valA == null && valB == null)) &&
+      sortByArr.length > depth
     ) {
       return multiPropertySorter(sortByArr[depth], sortByArr, depth + 1, order, comparer, a, b);
     }
