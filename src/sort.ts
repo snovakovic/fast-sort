@@ -111,21 +111,25 @@ export interface ISortByFunction<T> {
 
 export type ISortBy<T> = keyof T|ISortByFunction<T>|(keyof T|ISortByFunction<T>)[];
 
-export interface ISortComparer {
-  comparer?(a:any, b:any, order:1|-1):number,
+export interface IComparer {
+  (a:any, b:any, order:1|-1):number,
 }
 
-export interface ISortByAscSorter<T> extends ISortComparer {
+export interface ISortInstanceOptions {
+  comparer?:IComparer,
+}
+
+export interface ISortByAscSorter<T> extends ISortInstanceOptions {
   asc:boolean|ISortBy<T>,
 }
 
-export interface ISortByDescSorter<T> extends ISortComparer {
+export interface ISortByDescSorter<T> extends ISortInstanceOptions {
   desc:boolean|ISortBy<T>,
 }
 
 export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
 
-function createSortInstance(opts:ISortComparer) {
+function createSortInstance(opts:ISortInstanceOptions) {
   const comparer = castComparer(opts.comparer);
 
   return function<T>(ctx:T[]) {
