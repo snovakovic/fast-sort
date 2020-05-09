@@ -2,23 +2,20 @@
 
 const orderHandler = (comparer) => (a, b, order) => comparer(a, b, order) * order;
 
-const throwInvalidConfigError = function(context:string) {
-  throw Error(`Invalid sort config: ${context}`);
+const throwInvalidConfigErrorIfTrue = function(condition:boolean, context:string) {
+  if (condition) throw Error(`Invalid sort config: ${context}`);
 };
 
 const unpackObjectSorter = function(sortByObj) {
   const { asc, desc } = sortByObj || {};
   const order = asc ? 1 : -1;
   const sortBy = asc || desc;
-  if (asc && desc) {
-    throwInvalidConfigError('Ambiguous object with `asc` and `desc` config properties');
-  }
-  if (!sortBy) {
-    throwInvalidConfigError('Expected `asc` or `desc` property');
-  }
+
+  // Validate object config
+  throwInvalidConfigErrorIfTrue(!sortBy, 'Expected `asc` or `desc` property');
+  throwInvalidConfigErrorIfTrue(asc && desc, 'Ambiguous object with `asc` and `desc` config properties');
 
   const comparer = sortByObj.comparer && orderHandler(sortByObj.comparer);
-
   return { order, sortBy, comparer };
 };
 
@@ -69,9 +66,7 @@ function getSortStrategy(order, sortBy, comparer) {
 
   // Sort list of objects by single string key
   if (typeof sortBy === 'string') {
-    if (sortBy.includes('.')) {
-      throw throwInvalidConfigError('String syntax not allowed for nested properties.');
-    }
+    throwInvalidConfigErrorIfTrue(sortBy.includes('.'), 'String syntax not allowed for nested properties.');
     return (a, b) => comparer(a[sortBy], b[sortBy], order);
   }
 
