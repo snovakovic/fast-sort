@@ -1,6 +1,38 @@
+// >>> INTERFACES <<<
+
+type IOrder = 1|-1;
+
+export interface ISortByFunction<T> {
+  (prop:T):any,
+}
+
+export type ISortBy<T> = keyof T|ISortByFunction<T>|(keyof T|ISortByFunction<T>)[];
+
+export interface IComparer {
+  (a:any, b:any, order:1|-1):number,
+}
+
+export interface ISortInstanceOptions {
+  comparer?:IComparer,
+}
+
+export interface ISortByAscSorter<T> extends ISortInstanceOptions {
+  asc:boolean|ISortBy<T>,
+}
+
+export interface ISortByDescSorter<T> extends ISortInstanceOptions {
+  desc:boolean|ISortBy<T>,
+}
+
+export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
+
+type IAnySortBy<T = any> = ISortBy<T>|ISortBy<T>[]
+  |ISortByObjectSorter<T>|ISortByObjectSorter<T>[]
+  |boolean;
+
 // >>> HELPERS <<<
 
-const castComparer = (comparer) => (a, b, order) => comparer(a, b, order) * order;
+const castComparer = (comparer:IComparer) => (a, b, order:IOrder) => comparer(a, b, order) * order;
 
 const throwInvalidConfigErrorIfTrue = function(condition:boolean, context:string) {
   if (condition) throw Error(`Invalid sort config: ${context}`);
@@ -8,7 +40,7 @@ const throwInvalidConfigErrorIfTrue = function(condition:boolean, context:string
 
 const unpackObjectSorter = function(sortByObj) {
   const { asc, desc } = sortByObj || {};
-  const order = asc ? 1 : -1;
+  const order = asc ? 1 : -1 as IOrder;
   const sortBy = asc || desc;
 
   // Validate object config
@@ -21,8 +53,16 @@ const unpackObjectSorter = function(sortByObj) {
 
 // >>> SORTERS <<<
 
-const multiPropertySorterProvider = function(defaultComparer) {
-  return function multiPropertySorter(sortBy, sortByArray, depth, order, comparer, a, b) {
+const multiPropertySorterProvider = function(defaultComparer:IComparer) {
+  return function multiPropertySorter(
+    sortBy:IAnySortBy,
+    sortByArr:ISortBy<any>[]|ISortByObjectSorter<any>[],
+    depth:number,
+    order:IOrder,
+    comparer:IComparer,
+    a,
+    b,
+  ) {
     let valA;
     let valB;
 
@@ -36,7 +76,7 @@ const multiPropertySorterProvider = function(defaultComparer) {
       const objectSorterConfig = unpackObjectSorter(sortBy);
       return multiPropertySorter(
         objectSorterConfig.sortBy,
-        sortByArray,
+        sortByArr,
         depth,
         objectSorterConfig.order,
         objectSorterConfig.comparer || defaultComparer,
@@ -48,17 +88,17 @@ const multiPropertySorterProvider = function(defaultComparer) {
     const equality = comparer(valA, valB, order);
 
     if (
-      sortByArray.length > depth &&
+      sortByArr.length > depth &&
       (equality === 0 || (valA == null && valB == null))
     ) {
-      return multiPropertySorter(sortByArray[depth], sortByArray, depth + 1, order, comparer, a, b);
+      return multiPropertySorter(sortByArr[depth], sortByArr, depth + 1, order, comparer, a, b);
     }
 
     return equality;
   };
 };
 
-function getSortStrategy(order, sortBy, comparer) {
+function getSortStrategy(order:IOrder, sortBy:IAnySortBy, comparer:IComparer) {
   // Flat array sorter
   if (sortBy === undefined || sortBy === true) {
     return (a, b) => comparer(a, b, order);
@@ -90,7 +130,7 @@ function getSortStrategy(order, sortBy, comparer) {
   );
 }
 
-const sort = function(order, ctx, sortBy, comparer) {
+const sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComparer) {
   if (!Array.isArray(ctx)) {
     return ctx;
   }
@@ -103,31 +143,7 @@ const sort = function(order, ctx, sortBy, comparer) {
   return ctx.sort(getSortStrategy(order, sortBy, comparer));
 };
 
-// >>> PUBLIC <<<
-
-export interface ISortByFunction<T> {
-  (prop:T):any,
-}
-
-export type ISortBy<T> = keyof T|ISortByFunction<T>|(keyof T|ISortByFunction<T>)[];
-
-export interface IComparer {
-  (a:any, b:any, order:1|-1):number,
-}
-
-export interface ISortInstanceOptions {
-  comparer?:IComparer,
-}
-
-export interface ISortByAscSorter<T> extends ISortInstanceOptions {
-  asc:boolean|ISortBy<T>,
-}
-
-export interface ISortByDescSorter<T> extends ISortInstanceOptions {
-  desc:boolean|ISortBy<T>,
-}
-
-export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
+// >>> Public <<<
 
 function createSortInstance(opts:ISortInstanceOptions) {
   const comparer = castComparer(opts.comparer);
