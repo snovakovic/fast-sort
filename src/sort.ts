@@ -11,7 +11,7 @@ const unpackObjectSorter = function(sortByObj) {
   const order = asc ? 1 : -1;
   const sortBy = asc || desc;
   if (asc && desc) {
-    throw throwInvalidConfigError('Ambiguous object with `asc` and `desc` config properties');
+    throwInvalidConfigError('Ambiguous object with `asc` and `desc` config properties');
   }
   if (!sortBy) {
     throwInvalidConfigError('Expected `asc` or `desc` property');
@@ -61,40 +61,51 @@ const multiPropertySorterProvider = function(defaultComparer) {
   };
 };
 
+function getSortStrategy(order, sortBy, comparer) {
+  // Flat array sorter
+  if (sortBy === undefined || sortBy === true) {
+    return (a, b) => comparer(a, b, order);
+  }
+
+  // Sort list of objects by single string key
+  if (typeof sortBy === 'string') {
+    if (sortBy.includes('.')) {
+      throw throwInvalidConfigError('String syntax not allowed for nested properties.');
+    }
+    return (a, b) => comparer(a[sortBy], b[sortBy], order);
+  }
+
+  // Sort list of objects by single function sorter
+  if (typeof sortBy === 'function') {
+    return (a, b) => comparer(sortBy(a), sortBy(b), order);
+  }
+
+  // Sort by multiple properties
+  if (Array.isArray(sortBy)) {
+    return multiPropertySorterProvider(comparer)
+      .bind(undefined, sortBy[0], sortBy, 1, order, comparer);
+  }
+
+  // Unpack object config to get actual sorter
+  const objectSorterConfig = unpackObjectSorter(sortBy);
+  return getSortStrategy(
+    objectSorterConfig.order,
+    objectSorterConfig.sortBy,
+    objectSorterConfig.comparer || comparer,
+  );
+}
+
 const sort = function(order, ctx, sortBy, comparer) {
   if (!Array.isArray(ctx)) {
     return ctx;
   }
 
-  // Unwrap sortBy if array with only 1 value
+  // Unwrap sortBy if array with only 1 value to get faster sort path
   if (Array.isArray(sortBy) && sortBy.length < 2) {
     [sortBy] = sortBy;
   }
 
-  let sorter;
-  if (sortBy === undefined || sortBy === true) {
-    sorter = (a, b) => comparer(a, b, order);
-  } else if (typeof sortBy === 'string') {
-    if (sortBy.includes('.')) {
-      throw throwInvalidConfigError('String syntax not allowed for nested properties.');
-    }
-    sorter = (a, b) => comparer(a[sortBy], b[sortBy], order);
-  } else if (typeof sortBy === 'function') {
-    sorter = (a, b) => comparer(sortBy(a), sortBy(b), order);
-  } else if (Array.isArray(sortBy)) {
-    sorter = multiPropertySorterProvider(comparer)
-      .bind(undefined, sortBy[0], sortBy, 1, order, comparer);
-  } else {
-    const objectSorterConfig = unpackObjectSorter(sortBy);
-    return sort(
-      objectSorterConfig.order,
-      ctx,
-      objectSorterConfig.sortBy,
-      objectSorterConfig.comparer || comparer,
-    );
-  }
-
-  return ctx.sort(sorter);
+  return ctx.sort(getSortStrategy(order, sortBy, comparer));
 };
 
 // >>> PUBLIC <<<
