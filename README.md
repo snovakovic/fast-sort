@@ -56,7 +56,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 
 ## More examples
 
-  * `asc` / `desc` sorters. In below examples we will use `asc` sorter but keep in mind that both `asc` and `desc` sorters have exactly the same API so all the examples below can be applied for `desc` sorter.
+  * `asc` / `desc` sorters. Both asc and desc sorters have exactly the same API.
 
 ```javascript
   import sort from 'fast-sort';
@@ -105,10 +105,10 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   sort(users).by([{ asc: 'firstName' }, { desc: 'age' }]);
 
   // Sort users by city using custom comparer
-  sort(users).by([
+  sort(users).by({
     asc: u => u.address.city,
     comparer: (a, b) => a.localeCompare(b),
-  ]);
+  });
 
   // Sort users ascending by age using default comparer and then by lastName using language sensitive comparer
   sort(users).by([
@@ -125,7 +125,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
 ### Natural sorting / Language sensitive sorting
 
 By default `fast-sort` is not doing language sensitive sorting of strings.
-e.g `image-11.jpg` will be sorted before `image-2.jpg` (in ascending sorting).
+e.g `'image-11.jpg'` will be sorted before `'image-2.jpg'` (in ascending sorting).
 We can provide custom [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) comparer to fast-sort for language sensitive sorting of strings.
 Keep in mind that natural sort is slower then default sorting so recommendation is to use it
 only when needed.
@@ -201,14 +201,16 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
   const sortedArr = sort(arr).asc();
   console.log(sortedArr); // => [1, 2, 4]
   console.log(arr); // => [1, 2, 4]
+  console.log(sortedArr === arr), // => true
 
-  // To prevent that we can use ES6 destructor (or ES5 equivalents)
+  // TIP: to prevent mutating of input array you can clone it before passing to sort as
   const arr = [1, 4, 2];
   const sortedArr = sort([...arr]).asc();
   console.log(arr); // => [1, 4, 2]
   console.log(sortedArr); // => [1, 2, 4]
+  console.log(sortedArr === arr), // => false
 
-  // As stated in highlights fast-sort sorts null and undefined values to the
+  // As stated in highlights by default fast-sort sorts null and undefined values to the
   // bottom no matter if sorting is in asc or decs order.
   const addresses = [{ city: 'Split' }, { city: undefined }, { city: 'Zagreb'}];
   sort(addresses).asc(a => a.city); // => Split, Zagreb, undefined

@@ -1,31 +1,69 @@
+// >>> INTERFACES <<<
+
+type IOrder = 1 | -1;
+
+export interface IComparer {
+  (a:any, b:any, order:IOrder):number,
+}
+
+export interface ISortInstanceOptions {
+  comparer?:IComparer,
+}
+
+export interface ISortByFunction<T> {
+  (prop:T):any,
+}
+
+export type ISortBy<T> = keyof T | ISortByFunction<T> | (keyof T | ISortByFunction<T>)[];
+
+export interface ISortByAscSorter<T> extends ISortInstanceOptions {
+  asc:boolean | ISortBy<T>,
+}
+
+export interface ISortByDescSorter<T> extends ISortInstanceOptions {
+  desc:boolean | ISortBy<T>,
+}
+
+export type ISortByObjectSorter<T> = ISortByAscSorter<T> | ISortByDescSorter<T>;
+
+type IAnySortBy<T = any> = ISortBy<T> | ISortBy<T>[]
+  | ISortByObjectSorter<T> | ISortByObjectSorter<T>[]
+  | boolean;
+
 // >>> HELPERS <<<
 
-const orderHandler = (comparer) => (a, b, order) => comparer(a, b, order) * order;
+const castComparer = (comparer:IComparer) => (a, b, order:IOrder) => comparer(a, b, order) * order;
 
-const throwInvalidConfigError = function(context:string) {
-  throw Error(`Invalid sort config: ${context}`);
+const throwInvalidConfigErrorIfTrue = function(condition:boolean, context:string) {
+  if (condition) throw Error(`Invalid sort config: ${context}`);
 };
 
-const unpackObjectSorter = function(sortByObj) {
-  const { asc, desc } = sortByObj || {};
-  const order = asc ? 1 : -1;
-  const sortBy = asc || desc;
-  if (asc && desc) {
-    throw throwInvalidConfigError('Ambiguous object with `asc` and `desc` config properties');
-  }
-  if (!sortBy) {
-    throwInvalidConfigError('Expected `asc` or `desc` property');
-  }
+const unpackObjectSorter = function(sortByObj:ISortByObjectSorter<any>) {
+  const { asc, desc } = sortByObj as any || {};
+  const order = asc ? 1 : -1 as IOrder;
+  const sortBy = (asc || desc) as boolean | ISortBy<any>;
 
-  const comparer = sortByObj.comparer && orderHandler(sortByObj.comparer);
+  // Validate object config
+  throwInvalidConfigErrorIfTrue(!sortBy, 'Expected `asc` or `desc` property');
+  throwInvalidConfigErrorIfTrue(asc && desc, 'Ambiguous object with `asc` and `desc` config properties');
+
+  const comparer = sortByObj.comparer && castComparer(sortByObj.comparer);
 
   return { order, sortBy, comparer };
 };
 
 // >>> SORTERS <<<
 
-const multiPropertySorterProvider = function(defaultComparer) {
-  return function multiPropertySorter(sortBy, sortByArray, depth, order, comparer, a, b) {
+const multiPropertySorterProvider = function(defaultComparer:IComparer) {
+  return function multiPropertySorter(
+    sortBy:IAnySortBy,
+    sortByArr:ISortBy<any>[] | ISortByObjectSorter<any>[],
+    depth:number,
+    order:IOrder,
+    comparer:IComparer,
+    a,
+    b,
+  ):number {
     let valA;
     let valB;
 
@@ -36,10 +74,10 @@ const multiPropertySorterProvider = function(defaultComparer) {
       valA = sortBy(a);
       valB = sortBy(b);
     } else {
-      const objectSorterConfig = unpackObjectSorter(sortBy);
+      const objectSorterConfig = unpackObjectSorter(sortBy as ISortByObjectSorter<any>);
       return multiPropertySorter(
         objectSorterConfig.sortBy,
-        sortByArray,
+        sortByArr,
         depth,
         objectSorterConfig.order,
         objectSorterConfig.comparer || defaultComparer,
@@ -51,76 +89,69 @@ const multiPropertySorterProvider = function(defaultComparer) {
     const equality = comparer(valA, valB, order);
 
     if (
-      sortByArray.length > depth &&
-      (equality === 0 || (valA == null && valB == null))
+      (equality === 0 || (valA == null && valB == null)) &&
+      sortByArr.length > depth
     ) {
-      return multiPropertySorter(sortByArray[depth], sortByArray, depth + 1, order, comparer, a, b);
+      return multiPropertySorter(sortByArr[depth], sortByArr, depth + 1, order, comparer, a, b);
     }
 
     return equality;
   };
 };
 
-const sort = function(order, ctx, sortBy, comparer) {
+function getSortStrategy(
+  sortBy:IAnySortBy,
+  comparer:IComparer,
+  order:IOrder,
+):(a, b)=>number {
+  // Flat array sorter
+  if (sortBy === undefined || sortBy === true) {
+    return (a, b) => comparer(a, b, order);
+  }
+
+  // Sort list of objects by single object key
+  if (typeof sortBy === 'string') {
+    throwInvalidConfigErrorIfTrue(sortBy.includes('.'), 'String syntax not allowed for nested properties.');
+    return (a, b) => comparer(a[sortBy], b[sortBy], order);
+  }
+
+  // Sort list of objects by single function sorter
+  if (typeof sortBy === 'function') {
+    return (a, b) => comparer(sortBy(a), sortBy(b), order);
+  }
+
+  // Sort by multiple properties
+  if (Array.isArray(sortBy)) {
+    const multiPropSorter = multiPropertySorterProvider(comparer);
+    return (a, b) => multiPropSorter(sortBy[0], sortBy, 1, order, comparer, a, b);
+  }
+
+  // Unpack object config to get actual sorter strategy
+  const objectSorterConfig = unpackObjectSorter(sortBy as ISortByObjectSorter<any>);
+  return getSortStrategy(
+    objectSorterConfig.sortBy,
+    objectSorterConfig.comparer || comparer,
+    objectSorterConfig.order,
+  );
+}
+
+const sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComparer) {
   if (!Array.isArray(ctx)) {
     return ctx;
   }
 
-  // Unwrap sortBy if array with only 1 value
+  // Unwrap sortBy if array with only 1 value to get faster sort strategy
   if (Array.isArray(sortBy) && sortBy.length < 2) {
     [sortBy] = sortBy;
   }
 
-  let sorter;
-  if (sortBy === undefined || sortBy === true) {
-    sorter = (a, b) => comparer(a, b, order);
-  } else if (typeof sortBy === 'string') {
-    if (sortBy.includes('.')) {
-      throw throwInvalidConfigError('String syntax not allowed for nested properties.');
-    }
-    sorter = (a, b) => comparer(a[sortBy], b[sortBy], order);
-  } else if (typeof sortBy === 'function') {
-    sorter = (a, b) => comparer(sortBy(a), sortBy(b), order);
-  } else if (Array.isArray(sortBy)) {
-    sorter = multiPropertySorterProvider(comparer)
-      .bind(undefined, sortBy[0], sortBy, 1, order, comparer);
-  } else {
-    const objectSorterConfig = unpackObjectSorter(sortBy);
-    return sort(
-      objectSorterConfig.order,
-      ctx,
-      objectSorterConfig.sortBy,
-      objectSorterConfig.comparer || comparer,
-    );
-  }
-
-  return ctx.sort(sorter);
+  return ctx.sort(getSortStrategy(sortBy, comparer, order));
 };
 
-// >>> PUBLIC <<<
+// >>> Public <<<
 
-export interface ISortByFunction<T> {
-  (prop:T):any,
-}
-
-export type ISortBy<T> = keyof T|ISortByFunction<T>|(keyof T|ISortByFunction<T>)[];
-
-export interface ISortComparer {
-  comparer?(a:any, b:any, order:1|-1):number,
-}
-
-export interface ISortByAscSorter<T> extends ISortComparer {
-  asc:boolean|ISortBy<T>,
-}
-
-export interface ISortByDescSorter<T> extends ISortComparer {
-  desc:boolean|ISortBy<T>,
-}
-
-export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
-
-function createSortInstance(opts:ISortComparer) {
-  const comparer = orderHandler(opts.comparer);
+function createSortInstance(opts:ISortInstanceOptions) {
+  const comparer = castComparer(opts.comparer);
 
   return function<T>(ctx:T[]) {
     return {
@@ -134,7 +165,7 @@ function createSortInstance(opts:ISortComparer) {
        *   u => u.lastName,
        * ]);
        */
-      asc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
+      asc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
         return sort(1, ctx, sortBy, comparer);
       },
       /**
@@ -147,7 +178,7 @@ function createSortInstance(opts:ISortComparer) {
        *   u => u.lastName,
        * ]);
        */
-      desc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
+      desc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
         return sort(-1, ctx, sortBy, comparer);
       },
       /**
@@ -159,7 +190,7 @@ function createSortInstance(opts:ISortComparer) {
        *  { desc: u => u.age }
        * ]);
        */
-      by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
+      by(sortBy:ISortByObjectSorter<T> | ISortByObjectSorter<T>[]):T[] {
         return sort(1, ctx, sortBy, comparer);
       },
     };
