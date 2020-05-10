@@ -1,18 +1,22 @@
+declare type IOrder = 1 | -1;
+export interface IComparer {
+    (a: any, b: any, order: IOrder): number;
+}
+export interface ISortInstanceOptions {
+    comparer?: IComparer;
+}
 export interface ISortByFunction<T> {
     (prop: T): any;
 }
 export declare type ISortBy<T> = keyof T | ISortByFunction<T> | (keyof T | ISortByFunction<T>)[];
-export interface ISortComparer {
-    comparer?(a: any, b: any, order: 1 | -1): number;
-}
-export interface ISortByAscSorter<T> extends ISortComparer {
+export interface ISortByAscSorter<T> extends ISortInstanceOptions {
     asc: boolean | ISortBy<T>;
 }
-export interface ISortByDescSorter<T> extends ISortComparer {
+export interface ISortByDescSorter<T> extends ISortInstanceOptions {
     desc: boolean | ISortBy<T>;
 }
 export declare type ISortByObjectSorter<T> = ISortByAscSorter<T> | ISortByDescSorter<T>;
-declare function createSortInstance(opts: ISortComparer): <T>(ctx: T[]) => {
+declare function createSortInstance(opts: ISortInstanceOptions): <T>(ctx: T[]) => {
     /**
      * Sort array in ascending order. Mutates provided array by sorting it.
      * @example
