@@ -23,6 +23,8 @@ module.exports = {
     'arrow-parens': 0,
     'dot-notation': 0,
     'operator-linebreak': 0,
+    'import/no-unresolved': 0,
+    'import/extensions': 0,
     '@typescript-eslint/type-annotation-spacing': ['error', { before: false, after: false }],
     '@typescript-eslint/interface-name-prefix': ['error', 'always'],
     '@typescript-eslint/member-delimiter-style': ['error', {
