@@ -23,7 +23,6 @@ module.exports = {
     'arrow-parens': 0,
     'dot-notation': 0,
     'operator-linebreak': 0,
-    '@typescript-eslint/no-use-before-define': 0,
     '@typescript-eslint/type-annotation-spacing': ['error', { before: false, after: false }],
     '@typescript-eslint/interface-name-prefix': ['error', 'always'],
     '@typescript-eslint/member-delimiter-style': ['error', {
@@ -31,6 +30,5 @@ module.exports = {
     }],
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
-    '@typescript-eslint/no-var-requires': 0,
   },
 };

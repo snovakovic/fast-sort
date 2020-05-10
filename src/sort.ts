@@ -1,6 +1,6 @@
 // >>> INTERFACES <<<
 
-type IOrder = 1|-1;
+type IOrder = 1 | -1;
 
 export interface IComparer {
   (a:any, b:any, order:IOrder):number,
@@ -14,21 +14,21 @@ export interface ISortByFunction<T> {
   (prop:T):any,
 }
 
-export type ISortBy<T> = keyof T|ISortByFunction<T>|(keyof T|ISortByFunction<T>)[];
+export type ISortBy<T> = keyof T | ISortByFunction<T> | (keyof T | ISortByFunction<T>)[];
 
 export interface ISortByAscSorter<T> extends ISortInstanceOptions {
-  asc:boolean|ISortBy<T>,
+  asc:boolean | ISortBy<T>,
 }
 
 export interface ISortByDescSorter<T> extends ISortInstanceOptions {
-  desc:boolean|ISortBy<T>,
+  desc:boolean | ISortBy<T>,
 }
 
-export type ISortByObjectSorter<T> = ISortByAscSorter<T>|ISortByDescSorter<T>;
+export type ISortByObjectSorter<T> = ISortByAscSorter<T> | ISortByDescSorter<T>;
 
-type IAnySortBy<T = any> = ISortBy<T>|ISortBy<T>[]
-  |ISortByObjectSorter<T>|ISortByObjectSorter<T>[]
-  |boolean;
+type IAnySortBy<T = any> = ISortBy<T> | ISortBy<T>[]
+  | ISortByObjectSorter<T> | ISortByObjectSorter<T>[]
+  | boolean;
 
 // >>> HELPERS <<<
 
@@ -41,13 +41,14 @@ const throwInvalidConfigErrorIfTrue = function(condition:boolean, context:string
 const unpackObjectSorter = function(sortByObj:ISortByObjectSorter<any>) {
   const { asc, desc } = sortByObj as any || {};
   const order = asc ? 1 : -1 as IOrder;
-  const sortBy = (asc || desc) as boolean|ISortBy<any>;
+  const sortBy = (asc || desc) as boolean | ISortBy<any>;
 
   // Validate object config
   throwInvalidConfigErrorIfTrue(!sortBy, 'Expected `asc` or `desc` property');
   throwInvalidConfigErrorIfTrue(asc && desc, 'Ambiguous object with `asc` and `desc` config properties');
 
   const comparer = sortByObj.comparer && castComparer(sortByObj.comparer);
+
   return { order, sortBy, comparer };
 };
 
@@ -56,7 +57,7 @@ const unpackObjectSorter = function(sortByObj:ISortByObjectSorter<any>) {
 const multiPropertySorterProvider = function(defaultComparer:IComparer) {
   return function multiPropertySorter(
     sortBy:IAnySortBy,
-    sortByArr:ISortBy<any>[]|ISortByObjectSorter<any>[],
+    sortByArr:ISortBy<any>[] | ISortByObjectSorter<any>[],
     depth:number,
     order:IOrder,
     comparer:IComparer,
@@ -164,7 +165,7 @@ function createSortInstance(opts:ISortInstanceOptions) {
        *   u => u.lastName,
        * ]);
        */
-      asc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
+      asc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
         return sort(1, ctx, sortBy, comparer);
       },
       /**
@@ -177,7 +178,7 @@ function createSortInstance(opts:ISortInstanceOptions) {
        *   u => u.lastName,
        * ]);
        */
-      desc(sortBy?:ISortBy<T>|ISortBy<T>[]):T[] {
+      desc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
         return sort(-1, ctx, sortBy, comparer);
       },
       /**
@@ -189,7 +190,7 @@ function createSortInstance(opts:ISortInstanceOptions) {
        *  { desc: u => u.age }
        * ]);
        */
-      by(sortBy:ISortByObjectSorter<T>|ISortByObjectSorter<T>[]):T[] {
+      by(sortBy:ISortByObjectSorter<T> | ISortByObjectSorter<T>[]):T[] {
         return sort(1, ctx, sortBy, comparer);
       },
     };
