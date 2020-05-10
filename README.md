@@ -267,6 +267,9 @@ In this case just add this to your `tsconfig.json`:
   });
 
   // TypeScript support is available from [v2.0.0]
+
+  // v2.2.0 old IComparer interface is renamed to ISortInstanceOptions
+  // new IComparer interface is created that now describes actual comparer function
 ```
 
 ## Benchmark
