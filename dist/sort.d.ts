@@ -16,7 +16,7 @@ export interface ISortByDescSorter<T> extends ISortInstanceOptions {
     desc: boolean | ISortBy<T>;
 }
 export declare type ISortByObjectSorter<T> = ISortByAscSorter<T> | ISortByDescSorter<T>;
-declare function createSortInstance(opts: ISortInstanceOptions): <T>(ctx: T[]) => {
+export declare const createNewInstance: (opts: ISortInstanceOptions) => <T>(ctx: T[]) => {
     /**
      * Sort array in ascending order. Mutates provided array by sorting it.
      * @example
@@ -50,7 +50,7 @@ declare function createSortInstance(opts: ISortInstanceOptions): <T>(ctx: T[]) =
      */
     by(sortBy: ISortByAscSorter<T> | ISortByDescSorter<T> | ISortByObjectSorter<T>[]): T[];
 };
-declare const defaultSort: <T>(ctx: T[]) => {
+export declare const sort: <T>(ctx: T[]) => {
     /**
      * Sort array in ascending order. Mutates provided array by sorting it.
      * @example
@@ -84,9 +84,4 @@ declare const defaultSort: <T>(ctx: T[]) => {
      */
     by(sortBy: ISortByAscSorter<T> | ISortByDescSorter<T> | ISortByObjectSorter<T>[]): T[];
 };
-declare type ISortFunction = typeof defaultSort;
-interface ISortExport extends ISortFunction {
-    createNewInstance: typeof createSortInstance;
-}
-declare const _default: ISortExport;
-export default _default;
+export {};

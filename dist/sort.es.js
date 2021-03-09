@@ -63,7 +63,7 @@ function getSortStrategy(sortBy, comparer, order) {
     var objectSorterConfig = unpackObjectSorter(sortBy);
     return getSortStrategy(objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer, objectSorterConfig.order);
 }
-var sort = function (order, ctx, sortBy, comparer) {
+var _sort = function (order, ctx, sortBy, comparer) {
     var _a;
     if (!Array.isArray(ctx)) {
         return ctx;
@@ -75,7 +75,7 @@ var sort = function (order, ctx, sortBy, comparer) {
     return ctx.sort(getSortStrategy(sortBy, comparer, order));
 };
 // >>> Public <<<
-function createSortInstance(opts) {
+var createNewInstance = function (opts) {
     var comparer = castComparer(opts.comparer);
     return function (ctx) {
         return {
@@ -90,7 +90,7 @@ function createSortInstance(opts) {
              * ]);
              */
             asc: function (sortBy) {
-                return sort(1, ctx, sortBy, comparer);
+                return _sort(1, ctx, sortBy, comparer);
             },
             /**
              * Sort array in descending order. Mutates provided array by sorting it.
@@ -103,7 +103,7 @@ function createSortInstance(opts) {
              * ]);
              */
             desc: function (sortBy) {
-                return sort(-1, ctx, sortBy, comparer);
+                return _sort(-1, ctx, sortBy, comparer);
             },
             /**
              * Sort array in ascending or descending order. It allows sorting on multiple props
@@ -115,12 +115,12 @@ function createSortInstance(opts) {
              * ]);
              */
             by: function (sortBy) {
-                return sort(1, ctx, sortBy, comparer);
+                return _sort(1, ctx, sortBy, comparer);
             },
         };
     };
-}
-var defaultSort = createSortInstance({
+};
+var sort = createNewInstance({
     comparer: function (a, b, order) {
         if (a == null)
             return order;
@@ -133,7 +133,5 @@ var defaultSort = createSortInstance({
         return 1;
     },
 });
-// Attach createNewInstance to sort function
-defaultSort['createNewInstance'] = createSortInstance;
 
-export default defaultSort;
+export { createNewInstance, sort };

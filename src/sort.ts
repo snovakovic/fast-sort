@@ -135,7 +135,7 @@ function getSortStrategy(
   );
 }
 
-const sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComparer) {
+const _sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComparer) {
   if (!Array.isArray(ctx)) {
     return ctx;
   }
@@ -150,7 +150,7 @@ const sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComp
 
 // >>> Public <<<
 
-function createSortInstance(opts:ISortInstanceOptions) {
+export const createNewInstance = function(opts:ISortInstanceOptions) {
   const comparer = castComparer(opts.comparer);
 
   return function<T>(ctx:T[]) {
@@ -166,7 +166,7 @@ function createSortInstance(opts:ISortInstanceOptions) {
        * ]);
        */
       asc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
-        return sort(1, ctx, sortBy, comparer);
+        return _sort(1, ctx, sortBy, comparer);
       },
       /**
        * Sort array in descending order. Mutates provided array by sorting it.
@@ -179,7 +179,7 @@ function createSortInstance(opts:ISortInstanceOptions) {
        * ]);
        */
       desc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
-        return sort(-1, ctx, sortBy, comparer);
+        return _sort(-1, ctx, sortBy, comparer);
       },
       /**
        * Sort array in ascending or descending order. It allows sorting on multiple props
@@ -191,13 +191,13 @@ function createSortInstance(opts:ISortInstanceOptions) {
        * ]);
        */
       by(sortBy:ISortByObjectSorter<T> | ISortByObjectSorter<T>[]):T[] {
-        return sort(1, ctx, sortBy, comparer);
+        return _sort(1, ctx, sortBy, comparer);
       },
     };
   };
 }
 
-const defaultSort = createSortInstance({
+export const sort = createNewInstance({
   comparer(a, b, order):number {
     if (a == null) return order;
     if (b == null) return -order;
@@ -207,15 +207,3 @@ const defaultSort = createSortInstance({
     return 1;
   },
 });
-
-// Attach createNewInstance to sort function
-
-defaultSort['createNewInstance'] = createSortInstance;
-
-type ISortFunction = typeof defaultSort;
-
-interface ISortExport extends ISortFunction {
-  createNewInstance:typeof createSortInstance,
-}
-
-export default defaultSort as any as ISortExport;

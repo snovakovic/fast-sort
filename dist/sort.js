@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global['fast-sort'] = factory());
-}(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = global || self, factory(global['fast-sort'] = {}));
+}(this, (function (exports) { 'use strict';
 
   // >>> INTERFACES <<<
   // >>> HELPERS <<<
@@ -69,7 +69,7 @@
       var objectSorterConfig = unpackObjectSorter(sortBy);
       return getSortStrategy(objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer, objectSorterConfig.order);
   }
-  var sort = function (order, ctx, sortBy, comparer) {
+  var _sort = function (order, ctx, sortBy, comparer) {
       var _a;
       if (!Array.isArray(ctx)) {
           return ctx;
@@ -81,7 +81,7 @@
       return ctx.sort(getSortStrategy(sortBy, comparer, order));
   };
   // >>> Public <<<
-  function createSortInstance(opts) {
+  var createNewInstance = function (opts) {
       var comparer = castComparer(opts.comparer);
       return function (ctx) {
           return {
@@ -96,7 +96,7 @@
                * ]);
                */
               asc: function (sortBy) {
-                  return sort(1, ctx, sortBy, comparer);
+                  return _sort(1, ctx, sortBy, comparer);
               },
               /**
                * Sort array in descending order. Mutates provided array by sorting it.
@@ -109,7 +109,7 @@
                * ]);
                */
               desc: function (sortBy) {
-                  return sort(-1, ctx, sortBy, comparer);
+                  return _sort(-1, ctx, sortBy, comparer);
               },
               /**
                * Sort array in ascending or descending order. It allows sorting on multiple props
@@ -121,12 +121,12 @@
                * ]);
                */
               by: function (sortBy) {
-                  return sort(1, ctx, sortBy, comparer);
+                  return _sort(1, ctx, sortBy, comparer);
               },
           };
       };
-  }
-  var defaultSort = createSortInstance({
+  };
+  var sort = createNewInstance({
       comparer: function (a, b, order) {
           if (a == null)
               return order;
@@ -139,9 +139,14 @@
           return 1;
       },
   });
-  // Attach createNewInstance to sort function
-  defaultSort['createNewInstance'] = createSortInstance;
 
-  return defaultSort;
+  exports.createNewInstance = createNewInstance;
+  exports.sort = sort;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+  // Backward compatible compatible with older version
+  sort['createNewInstance'] = createNewInstance;
+  return sort;
 
 })));
