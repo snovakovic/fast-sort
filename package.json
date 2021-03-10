@@ -2,7 +2,7 @@
   "name": "fast-sort",
   "version": "3.0.0",
   "description": "Fast and powerful array sorting. Sort by any property in any direction with easy to read syntax.",
-  "main": "dist/sort.js",
+  "main": "dist/sort.min.js",
   "module": "dist/sort.es.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
   "contributors": [
