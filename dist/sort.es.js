@@ -1,3 +1,26 @@
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
 // >>> INTERFACES <<<
 // >>> HELPERS <<<
 var castComparer = function (comparer) { return function (a, b, order) { return comparer(a, b, order) * order; }; };
@@ -63,7 +86,7 @@ function getSortStrategy(sortBy, comparer, order) {
     var objectSorterConfig = unpackObjectSorter(sortBy);
     return getSortStrategy(objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer, objectSorterConfig.order);
 }
-var _sort = function (order, ctx, sortBy, comparer) {
+var sortArray = function (order, ctx, sortBy, comparer) {
     var _a;
     if (!Array.isArray(ctx)) {
         return ctx;
@@ -72,12 +95,15 @@ var _sort = function (order, ctx, sortBy, comparer) {
     if (Array.isArray(sortBy) && sortBy.length < 2) {
         _a = sortBy, sortBy = _a[0];
     }
-    return ctx.sort(getSortStrategy(sortBy, comparer, order));
+    return (inPlaceSort ? ctx : __spreadArrays(ctx))
+        .sort(getSortStrategy(sortBy, comparer, order));
 };
 // >>> Public <<<
-var createNewInstance = function (opts) {
+var createNewSortInstance = function (opts) {
     var comparer = castComparer(opts.comparer);
-    return function (ctx) {
+    return function (_ctx) {
+        var ctx = Array.isArray(_ctx) && !opts.inPlaceSorting
+            ? __spreadArrays(_ctx) : _ctx;
         return {
             /**
              * Sort array in ascending order. Mutates provided array by sorting it.
@@ -90,7 +116,7 @@ var createNewInstance = function (opts) {
              * ]);
              */
             asc: function (sortBy) {
-                return _sort(1, ctx, sortBy, comparer);
+                return sortArray(1, ctx, sortBy, comparer);
             },
             /**
              * Sort array in descending order. Mutates provided array by sorting it.
@@ -103,7 +129,7 @@ var createNewInstance = function (opts) {
              * ]);
              */
             desc: function (sortBy) {
-                return _sort(-1, ctx, sortBy, comparer);
+                return sortArray(-1, ctx, sortBy, comparer);
             },
             /**
              * Sort array in ascending or descending order. It allows sorting on multiple props
@@ -115,23 +141,28 @@ var createNewInstance = function (opts) {
              * ]);
              */
             by: function (sortBy) {
-                return _sort(1, ctx, sortBy, comparer);
+                return sortArray(1, ctx, sortBy, comparer);
             },
         };
     };
 };
-var sort = createNewInstance({
-    comparer: function (a, b, order) {
-        if (a == null)
-            return order;
-        if (b == null)
-            return -order;
-        if (a < b)
-            return -1;
-        if (a === b)
-            return 0;
-        return 1;
-    },
+var defaultComparer = function (a, b, order) {
+    if (a == null)
+        return order;
+    if (b == null)
+        return -order;
+    if (a < b)
+        return -1;
+    if (a === b)
+        return 0;
+    return 1;
+};
+var sort = createNewSortInstance({
+    comparer: defaultComparer,
+});
+var inPlaceSort = createNewSortInstance({
+    comparer: defaultComparer,
+    inPlaceSorting: true,
 });
 
-export { createNewInstance, sort };
+export { createNewSortInstance, inPlaceSort, sort };
