@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { sort, createNewInstance } from '../src/sort';
+import { sort, createNewSortInstance } from '../src/sort';
 
 describe('sort', () => {
   let flatArray:number[];
@@ -385,7 +385,7 @@ describe('sort', () => {
   });
 
   it('Should create natural sort instance and handle sorting correctly', () => {
-    const naturalSort = createNewInstance({
+    const naturalSort = createNewSortInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
 
@@ -409,7 +409,7 @@ describe('sort', () => {
   });
 
   it('Should handle sorting on multiples props with custom sorter instance', () => {
-    const naturalSort = createNewInstance({
+    const naturalSort = createNewSortInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
 
@@ -440,14 +440,14 @@ describe('sort', () => {
 
     const tags = ['influencer', 'unknown', 'vip', 'captain'];
 
-    const tagSorter = createNewInstance({ comparer: customTagComparer });
+    const tagSorter = createNewSortInstance({ comparer: customTagComparer });
     assert.deepEqual(tagSorter(tags).asc(), ['unknown', 'captain', 'influencer', 'vip']);
     assert.deepEqual(tagSorter(tags).desc(), ['vip', 'influencer', 'captain', 'unknown']);
     assert.deepEqual(sort(tags).asc(tag => tagImportance[tag] || 0), ['unknown', 'captain', 'influencer', 'vip']);
   });
 
   it('Should be able to override natural sort comparer', () => {
-    const naturalSort = createNewInstance({
+    const naturalSort = createNewSortInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
 
@@ -548,7 +548,7 @@ describe('sort', () => {
     assert.deepEqual(testArr, ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']);
 
     // If we want to reuse natural sort in multiple places we can create new sort instance
-    const naturalSort = createNewInstance({
+    const naturalSort = createNewSortInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
 
@@ -560,7 +560,7 @@ describe('sort', () => {
   });
 
   it('Should create sort instance that sorts nil value to the top in desc order', () => {
-    const nilSort = createNewInstance({
+    const nilSort = createNewSortInstance({
       comparer(a, b):number {
         if (a == null) return 1;
         if (b == null) return -1;

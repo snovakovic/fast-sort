@@ -150,7 +150,7 @@ const _sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:ICom
 
 // >>> Public <<<
 
-export const createNewInstance = function(opts:ISortInstanceOptions) {
+export const createNewSortInstance = function(opts:ISortInstanceOptions) {
   const comparer = castComparer(opts.comparer);
 
   return function<T>(ctx:T[]) {
@@ -197,7 +197,7 @@ export const createNewInstance = function(opts:ISortInstanceOptions) {
   };
 }
 
-export const sort = createNewInstance({
+export const sort = createNewSortInstance({
   comparer(a, b, order):number {
     if (a == null) return order;
     if (b == null) return -order;

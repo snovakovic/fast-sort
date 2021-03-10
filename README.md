@@ -15,7 +15,7 @@ For list of all available features check [highlights](#highlights) section.
 ## Quick examples
 
 ```javascript
-  import sort from 'fast-sort';
+  import { sort } from 'fast-sort';
 
   // Sort flat arrays
   sort([1,4,2]).asc(); // => [1, 2, 4]
@@ -59,7 +59,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   * `asc` / `desc` sorters. Both asc and desc sorters have exactly the same API.
 
 ```javascript
-  import sort from 'fast-sort';
+  import { sort } from 'fast-sort';
 
   // Sort flat arrays
   sort([1,4,2]).asc(); // => [1, 2, 4]
@@ -93,7 +93,7 @@ Usage of native sort implies that sorting is not necessarily [stable](https://en
   we can override default `comparer` for e.g natural sort purposes.
 
 ```javascript
-  import sort from 'fast-sort';
+  import { sort } from 'fast-sort';
 
   // Sort users by firstName in ascending order and age in descending order
   sort(users).by([
@@ -131,7 +131,7 @@ Keep in mind that natural sort is slower then default sorting so recommendation 
 only when needed.
 
 ```javascript
-  import sort from 'fast-sort';
+  import { sort, createNewSortInstance } from 'fast-sort';
 
   const testArr = ['image-2.jpg', 'image-11.jpg', 'image-3.jpg'];
 
@@ -147,7 +147,7 @@ only when needed.
 
   // Or we can create new sort instance with language sensitive comparer.
   // Recommended if used in multiple places
-  const naturalSort = sort.createNewInstance({
+  const naturalSort = createNewSortInstance({
     comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
   });
 
@@ -166,7 +166,7 @@ Fast sort can be tailored to fit any sorting need or use case by:
 For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of greater importance then `captain` tag).
 
 ```javascript
-  import sort from 'fast-sort';
+  import { sort, createNewSortInstance } from 'fast-sort';
 
   const tagsImportance = { vip: 3, influencer: 2, captain: 1 }; // Some domain specific logic
   const tags = ['influencer', 'unknown', 'vip', 'captain'];
@@ -176,7 +176,7 @@ For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of 
   sort(tags).desc(tag => tagImportance[tag] || 0); // => ['vip', 'influencer', 'captain', 'unknown'];
 
   // We can also create specialized tagSorter instance and reuse it across the application
-  const tagSorter = sort.createNewInstance({
+  const tagSorter = createNewSortInstance({
     comparer: (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0)
   });
 
@@ -221,56 +221,11 @@ When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org
   // "Should create sort instance that sorts nil value to the top in desc order" in 'test/sort.spec.ts'
 ```
 
-### Usage with ts-node
-
-In a nodeJS environment, when fast-sort is being imported with ts-node, you might see an error along the lines of:
-
-```
-TypeError {
-  message: 'fast_sort_1.default is not a function',
-}
-```
-
-In this case just add this to your `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "esModuleInterop": true
-  }
-}
-```
-
 ### Fast sort versions
 
-#### `v2` version
+#### `v3` version
 
-  There is no breaking changes in API between `v2` and `v1` version of library.
-  Some import files have been removed so if you haven't import it using default import
-  you might need to update imports. For more info check [v2 release notes](https://github.com/snovakovic/fast-sort/releases/tag/v2.0.0)
-
-#### Features by version
-
-```javascript
- // Sorting in multiple directions is available from [v1.5.0]
- sort(users).by([{ asc: 'age' }, { desc: 'firstName' }]);
-
- // Overriding of default comparer in `by` sorter is available from [v1.6.0]
-  sort(testArr).by({
-    desc: true,
-    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
-  });
-
-  // Creating new custom sort instances is available from [v2.0.0]
-  const naturalSort = sort.createNewInstance({
-    comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
-  });
-
-  // TypeScript support is available from [v2.0.0]
-
-  // v2.2.0 old IComparer interface is renamed to ISortInstanceOptions
-  // new IComparer interface is created that now describes actual comparer function
-```
+  TODO: fill in => Also link to v2 documentation
 
 ## Benchmark
 
