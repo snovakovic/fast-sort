@@ -8,6 +8,7 @@ export interface IComparer {
 
 export interface ISortInstanceOptions {
   comparer?:IComparer,
+  inPlaceSorting?:boolean,
 }
 
 export interface ISortByFunction<T> {
@@ -135,7 +136,7 @@ function getSortStrategy(
   );
 }
 
-const _sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComparer) {
+const sortArray = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComparer) {
   if (!Array.isArray(ctx)) {
     return ctx;
   }
@@ -145,7 +146,8 @@ const _sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:ICom
     [sortBy] = sortBy;
   }
 
-  return ctx.sort(getSortStrategy(sortBy, comparer, order));
+  return (inPlaceSort ? ctx : [...ctx])
+    .sort(getSortStrategy(sortBy, comparer, order))
 };
 
 // >>> Public <<<
@@ -153,7 +155,11 @@ const _sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:ICom
 export const createNewSortInstance = function(opts:ISortInstanceOptions) {
   const comparer = castComparer(opts.comparer);
 
-  return function<T>(ctx:T[]) {
+  return function<T>(_ctx:T[]) {
+    const ctx = Array.isArray(_ctx) && !opts.inPlaceSorting
+      ? [..._ctx]
+      : _ctx;
+
     return {
       /**
        * Sort array in ascending order. Mutates provided array by sorting it.
@@ -166,7 +172,7 @@ export const createNewSortInstance = function(opts:ISortInstanceOptions) {
        * ]);
        */
       asc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
-        return _sort(1, ctx, sortBy, comparer);
+        return sortArray(1, ctx, sortBy, comparer);
       },
       /**
        * Sort array in descending order. Mutates provided array by sorting it.
@@ -179,7 +185,7 @@ export const createNewSortInstance = function(opts:ISortInstanceOptions) {
        * ]);
        */
       desc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
-        return _sort(-1, ctx, sortBy, comparer);
+        return sortArray(-1, ctx, sortBy, comparer);
       },
       /**
        * Sort array in ascending or descending order. It allows sorting on multiple props
@@ -191,19 +197,26 @@ export const createNewSortInstance = function(opts:ISortInstanceOptions) {
        * ]);
        */
       by(sortBy:ISortByObjectSorter<T> | ISortByObjectSorter<T>[]):T[] {
-        return _sort(1, ctx, sortBy, comparer);
+        return sortArray(1, ctx, sortBy, comparer);
       },
     };
   };
 }
 
-export const sort = createNewSortInstance({
-  comparer(a, b, order):number {
-    if (a == null) return order;
-    if (b == null) return -order;
-    if (a < b) return -1;
-    if (a === b) return 0;
+const defaultComparer = (a, b, order):number => {
+  if (a == null) return order;
+  if (b == null) return -order;
+  if (a < b) return -1;
+  if (a === b) return 0;
 
-    return 1;
-  },
+  return 1;
+}
+
+export const sort = createNewSortInstance({
+  comparer: defaultComparer,
+});
+
+export const inPlaceSort = createNewSortInstance({
+  comparer: defaultComparer,
+  inPlaceSorting: true,
 });

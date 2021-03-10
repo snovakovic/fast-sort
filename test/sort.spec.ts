@@ -1,5 +1,9 @@
 import { assert } from 'chai';
-import { sort, createNewSortInstance } from '../src/sort';
+import {
+  sort,
+  inPlaceSort,
+  createNewSortInstance,
+} from '../src/sort';
 
 describe('sort', () => {
   let flatArray:number[];
@@ -65,38 +69,65 @@ describe('sort', () => {
   it('Should sort flat array in ascending order', () => {
     const sorted = sort(flatArray).asc();
     assert.deepEqual(sorted, [1, 2, 3, 4, 5, 5]);
-    assert.equal(sorted, flatArray);
+
+    // flatArray should not be modified
+    assert.deepEqual(flatArray, [1, 5, 3, 2, 4, 5]);
+    assert.notEqual(sorted,flatArray);
+  });
+
+  it('Should do in place sorting', () => {
+    const sorted = inPlaceSort(flatArray).asc();
+    assert.deepEqual(sorted, [1, 2, 3, 4, 5, 5]);
+
+    assert.deepEqual(flatArray, [1, 2, 3, 4, 5, 5]);
+    assert.equal(sorted,flatArray);
   });
 
   it('Should sort flat array in descending order', () => {
-    sort(flatArray).desc();
+    const sorted = sort(flatArray).desc();
+    assert.deepEqual(sorted, [5, 5, 4, 3, 2, 1]);
+
+    // Passed array is not mutated
+    assert.deepEqual(flatArray, [1, 5, 3, 2, 4, 5]);
+
+    // Can do in place sorting
+    const sorted2 = inPlaceSort(flatArray).desc();
+    assert.equal(sorted2, flatArray);
     assert.deepEqual(flatArray, [5, 5, 4, 3, 2, 1]);
   });
 
   it('Should be able to sort flat arrays with by sorter', () => {
-    let sorted = sort(flatArray).by({ asc: true });
+    const sorted = sort(flatArray).by({ asc: true });
     assert.deepEqual(sorted, [1, 2, 3, 4, 5, 5]);
 
-    sorted = sort(flatArray).by({ desc: true });
-    assert.deepEqual(sorted, [5, 5, 4, 3, 2, 1]);
+    const sorted2 = sort(flatArray).by({ desc: true });
+    assert.deepEqual(sorted2, [5, 5, 4, 3, 2, 1]);
+
+    // Passed array is not mutated
+    assert.deepEqual(flatArray, [1, 5, 3, 2, 4, 5]);
+
+    // Can do in place sorting
+    const sorted3 = inPlaceSort(flatArray).by({ desc: true });
+    assert.equal(sorted3, flatArray);
+    assert.deepEqual(flatArray, [5, 5, 4, 3, 2, 1]);
   });
 
   it('Should sort by object property in ascending order', () => {
-    sort(persons).asc(p => p.name.toLowerCase());
-    assert.deepEqual(['FIRST', 'In the middle', 'last'], persons.map(p => p.name));
+    const sorted = sort(persons).asc(p => p.name.toLowerCase());
+    assert.deepEqual(['FIRST', 'In the middle', 'last'], sorted.map(p => p.name));
   });
 
   it('Should sort by object property in descending order', () => {
-    sort(persons).desc((p) => p.name.toLowerCase());
-    assert.deepEqual(['last', 'In the middle', 'FIRST'], persons.map(p => p.name));
+    const sorted = sort(persons).desc((p) => p.name.toLowerCase());
+    assert.deepEqual(['last', 'In the middle', 'FIRST'], sorted.map(p => p.name));
   });
 
   it('Should sort nil values to the bottom', () => {
-    sort(persons).asc((p) => p.address.code);
-    assert.deepEqual([1, 3, undefined], persons.map(p => p.address.code));
+    const sorted1 = sort(persons).asc((p) => p.address.code);
+    assert.deepEqual([1, 3, undefined], sorted1.map(p => p.address.code));
 
-    sort(persons).desc((p) => p.address.code);
-    assert.deepEqual([3, 1, undefined], persons.map(p => p.address.code));
+    const sorted2 = sort(persons).desc((p) => p.address.code);
+    assert.deepEqual([3, 1, undefined], sorted2.map(p => p.address.code));
 
     assert.deepEqual(
       sort([1, undefined, 3, null, 2]).asc(),
@@ -119,8 +150,8 @@ describe('sort', () => {
   });
 
   it('Should sort dates correctly', () => {
-    sort(persons).asc('dob');
-    assert.deepEqual(persons.map(p => p.dob), [
+    const sorted = sort(persons).asc('dob');
+    assert.deepEqual(sorted.map(p => p.dob), [
       new Date(1987, 14, 9),
       new Date(1987, 14, 10),
       new Date(1987, 14, 11),
@@ -128,18 +159,18 @@ describe('sort', () => {
   });
 
   it('Should unwrap single array value', () => {
-    sort(persons).asc(['name']);
-    assert.deepEqual(['FIRST', 'In the middle', 'last'], persons.map(p => p.name));
+    const sorted = sort(persons).asc(['name']);
+    assert.deepEqual(['FIRST', 'In the middle', 'last'], sorted.map(p => p.name));
   });
 
   it('Should sort on multiple properties', () => {
-    sort(multiPropArray).asc([
+    const sorted = sort(multiPropArray).asc([
       p => p.name,
       p => p.lastName,
       p => p.age,
     ]);
 
-    const sortedArray = multiPropArray.map(arr => ({
+    const sortedArray = sorted.map(arr => ({
       name: arr.name,
       lastName: arr.lastName,
       age: arr.age,
@@ -155,8 +186,8 @@ describe('sort', () => {
   });
 
   it('Should sort on multiple properties by string sorter', () => {
-    sort(multiPropArray).asc(['name', 'age', 'lastName']);
-    const sortedArray = multiPropArray.map(arr => ({
+    const sorted = sort(multiPropArray).asc(['name', 'age', 'lastName']);
+    const sortedArray = sorted.map(arr => ({
       name: arr.name,
       lastName: arr.lastName,
       age: arr.age,
@@ -172,8 +203,8 @@ describe('sort', () => {
   });
 
   it('Should sort on multiple mixed properties', () => {
-    sort(multiPropArray).asc(['name', p => p.lastName, 'age']);
-    const sortedArray = multiPropArray.map(arr => ({
+    const sorted = sort(multiPropArray).asc(['name', p => p.lastName, 'age']);
+    const sortedArray = sorted.map(arr => ({
       name: arr.name,
       lastName: arr.lastName,
       age: arr.age,
@@ -194,19 +225,19 @@ describe('sort', () => {
       { name: 'a', age: 1 },
     ];
 
-    sort(same).asc(['name', 'age']);
-    assert.deepEqual(same, [
+    const sorted = sort(same).asc(['name', 'age']);
+    assert.deepEqual(sorted, [
       { name: 'a', age: 1 },
       { name: 'a', age: 1 },
     ]);
   });
 
   it('Should sort by desc name and asc lastName', () => {
-    sort(multiPropArray).by([
+    const sorted = sort(multiPropArray).by([
       { desc: 'name' },
       { asc: 'lastName' },
     ]);
-    const sortedArray = multiPropArray.map(arr => ({
+    const sortedArray = sorted.map(arr => ({
       name: arr.name,
       lastName: arr.lastName,
     }));
@@ -221,12 +252,12 @@ describe('sort', () => {
   });
 
   it('Should sort by asc name and desc age', () => {
-    sort(multiPropArray).by([
+    const sorted = sort(multiPropArray).by([
       { asc: 'name' },
       { desc: 'age' },
     ]);
 
-    const sortedArray = multiPropArray.map(arr => ({ name: arr.name, age: arr.age }));
+    const sortedArray = sorted.map(arr => ({ name: arr.name, age: arr.age }));
     assert.deepEqual(sortedArray, [
       { name: 'aa', age: 11 },
       { name: 'aa', age: 10 },
@@ -237,13 +268,13 @@ describe('sort', () => {
   });
 
   it('Should sort by asc lastName, desc name and asc age', () => {
-    sort(multiPropArray).by([
+    const sorted = sort(multiPropArray).by([
       { asc: p => p.lastName },
       { desc: p => p.name },
       { asc: p => p.age },
     ]);
 
-    const sortedArray = multiPropArray.map(arr => ({
+    const sortedArray = sorted.map(arr => ({
       name: arr.name,
       lastName: arr.lastName,
       age: arr.age,
@@ -294,49 +325,49 @@ describe('sort', () => {
   });
 
   it('Should sort ascending with by on 1 property', () => {
-    sort(multiPropArray).by([{ asc: p => p.age }]);
-    assert.deepEqual([6, 8, 9, 10, 11], multiPropArray.map(m => m.age));
+    const sorted = sort(multiPropArray).by([{ asc: p => p.age }]);
+    assert.deepEqual([6, 8, 9, 10, 11], sorted.map(m => m.age));
   });
 
   it('Should sort descending with by on 1 property', () => {
-    sort(multiPropArray).by([{ desc: 'age' }]);
-    assert.deepEqual([11, 10, 9, 8, 6], multiPropArray.map(m => m.age));
+    const sorted = sort(multiPropArray).by([{ desc: 'age' }]);
+    assert.deepEqual([11, 10, 9, 8, 6], sorted.map(m => m.age));
   });
 
   it('Should sort flat array in asc order using natural sort comparer', () => {
-    sort(flatNaturalArray).by([{
+    const sorted = sort(flatNaturalArray).by([{
       asc: true,
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
-    assert.deepEqual(flatNaturalArray, ['A2', 'A10', 'B2', 'B10']);
+    assert.deepEqual(sorted, ['A2', 'A10', 'B2', 'B10']);
   });
 
   it('Should sort flat array in desc order using natural sort comparer', () => {
-    sort(flatNaturalArray).by([{
+    const sorted = sort(flatNaturalArray).by([{
       desc: true,
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
-    assert.deepEqual(flatNaturalArray, ['B10', 'B2', 'A10', 'A2']);
+    assert.deepEqual(sorted, ['B10', 'B2', 'A10', 'A2']);
   });
 
   it('Should sort object in asc order using natural sort comparer', () => {
-    sort(multiPropArray).by([{
+    const sorted = sort(multiPropArray).by([{
       asc: p => p.unit,
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
-    assert.deepEqual(['A01', 'A2', 'A10', 'B3', 'C2'], multiPropArray.map(m => m.unit));
+    assert.deepEqual(['A01', 'A2', 'A10', 'B3', 'C2'], sorted.map(m => m.unit));
   });
 
   it('Should sort object in desc order using natural sort comparer', () => {
-    sort(multiPropArray).by([{
+    const sorted = sort(multiPropArray).by([{
       desc: p => p.unit,
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
-    assert.deepEqual(['C2', 'B3', 'A10', 'A2', 'A01'], multiPropArray.map(m => m.unit));
+    assert.deepEqual(['C2', 'B3', 'A10', 'A2', 'A01'], sorted.map(m => m.unit));
   });
 
   it('Should sort object on multiple props using both default and custom comparer', () => {
@@ -346,14 +377,14 @@ describe('sort', () => {
       { a: 'A10', b: 'A2' },
     ];
 
-    sort(testArr).by([{
+    const sorted = sort(testArr).by([{
       desc: p => p.a,
     }, {
       asc: 'b',
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     }]);
 
-    assert.deepEqual(testArr, [
+    assert.deepEqual(sorted, [
       { a: 'A2', b: 'A2' },
       { a: 'A2', b: 'A10' }, // <= B is sorted using natural sort comparer
       { a: 'A10', b: 'A2' }, // <= A is sorted using default sort comparer
@@ -369,14 +400,14 @@ describe('sort', () => {
       { status: 1, title: 'C' },
     ];
 
-    sort(rows).by([{
+    const sorted = sort(rows).by([{
       asc: row => row.status,
       comparer: (a, b) => a - b,
     }, {
       asc: row => row.title,
     }]);
 
-    assert.deepEqual(rows, [
+    assert.deepEqual(sorted, [
       { status: 0, title: 'A' },
       { status: 0, title: 'B' },
       { status: 0, title: 'D' },
@@ -389,23 +420,23 @@ describe('sort', () => {
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
 
-    naturalSort(multiPropArray).desc('unit');
-    assert.deepEqual(['C2', 'B3', 'A10', 'A2', 'A01'], multiPropArray.map(m => m.unit));
+    const sorted1 = naturalSort(multiPropArray).desc('unit');
+    assert.deepEqual(['C2', 'B3', 'A10', 'A2', 'A01'], sorted1.map(m => m.unit));
 
-    naturalSort(multiPropArray).by({ asc: 'unit' });
-    assert.deepEqual(['A01', 'A2', 'A10', 'B3', 'C2'], multiPropArray.map(m => m.unit));
+    const sorted2 = naturalSort(multiPropArray).by({ asc: 'unit' });
+    assert.deepEqual(['A01', 'A2', 'A10', 'B3', 'C2'], sorted2.map(m => m.unit));
 
-    naturalSort(multiPropArray).asc('lastName');
-    assert.deepEqual(['aa', 'aa', 'bb', null, undefined], multiPropArray.map(m => m.lastName));
+    const sorted3 = naturalSort(multiPropArray).asc('lastName');
+    assert.deepEqual(['aa', 'aa', 'bb', null, undefined], sorted3.map(m => m.lastName));
 
-    naturalSort(multiPropArray).desc(p => p.lastName);
-    assert.deepEqual([undefined, null, 'bb', 'aa', 'aa'], multiPropArray.map(m => m.lastName));
+    const sorted4 = naturalSort(multiPropArray).desc(p => p.lastName);
+    assert.deepEqual([undefined, null, 'bb', 'aa', 'aa'], sorted4.map(m => m.lastName));
 
-    naturalSort(flatArray).desc();
-    assert.deepEqual(flatArray, [5, 5, 4, 3, 2, 1]);
+    const sorted5 = naturalSort(flatArray).desc();
+    assert.deepEqual(sorted5, [5, 5, 4, 3, 2, 1]);
 
-    naturalSort(flatNaturalArray).asc();
-    assert.deepEqual(flatNaturalArray, ['A2', 'A10', 'B2', 'B10']);
+    const sorted6 = naturalSort(flatNaturalArray).asc();
+    assert.deepEqual(sorted6, ['A2', 'A10', 'B2', 'B10']);
   });
 
   it('Should handle sorting on multiples props with custom sorter instance', () => {
@@ -421,17 +452,17 @@ describe('sort', () => {
       { a: 'a', b: undefined },
     ];
 
-    naturalSort(arr).asc('b');
-    assert.deepEqual(arr.map(a => a.b), ['A2', 'A3', 'A20', null, undefined]);
+    const sort1 = naturalSort(arr).asc('b');
+    assert.deepEqual(sort1.map(a => a.b), ['A2', 'A3', 'A20', null, undefined]);
 
-    naturalSort(arr).asc(['a', 'b']);
-    assert.deepEqual(arr.map(a => a.b), ['A2', 'A3', 'A20', null, undefined]);
+    const sorted2 = naturalSort(arr).asc(['a', 'b']);
+    assert.deepEqual(sorted2.map(a => a.b), ['A2', 'A3', 'A20', null, undefined]);
 
-    naturalSort(arr).desc('b');
-    assert.deepEqual(arr.map(a => a.b), [undefined, null, 'A20', 'A3', 'A2']);
+    const sorted3 = naturalSort(arr).desc('b');
+    assert.deepEqual(sorted3.map(a => a.b), [undefined, null, 'A20', 'A3', 'A2']);
 
-    naturalSort(arr).desc(['a', 'b']);
-    assert.deepEqual(arr.map(a => a.b), [undefined, null, 'A20', 'A3', 'A2']);
+    const sorted4 = naturalSort(arr).desc(['a', 'b']);
+    assert.deepEqual(sorted4.map(a => a.b), [undefined, null, 'A20', 'A3', 'A2']);
   });
 
   it('Should create custom tag sorter instance', () => {
@@ -451,7 +482,7 @@ describe('sort', () => {
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
 
-    naturalSort(multiPropArray).by([{
+    const sorted1 = naturalSort(multiPropArray).by([{
       asc: 'name',
     }, {
       desc: 'unit',
@@ -461,7 +492,7 @@ describe('sort', () => {
       },
     }]);
 
-    let sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
+    let sortedArray = sorted1.map(arr => ({ name: arr.name, unit: arr.unit }));
     assert.deepEqual(sortedArray, [
       { name: 'aa', unit: 'C2' },
       { name: 'aa', unit: 'A2' },
@@ -470,8 +501,8 @@ describe('sort', () => {
       { name: 'bb', unit: 'B3' },
     ]);
 
-    naturalSort(multiPropArray).by([{ asc: 'name' }, { desc: 'unit' }]);
-    sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
+    const sorted2 = naturalSort(multiPropArray).by([{ asc: 'name' }, { desc: 'unit' }]);
+    sortedArray = sorted2.map(arr => ({ name: arr.name, unit: arr.unit }));
     assert.deepEqual(sortedArray, [
       { name: 'aa', unit: 'C2' },
       { name: 'aa', unit: 'A10' },
@@ -482,8 +513,8 @@ describe('sort', () => {
   });
 
   it('Should sort in asc order with by sorter if object config not provided', () => {
-    sort(multiPropArray).by(['name', 'unit'] as any);
-    const sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
+    const sorted = sort(multiPropArray).by(['name', 'unit'] as any);
+    const sortedArray = sorted.map(arr => ({ name: arr.name, unit: arr.unit }));
     assert.deepEqual(sortedArray, [
       { name: 'aa', unit: 'A01' },
       { name: 'aa', unit: 'A10' },
@@ -504,15 +535,15 @@ describe('sort', () => {
       { openIssues: 3, closedIssues: 3 },
     ];
 
-    sort(repos).asc(r => r.openIssues + r.closedIssues);
-    assert.deepEqual(repos, [
+    const sorted1 = sort(repos).asc(r => r.openIssues + r.closedIssues);
+    assert.deepEqual(sorted1, [
       { openIssues: 0, closedIssues: 5 },
       { openIssues: 3, closedIssues: 3 },
       { openIssues: 4, closedIssues: 4 },
     ]);
 
-    sort(repos).desc(r => r.openIssues + r.closedIssues);
-    assert.deepEqual(repos, [
+    const sorted2 = sort(repos).desc(r => r.openIssues + r.closedIssues);
+    assert.deepEqual(sorted2, [
       { openIssues: 4, closedIssues: 4 },
       { openIssues: 3, closedIssues: 3 },
       { openIssues: 0, closedIssues: 5 },
@@ -521,10 +552,10 @@ describe('sort', () => {
 
   it('Should not mutate sort by array', () => {
     const sortBy = [{ asc: 'name' }, { asc: 'unit' }];
-    sort(multiPropArray).by(sortBy as any);
+    const sorted = sort(multiPropArray).by(sortBy as any);
     assert.deepEqual(sortBy, [{ asc: 'name' }, { asc: 'unit' }]);
 
-    const sortedArray = multiPropArray.map(arr => ({ name: arr.name, unit: arr.unit }));
+    const sortedArray = sorted.map(arr => ({ name: arr.name, unit: arr.unit }));
     assert.deepEqual(sortedArray, [
       { name: 'aa', unit: 'A01' },
       { name: 'aa', unit: 'A10' },
@@ -538,25 +569,25 @@ describe('sort', () => {
     const testArr = ['image-2.jpg', 'image-11.jpg', 'image-3.jpg'];
 
     // By default fast-sort is not doing natural sort
-    sort(testArr).desc(); // =>
-    assert.deepEqual(testArr, ['image-3.jpg', 'image-2.jpg', 'image-11.jpg']);
+    const sorted1 = sort(testArr).desc(); // =>
+    assert.deepEqual(sorted1, ['image-3.jpg', 'image-2.jpg', 'image-11.jpg']);
 
-    sort(testArr).by({
+    const sorted2 = sort(testArr).by({
       desc: true,
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
-    assert.deepEqual(testArr, ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']);
+    assert.deepEqual(sorted2, ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']);
 
     // If we want to reuse natural sort in multiple places we can create new sort instance
     const naturalSort = createNewSortInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
     });
 
-    naturalSort(testArr).asc();
-    assert.deepEqual(testArr, ['image-2.jpg', 'image-3.jpg', 'image-11.jpg']);
+    const sorted3 = naturalSort(testArr).asc();
+    assert.deepEqual(sorted3, ['image-2.jpg', 'image-3.jpg', 'image-11.jpg']);
 
-    naturalSort(testArr).desc();
-    assert.deepEqual(testArr, ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']);
+    const sorted4 = naturalSort(testArr).desc();
+    assert.deepEqual(sorted4, ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']);
   });
 
   it('Should create sort instance that sorts nil value to the top in desc order', () => {
@@ -571,10 +602,10 @@ describe('sort', () => {
       },
     });
 
-    nilSort(multiPropArray).asc(p => p.lastName);
-    assert.deepEqual(['aa', 'aa', 'bb', null, undefined], multiPropArray.map(p => p.lastName));
+    const sorter1 = nilSort(multiPropArray).asc(p => p.lastName);
+    assert.deepEqual(['aa', 'aa', 'bb', null, undefined], sorter1.map(p => p.lastName));
 
-    nilSort(multiPropArray).desc(p => p.lastName);
-    assert.deepEqual([null, undefined, 'bb', 'aa', 'aa'], multiPropArray.map(p => p.lastName));
+    const sorter2 = nilSort(multiPropArray).desc(p => p.lastName);
+    assert.deepEqual([undefined, null, 'bb', 'aa', 'aa'], sorter2.map(p => p.lastName));
   });
 });
