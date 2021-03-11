@@ -146,8 +146,7 @@ const sortArray = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:
     [sortBy] = sortBy;
   }
 
-  return (inPlaceSort ? ctx : [...ctx])
-    .sort(getSortStrategy(sortBy, comparer, order))
+  return ctx.sort(getSortStrategy(sortBy, comparer, order))
 };
 
 // >>> Public <<<
