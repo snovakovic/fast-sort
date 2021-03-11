@@ -28,7 +28,7 @@ export declare const createNewSortInstance: (opts: ISortInstanceOptions) => <T>(
      *   u => u.lastName,
      * ]);
      */
-    asc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    asc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
     /**
      * Sort array in descending order. Mutates provided array by sorting it.
      * @example
@@ -39,7 +39,7 @@ export declare const createNewSortInstance: (opts: ISortInstanceOptions) => <T>(
      *   u => u.lastName,
      * ]);
      */
-    desc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    desc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
     /**
      * Sort array in ascending or descending order. It allows sorting on multiple props
      * in different order for each of them. Mutates provided array by sorting it.
@@ -49,7 +49,7 @@ export declare const createNewSortInstance: (opts: ISortInstanceOptions) => <T>(
      *  { desc: u => u.age }
      * ]);
      */
-    by(sortBy: ISortByAscSorter<T> | ISortByDescSorter<T> | ISortByObjectSorter<T>[]): T[];
+    by(sortBy: ISortByObjectSorter<T> | ISortByObjectSorter<T>[]): T[];
 };
 export declare const sort: <T>(_ctx: T[]) => {
     /**
@@ -62,7 +62,7 @@ export declare const sort: <T>(_ctx: T[]) => {
      *   u => u.lastName,
      * ]);
      */
-    asc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    asc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
     /**
      * Sort array in descending order. Mutates provided array by sorting it.
      * @example
@@ -73,7 +73,7 @@ export declare const sort: <T>(_ctx: T[]) => {
      *   u => u.lastName,
      * ]);
      */
-    desc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    desc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
     /**
      * Sort array in ascending or descending order. It allows sorting on multiple props
      * in different order for each of them. Mutates provided array by sorting it.
@@ -83,7 +83,7 @@ export declare const sort: <T>(_ctx: T[]) => {
      *  { desc: u => u.age }
      * ]);
      */
-    by(sortBy: ISortByAscSorter<T> | ISortByDescSorter<T> | ISortByObjectSorter<T>[]): T[];
+    by(sortBy: ISortByObjectSorter<T> | ISortByObjectSorter<T>[]): T[];
 };
 export declare const inPlaceSort: <T>(_ctx: T[]) => {
     /**
@@ -96,7 +96,7 @@ export declare const inPlaceSort: <T>(_ctx: T[]) => {
      *   u => u.lastName,
      * ]);
      */
-    asc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    asc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
     /**
      * Sort array in descending order. Mutates provided array by sorting it.
      * @example
@@ -107,7 +107,7 @@ export declare const inPlaceSort: <T>(_ctx: T[]) => {
      *   u => u.lastName,
      * ]);
      */
-    desc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    desc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
     /**
      * Sort array in ascending or descending order. It allows sorting on multiple props
      * in different order for each of them. Mutates provided array by sorting it.
@@ -117,6 +117,6 @@ export declare const inPlaceSort: <T>(_ctx: T[]) => {
      *  { desc: u => u.age }
      * ]);
      */
-    by(sortBy: ISortByAscSorter<T> | ISortByDescSorter<T> | ISortByObjectSorter<T>[]): T[];
+    by(sortBy: ISortByObjectSorter<T> | ISortByObjectSorter<T>[]): T[];
 };
 export {};
