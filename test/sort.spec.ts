@@ -588,6 +588,8 @@ describe('sort', () => {
 
     const sorted4 = naturalSort(testArr).desc();
     assert.deepEqual(sorted4, ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']);
+
+    assert.notEqual(sorted3, testArr);
   });
 
   it('Should create sort instance that sorts nil value to the top in desc order', () => {
@@ -607,5 +609,22 @@ describe('sort', () => {
 
     const sorter2 = nilSort(multiPropArray).desc(p => p.lastName);
     assert.deepEqual([undefined, null, 'bb', 'aa', 'aa'], sorter2.map(p => p.lastName));
+
+    // By default custom sorter should not mutate provided array
+    assert.notEqual(sorter1, multiPropArray);
+    assert.notEqual(sorter2, multiPropArray);
   });
+
+  it('Should mutate array with custom sorter if inPlaceSorting provided', () => {
+    const customInPlaceSorting = createNewSortInstance({
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+      inPlaceSorting: true, // <= NOTE
+    });
+
+    const sorted = customInPlaceSorting(flatArray).asc();
+
+    assert.equal(sorted, flatArray);
+    assert.deepEqual(flatArray, [1, 2, 3, 4, 5, 5]);
+  });
+
 });
