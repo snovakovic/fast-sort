@@ -80,7 +80,7 @@ describe('sort', () => {
     assert.deepStrictEqual(sorted, [1, 2, 3, 4, 5, 5]);
 
     assert.deepStrictEqual(flatArray, [1, 2, 3, 4, 5, 5]);
-    assert.equal(sorted,flatArray);
+    assert.equal(sorted, flatArray);
   });
 
   it('Should sort flat array in descending order', () => {

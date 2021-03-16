@@ -18,11 +18,14 @@ For list of all available features check [highlights](#highlights) section.
   import { sort } from 'fast-sort';
 
   // Sort flat arrays
-  sort([1,4,2]).asc(); // => [1, 2, 4]
-  sort([1, 4, 2]).desc(); // => [4, 2, 1]
+  const ascSorted = sort([1,4,2]).asc(); // => [1, 2, 4]
+  const descSorted = sort([1, 4, 2]).desc(); // => [4, 2, 1]
 
   // Sort users (array of objects) by firstName in descending order
   sort(users).desc(u => u.firstName);
+
+  // String shorthand can be used for root object properties
+  sort(users).asc('firstName');
 
   // Sort users in ascending order by firstName and lastName
   sort(users).asc([
@@ -30,12 +33,18 @@ For list of all available features check [highlights](#highlights) section.
     u => u.lastName
   ]);
 
-  // Sort users ascending by firstName and descending by age
+  // Sort users ascending by firstName and descending by city
   sort(users).by([
     { asc: u => u.firstName },
-    { desc: u => u.age }
+    { desc: u => u.address.city }
   ]);
+
+  // Sort based on computed property
+  sort(repositories).desc(r => r.openIssues + r.closedIssues);
 ```
+
+Fore even more examples check unit tests `test/sort.spec.ts`.
+https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts
 
 ## Highlights
 
@@ -48,81 +57,29 @@ For list of all available features check [highlights](#highlights) section.
   * [Faster](#benchmark) than other popular sort alternatives
   * Undefined and null values are always sorted to bottom (with default comparer)
   * TypeScript support
-  * Small footprint with 0 dependencies (~ 750 bytes gzip)
+  * Packed with features in small footprint with 0 dependencies (~ 750 bytes gzip)
   * Compatible with any JS environment as Node, Web, etc..
 
-Under the hood sort is using [native JavaScript sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
-Usage of native sort implies that sorting is not necessarily [stable](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) and it also implies that input array is modified(sorted) same as it would be when applying native sort.
+## In place sorting
 
-## More examples
-
-  * `asc` / `desc` sorters. Both asc and desc sorters have exactly the same API.
+By default `sort` creates new "sorted" instance of provided array. It does not mutate provided array. `inPlaceSort` on other hand mutates provided array by sorting it without creating new array instance. Benefits of `inPlaceSort` is that it's slightly faster and more generous on memory as it don't create new array instance. Other than that they share exactly the same interface.
 
 ```javascript
-  import { sort } from 'fast-sort';
+const { sort, inPlaceSort } = require('fast-sort');
 
-  // Sort flat arrays
-  sort([1,4,2]).asc(); // => [1, 2, 4]
+const array = [3, 1, 5];
+const sorted = sort(array).asc();
 
-  // Sort array of objects by single object property
-  sort(users).asc(u => u.firstName);
+// sorted => [1, 3, 5]
+// array => [3, 1, 5]
 
-  // For root object properties we can use string shorthand (same as example above)
-  sort(users).asc('firstName');
 
-  // Sort by nested object properties
-  // NOTE: for nested object properties we can't use string shorthand ('address.city' is not valid syntax).
-  sort(users).asc(u => u.address.city);
+inPlaceSort(array).asc();
 
-  // Sort by multiple properties
-  sort(users).asc([
-    u => u.age,
-    u => u.firstName,
-  ]);
-
-  // Same as above but using string shorthand
-  sort(users).asc(['age', 'firstName']);
-
-  // Sort based on computed property
-  // For example sort repositories by total number of issues (summary of open and closed issues)
-  sort(repositories).desc(r => r.openIssues + r.closedIssues);
+// array => [1, 3, 5]
 ```
 
-  * `by` sorter can do anything that `asc` / `desc` sorters can with addition to some more advance
-  sort handling. With `by` sorter we can sort by multiple properties in different directions and
-  we can override default `comparer` for e.g natural sort purposes.
-
-```javascript
-  import { sort } from 'fast-sort';
-
-  // Sort users by firstName in ascending order and age in descending order
-  sort(users).by([
-    { asc: u => u.firstName },
-    { desc: u => u.age },
-  ]);
-
-  // Same as with asc/desc sorters we can use string shorthand for root object properties
-  sort(users).by([{ asc: 'firstName' }, { desc: 'age' }]);
-
-  // Sort users by city using custom comparer
-  sort(users).by({
-    asc: u => u.address.city,
-    comparer: (a, b) => a.localeCompare(b),
-  });
-
-  // Sort users ascending by age using default comparer and then by lastName using language sensitive comparer
-  sort(users).by([
-    { asc: 'age' },
-    {
-      asc: 'lastName',
-      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
-    },
-  ]);
-```
-
-  * Fore even more examples check unit tests `test/sort.spec.ts` in the github repo.
-
-### Natural sorting / Language sensitive sorting
+## Natural sorting / Language sensitive sorting
 
 By default `fast-sort` is not doing language sensitive sorting of strings.
 e.g `'image-11.jpg'` will be sorted before `'image-2.jpg'` (in ascending sorting).
@@ -138,12 +95,12 @@ only when needed.
   // By default fast-sort is not doing natural sort
   sort(testArr).desc(); // => ['image-3.jpg', 'image-2.jpg', 'image-11.jpg']
 
-  // We can use `by` sort to override default comparer with the one that is doing language sensitive comparison
+  // We can use `by` sort to override default comparer
+  // with the one that is doing language sensitive comparison
   sort(testArr).by({
     desc: true,
     comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
   }); // => ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']
-
 
   // Or we can create new sort instance with language sensitive comparer.
   // Recommended if used in multiple places
@@ -155,7 +112,7 @@ only when needed.
   naturalSort(testArr).desc(); // => ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']
 ```
 
-### Custom sorting
+## Custom sorting
 
 Fast sort can be tailored to fit any sorting need or use case by:
   * creating custom sorting instances
@@ -171,61 +128,37 @@ For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of 
   const tagsImportance = { vip: 3, influencer: 2, captain: 1 }; // Some domain specific logic
   const tags = ['influencer', 'unknown', 'vip', 'captain'];
 
-  // Sort tags in ascending order by custom tags values
-  sort(tags).asc(tag => tagImportance[tag] || 0); // => ['unknown', 'captain', 'influencer', 'vip'];
-  sort(tags).desc(tag => tagImportance[tag] || 0); // => ['vip', 'influencer', 'captain', 'unknown'];
+  // Sort tags in ascending order by custom tag value using computed property
+  const ascTags = sort(tags).asc(tag => tagImportance[tag] || 0); // => ['unknown', 'captain', 'influencer', 'vip'];
+  const descTags = sort(tags).desc(tag => tagImportance[tag] || 0); // => ['vip', 'influencer', 'captain', 'unknown'];
 
-  // We can also create specialized tagSorter instance and reuse it across the application
+  // Create custom specialized tagSorter instance and reuse it across the application
   const tagSorter = createNewSortInstance({
-    comparer: (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0)
+    comparer: (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0),
+    inPlaceSorting: true, // default[false] => Check "In Place Sort" section for more info.
   });
 
   tagSorter(tags).asc(); // => ['unknown', 'captain', 'influencer', 'vip'];
   tagSorter(tags).desc(); // => ['vip', 'influencer', 'captain', 'unknown'];
 
   // Default sorter will sort tags by string comparison and not "tag" importance
-  sort(tags).asc(); // => ['captain', 'influencer', 'unknown' 'vip']
+  const defaultSort = sort(tags).asc(); // => ['captain', 'influencer', 'unknown' 'vip']
 ```
 
-### Things to know
-
-When using custom comparers as e.g [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) it's up to you to ensure those features are available in all the platforms you intend to support. (You can check browser compatibility for Intl.Collator by following link above). Same applies for any other custom comparer.
+### More examples
 
 ```javascript
   // Sorting values that are not sortable will return same value back
   sort(null).asc(); // => null
   sort(33).desc(); // => 33
 
-  // By default sort will mutate input array (by sorting it),
-  const arr = [1, 4, 2];
-  const sortedArr = sort(arr).asc();
-  console.log(sortedArr); // => [1, 2, 4]
-  console.log(arr); // => [1, 2, 4]
-  console.log(sortedArr === arr), // => true
-
-  // TIP: to prevent mutating of input array you can clone it before passing to sort as
-  const arr = [1, 4, 2];
-  const sortedArr = sort([...arr]).asc();
-  console.log(arr); // => [1, 4, 2]
-  console.log(sortedArr); // => [1, 2, 4]
-  console.log(sortedArr === arr), // => false
-
-  // As stated in highlights by default fast-sort sorts null and undefined values to the
+  // By default fast-sort sorts null and undefined values to the
   // bottom no matter if sorting is in asc or decs order.
+  // If this is not intended behaviour you can check "Should create sort instance that sorts nil value to the top in desc order" test on how to override
   const addresses = [{ city: 'Split' }, { city: undefined }, { city: 'Zagreb'}];
   sort(addresses).asc(a => a.city); // => Split, Zagreb, undefined
   sort(addresses).desc(a => a.city); // => Zagreb, Split, undefined
-
-  // If above is not intended behaviour you can always create new sort instance that will sort null
-  // or undefined values the way you intended it to be. For example of exactly that you can check unit test
-  // "Should create sort instance that sorts nil value to the top in desc order" in 'test/sort.spec.ts'
 ```
-
-### Fast sort versions
-
-#### `v3` version
-
-  TODO: fill in => Also link to v2 documentation
 
 ## Benchmark
 
