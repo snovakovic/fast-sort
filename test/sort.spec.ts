@@ -8,10 +8,10 @@ import {
 describe('sort', () => {
   let flatArray:number[];
   let flatNaturalArray:string[];
-  let persons:{
+  let students:{
     name:string,
     dob:Date,
-    address:{ code?:number },
+    address:{ streetNumber?:number },
   }[];
   let multiPropArray:{
     name:string,
@@ -24,18 +24,18 @@ describe('sort', () => {
     flatArray = [1, 5, 3, 2, 4, 5];
     flatNaturalArray = ['A10', 'A2', 'B10', 'B2'];
 
-    persons = [{
-      name: 'last',
+    students = [{
+      name: 'Mate',
       dob: new Date(1987, 14, 11),
-      address: { code: 3 },
+      address: { streetNumber: 3 },
     }, {
-      name: 'FIRST',
+      name: 'Ante',
       dob: new Date(1987, 14, 9),
       address: {},
     }, {
-      name: 'In the middle',
+      name: 'Dino',
       dob: new Date(1987, 14, 10),
-      address: { code: 1 },
+      address: { streetNumber: 1 },
     }];
 
     multiPropArray = [{
@@ -75,7 +75,7 @@ describe('sort', () => {
     assert.notEqual(sorted,flatArray);
   });
 
-  it('Should do in place sorting', () => {
+  it('Should in place sort flat array in ascending order', () => {
     const sorted = inPlaceSort(flatArray).asc();
     assert.deepStrictEqual(sorted, [1, 2, 3, 4, 5, 5]);
 
@@ -96,7 +96,7 @@ describe('sort', () => {
     assert.deepStrictEqual(flatArray, [5, 5, 4, 3, 2, 1]);
   });
 
-  it('Should be able to sort flat arrays with by sorter', () => {
+  it('Should sort flat array with by sorter', () => {
     const sorted = sort(flatArray).by({ asc: true });
     assert.deepStrictEqual(sorted, [1, 2, 3, 4, 5, 5]);
 
@@ -112,22 +112,22 @@ describe('sort', () => {
     assert.deepStrictEqual(flatArray, [5, 5, 4, 3, 2, 1]);
   });
 
-  it('Should sort by object property in ascending order', () => {
-    const sorted = sort(persons).asc(p => p.name.toLowerCase());
-    assert.deepStrictEqual(['FIRST', 'In the middle', 'last'], sorted.map(p => p.name));
+  it('Should sort by student name in ascending order', () => {
+    const sorted = sort(students).asc(p => p.name.toLowerCase());
+    assert.deepStrictEqual(['Ante', 'Dino', 'Mate'], sorted.map(p => p.name));
   });
 
-  it('Should sort by object property in descending order', () => {
-    const sorted = sort(persons).desc((p) => p.name.toLowerCase());
-    assert.deepStrictEqual(['last', 'In the middle', 'FIRST'], sorted.map(p => p.name));
+  it('Should sort by student name in descending order', () => {
+    const sorted = sort(students).desc((p) => p.name.toLowerCase());
+    assert.deepStrictEqual(['Mate', 'Dino', 'Ante'], sorted.map(p => p.name));
   });
 
   it('Should sort nil values to the bottom', () => {
-    const sorted1 = sort(persons).asc((p) => p.address.code);
-    assert.deepStrictEqual([1, 3, undefined], sorted1.map(p => p.address.code));
+    const sorted1 = sort(students).asc((p) => p.address.streetNumber);
+    assert.deepStrictEqual([1, 3, undefined], sorted1.map(p => p.address.streetNumber));
 
-    const sorted2 = sort(persons).desc((p) => p.address.code);
-    assert.deepStrictEqual([3, 1, undefined], sorted2.map(p => p.address.code));
+    const sorted2 = sort(students).desc((p) => p.address.streetNumber);
+    assert.deepStrictEqual([3, 1, undefined], sorted2.map(p => p.address.streetNumber));
 
     assert.deepStrictEqual(
       sort([1, undefined, 3, null, 2]).asc(),
@@ -150,7 +150,7 @@ describe('sort', () => {
   });
 
   it('Should sort dates correctly', () => {
-    const sorted = sort(persons).asc('dob');
+    const sorted = sort(students).asc('dob');
     assert.deepStrictEqual(sorted.map(p => p.dob), [
       new Date(1987, 14, 9),
       new Date(1987, 14, 10),
@@ -158,9 +158,9 @@ describe('sort', () => {
     ]);
   });
 
-  it('Should unwrap single array value', () => {
-    const sorted = sort(persons).asc(['name']);
-    assert.deepStrictEqual(['FIRST', 'In the middle', 'last'], sorted.map(p => p.name));
+  it('Should sort on single property when passed as array', () => {
+    const sorted = sort(students).asc(['name']);
+    assert.deepStrictEqual(['Ante', 'Dino', 'Mate'], sorted.map(p => p.name));
   });
 
   it('Should sort on multiple properties', () => {
@@ -232,7 +232,7 @@ describe('sort', () => {
     ]);
   });
 
-  it('Should sort by desc name and asc lastName', () => {
+  it('Should sort descending by name and ascending by lastName', () => {
     const sorted = sort(multiPropArray).by([
       { desc: 'name' },
       { asc: 'lastName' },
@@ -251,7 +251,7 @@ describe('sort', () => {
     ]);
   });
 
-  it('Should sort by asc name and desc age', () => {
+  it('Should sort ascending by name and descending by age', () => {
     const sorted = sort(multiPropArray).by([
       { asc: 'name' },
       { desc: 'age' },
@@ -267,7 +267,7 @@ describe('sort', () => {
     ]);
   });
 
-  it('Should sort by asc lastName, desc name and asc age', () => {
+  it('Should sort ascending by lastName, descending by name and ascending by age', () => {
     const sorted = sort(multiPropArray).by([
       { asc: p => p.lastName },
       { desc: p => p.name },
@@ -318,18 +318,18 @@ describe('sort', () => {
 
   it('Should throw error if using nested property with string syntax', () => {
     assert.throw(
-      () => sort(persons).desc('address.code' as any),
+      () => sort(students).desc('address.streetNumber' as any),
       Error,
       'Invalid sort config: String syntax not allowed for nested properties.',
     );
   });
 
-  it('Should sort ascending with by on 1 property', () => {
+  it('Should sort ascending on single property with by sorter', () => {
     const sorted = sort(multiPropArray).by([{ asc: p => p.age }]);
     assert.deepStrictEqual([6, 8, 9, 10, 11], sorted.map(m => m.age));
   });
 
-  it('Should sort descending with by on 1 property', () => {
+  it('Should sort descending on single property with by sorter', () => {
     const sorted = sort(multiPropArray).by([{ desc: 'age' }]);
     assert.deepStrictEqual([11, 10, 9, 8, 6], sorted.map(m => m.age));
   });
@@ -524,7 +524,7 @@ describe('sort', () => {
     ]);
   });
 
-  it('Should handle edge cases', () => {
+  it('Should ignore empty array as a sorting prop', () => {
     assert.deepStrictEqual(sort([2, 1, 4]).asc([]), [1, 2, 4]);
   });
 
