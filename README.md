@@ -24,9 +24,6 @@ For list of all available features check [highlights](#highlights) section.
   // Sort users (array of objects) by firstName in descending order
   sort(users).desc(u => u.firstName);
 
-  // String shorthand can be used for root object properties
-  sort(users).asc('firstName');
-
   // Sort users in ascending order by firstName and lastName
   sort(users).asc([
     u => u.firstName,
@@ -41,6 +38,10 @@ For list of all available features check [highlights](#highlights) section.
 
   // Sort based on computed property
   sort(repositories).desc(r => r.openIssues + r.closedIssues);
+
+  // Sort using string for object key
+  // NOTE: Using string for a key is not available for nested object properties
+  sort(users).asc('firstName');
 ```
 
 Fore even more examples check unit tests `test/sort.spec.ts`.
@@ -62,7 +63,7 @@ https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts
 
 ## In place sorting
 
-By default `sort` creates new "sorted" instance of provided array. It does not mutate provided array. `inPlaceSort` on other hand mutates provided array by sorting it without creating new array instance. Benefits of `inPlaceSort` is that it's slightly faster and more generous on memory as it don't create new array instance. Other than that they share exactly the same interface.
+By default `sort` does not mutate provided array it creates new "sorted" instance of array. `inPlaceSort` on other hand mutates provided array by sorting it without creating new array instance. Benefits of `inPlaceSort` is that it's slightly faster and more generous on memory as it don't create new array instance every time sorting is performed. Other than that there is not difference between using one or another.
 
 ```javascript
 const { sort, inPlaceSort } = require('fast-sort');
@@ -125,14 +126,18 @@ For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of 
 ```javascript
   import { sort, createNewSortInstance } from 'fast-sort';
 
-  const tagsImportance = { vip: 3, influencer: 2, captain: 1 }; // Some domain specific logic
   const tags = ['influencer', 'unknown', 'vip', 'captain'];
+  const tagsImportance = { // Domain specific tag importance
+    vip: 3,
+    influencer: 2,
+    captain: 1,
+  };
 
-  // Sort tags in ascending order by custom tag value using computed property
-  const ascTags = sort(tags).asc(tag => tagImportance[tag] || 0); // => ['unknown', 'captain', 'influencer', 'vip'];
-  const descTags = sort(tags).desc(tag => tagImportance[tag] || 0); // => ['vip', 'influencer', 'captain', 'unknown'];
+  // We can use power of computed prop to sort tags by domain specific importance
+  const descTags = sort(tags).desc(tag => tagImportance[tag] || 0);
+  // => ['vip', 'influencer', 'captain', 'unknown'];
 
-  // Create custom specialized tagSorter instance and reuse it across the application
+  // Or we can create specialized tagSorter so we can reuse it in multiple places
   const tagSorter = createNewSortInstance({
     comparer: (a, b) => (tagImportance[a] || 0) - (tagImportance[b] || 0),
     inPlaceSorting: true, // default[false] => Check "In Place Sort" section for more info.
@@ -141,11 +146,10 @@ For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of 
   tagSorter(tags).asc(); // => ['unknown', 'captain', 'influencer', 'vip'];
   tagSorter(tags).desc(); // => ['vip', 'influencer', 'captain', 'unknown'];
 
-  // Default sorter will sort tags by string comparison and not "tag" importance
+  // Default sorter will sort tags by comparing string values not by their domain specific value
   const defaultSort = sort(tags).asc(); // => ['captain', 'influencer', 'unknown' 'vip']
 ```
-
-### More examples
+## More examples
 
 ```javascript
   // Sorting values that are not sortable will return same value back
