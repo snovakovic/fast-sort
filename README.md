@@ -58,15 +58,15 @@ https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts
   * [Faster](#benchmark) than other popular sort alternatives
   * Undefined and null values are always sorted to bottom (with default comparer)
   * TypeScript support
-  * Packed with features in small footprint with 0 dependencies (~ 750 bytes gzip)
+  * Packed with features in small footprint with 0 dependencies (~ 850 bytes gzip)
   * Compatible with any JS environment as Node, Web, etc..
 
 ## Migrating from older versions
 
-Documentation for v2 and older versions is available here
-https://github.com/snovakovic/fast-sort/blob/v2/README.md
+Documentation for v2 and older versions is available [here](https://github.com/snovakovic/fast-sort/blob/v2/README.md).
 
-For migrating to v3 check the CHANGELOG for what has been changed.
+
+For migrating to v3 you can reference [CHANGELOG](https://github.com/snovakovic/fast-sort/blob/master/CHANGELOG.md) for what has been changed.
 
 ## In place sorting
 

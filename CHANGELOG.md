@@ -1,4 +1,5 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
@@ -29,7 +30,6 @@ import { createNewSortInstance } from 'fast-sort';
  * `inPlaceSort` which mutates provided array. This was default behaviour of previous sort versions `import { inPlaceSort } from 'fast-sort';`
  * `inPlaceSorting` option that can be passed to `createNewSortInstance`.
 
-
 ## [2.2.0] - 2019-12-14
 
 ### Changed
@@ -48,7 +48,6 @@ import { createNewSortInstance } from 'fast-sort';
 ```
 * TypeScript support
 * more info on this release on https://github.com/snovakovic/fast-sort/releases/tag/v2.0.0
-
 
 ## [1.6.0]
 

@@ -109,7 +109,7 @@
                 ? __spreadArray([], _ctx) : _ctx;
             return {
                 /**
-                 * Sort array in ascending order. Mutates provided array by sorting it.
+                 * Sort array in ascending order.
                  * @example
                  * sort([3, 1, 4]).asc();
                  * sort(users).asc(u => u.firstName);
@@ -122,7 +122,7 @@
                     return sortArray(1, ctx, sortBy, comparer);
                 },
                 /**
-                 * Sort array in descending order. Mutates provided array by sorting it.
+                 * Sort array in descending order.
                  * @example
                  * sort([3, 1, 4]).desc();
                  * sort(users).desc(u => u.firstName);
@@ -136,7 +136,7 @@
                 },
                 /**
                  * Sort array in ascending or descending order. It allows sorting on multiple props
-                 * in different order for each of them. Mutates provided array by sorting it.
+                 * in different order for each of them.
                  * @example
                  * sort(users).by([
                  *  { asc: u => u.score }
