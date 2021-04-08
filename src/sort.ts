@@ -156,7 +156,7 @@ export const createNewSortInstance = function(opts:ISortInstanceOptions) {
 
   return function<T>(_ctx:T[]) {
     const ctx = Array.isArray(_ctx) && !opts.inPlaceSorting
-      ? [..._ctx]
+      ? _ctx.slice()
       : _ctx;
 
     return {

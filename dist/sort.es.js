@@ -1,24 +1,3 @@
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-
-function __spreadArray(to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
-}
-
 // >>> INTERFACES <<<
 // >>> HELPERS <<<
 var castComparer = function (comparer) { return function (a, b, order) { return comparer(a, b, order) * order; }; };
@@ -100,7 +79,8 @@ var createNewSortInstance = function (opts) {
     var comparer = castComparer(opts.comparer);
     return function (_ctx) {
         var ctx = Array.isArray(_ctx) && !opts.inPlaceSorting
-            ? __spreadArray([], _ctx) : _ctx;
+            ? _ctx.slice()
+            : _ctx;
         return {
             /**
              * Sort array in ascending order.
