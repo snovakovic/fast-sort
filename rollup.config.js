@@ -6,14 +6,12 @@ export default {
   input: 'src/sort.ts',
   output: [
     {
-      // sort.js
-      file: pkg.main,
+      file: 'dist/sort.js',
       format: 'umd',
       name: 'fast-sort',
     },
     {
-      // sort.min.js
-      file: pkg.main.replace('.js', '.min.js'),
+      file: 'dist/sort.min.js',
       format: 'umd',
       name: 'fast-sort',
       plugins: [uglify({})],

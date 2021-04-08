@@ -8,6 +8,7 @@ export interface IComparer {
 
 export interface ISortInstanceOptions {
   comparer?:IComparer,
+  inPlaceSorting?:boolean,
 }
 
 export interface ISortByFunction<T> {
@@ -135,7 +136,7 @@ function getSortStrategy(
   );
 }
 
-const sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComparer) {
+const sortArray = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComparer) {
   if (!Array.isArray(ctx)) {
     return ctx;
   }
@@ -145,18 +146,22 @@ const sort = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:IComp
     [sortBy] = sortBy;
   }
 
-  return ctx.sort(getSortStrategy(sortBy, comparer, order));
+  return ctx.sort(getSortStrategy(sortBy, comparer, order))
 };
 
 // >>> Public <<<
 
-function createSortInstance(opts:ISortInstanceOptions) {
+export const createNewSortInstance = function(opts:ISortInstanceOptions) {
   const comparer = castComparer(opts.comparer);
 
-  return function<T>(ctx:T[]) {
+  return function<T>(_ctx:T[]) {
+    const ctx = Array.isArray(_ctx) && !opts.inPlaceSorting
+      ? _ctx.slice()
+      : _ctx;
+
     return {
       /**
-       * Sort array in ascending order. Mutates provided array by sorting it.
+       * Sort array in ascending order.
        * @example
        * sort([3, 1, 4]).asc();
        * sort(users).asc(u => u.firstName);
@@ -166,10 +171,10 @@ function createSortInstance(opts:ISortInstanceOptions) {
        * ]);
        */
       asc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
-        return sort(1, ctx, sortBy, comparer);
+        return sortArray(1, ctx, sortBy, comparer);
       },
       /**
-       * Sort array in descending order. Mutates provided array by sorting it.
+       * Sort array in descending order.
        * @example
        * sort([3, 1, 4]).desc();
        * sort(users).desc(u => u.firstName);
@@ -179,11 +184,11 @@ function createSortInstance(opts:ISortInstanceOptions) {
        * ]);
        */
       desc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
-        return sort(-1, ctx, sortBy, comparer);
+        return sortArray(-1, ctx, sortBy, comparer);
       },
       /**
        * Sort array in ascending or descending order. It allows sorting on multiple props
-       * in different order for each of them. Mutates provided array by sorting it.
+       * in different order for each of them.
        * @example
        * sort(users).by([
        *  { asc: u => u.score }
@@ -191,31 +196,26 @@ function createSortInstance(opts:ISortInstanceOptions) {
        * ]);
        */
       by(sortBy:ISortByObjectSorter<T> | ISortByObjectSorter<T>[]):T[] {
-        return sort(1, ctx, sortBy, comparer);
+        return sortArray(1, ctx, sortBy, comparer);
       },
     };
   };
 }
 
-const defaultSort = createSortInstance({
-  comparer(a, b, order):number {
-    if (a == null) return order;
-    if (b == null) return -order;
-    if (a < b) return -1;
-    if (a === b) return 0;
+const defaultComparer = (a, b, order):number => {
+  if (a == null) return order;
+  if (b == null) return -order;
+  if (a < b) return -1;
+  if (a === b) return 0;
 
-    return 1;
-  },
-});
-
-// Attach createNewInstance to sort function
-
-defaultSort['createNewInstance'] = createSortInstance;
-
-type ISortFunction = typeof defaultSort;
-
-interface ISortExport extends ISortFunction {
-  createNewInstance:typeof createSortInstance,
+  return 1;
 }
 
-export default defaultSort as any as ISortExport;
+export const sort = createNewSortInstance({
+  comparer: defaultComparer,
+});
+
+export const inPlaceSort = createNewSortInstance({
+  comparer: defaultComparer,
+  inPlaceSorting: true,
+});

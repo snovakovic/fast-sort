@@ -63,7 +63,7 @@ function getSortStrategy(sortBy, comparer, order) {
     var objectSorterConfig = unpackObjectSorter(sortBy);
     return getSortStrategy(objectSorterConfig.sortBy, objectSorterConfig.comparer || comparer, objectSorterConfig.order);
 }
-var sort = function (order, ctx, sortBy, comparer) {
+var sortArray = function (order, ctx, sortBy, comparer) {
     var _a;
     if (!Array.isArray(ctx)) {
         return ctx;
@@ -75,12 +75,15 @@ var sort = function (order, ctx, sortBy, comparer) {
     return ctx.sort(getSortStrategy(sortBy, comparer, order));
 };
 // >>> Public <<<
-function createSortInstance(opts) {
+var createNewSortInstance = function (opts) {
     var comparer = castComparer(opts.comparer);
-    return function (ctx) {
+    return function (_ctx) {
+        var ctx = Array.isArray(_ctx) && !opts.inPlaceSorting
+            ? _ctx.slice()
+            : _ctx;
         return {
             /**
-             * Sort array in ascending order. Mutates provided array by sorting it.
+             * Sort array in ascending order.
              * @example
              * sort([3, 1, 4]).asc();
              * sort(users).asc(u => u.firstName);
@@ -90,10 +93,10 @@ function createSortInstance(opts) {
              * ]);
              */
             asc: function (sortBy) {
-                return sort(1, ctx, sortBy, comparer);
+                return sortArray(1, ctx, sortBy, comparer);
             },
             /**
-             * Sort array in descending order. Mutates provided array by sorting it.
+             * Sort array in descending order.
              * @example
              * sort([3, 1, 4]).desc();
              * sort(users).desc(u => u.firstName);
@@ -103,11 +106,11 @@ function createSortInstance(opts) {
              * ]);
              */
             desc: function (sortBy) {
-                return sort(-1, ctx, sortBy, comparer);
+                return sortArray(-1, ctx, sortBy, comparer);
             },
             /**
              * Sort array in ascending or descending order. It allows sorting on multiple props
-             * in different order for each of them. Mutates provided array by sorting it.
+             * in different order for each of them.
              * @example
              * sort(users).by([
              *  { asc: u => u.score }
@@ -115,25 +118,28 @@ function createSortInstance(opts) {
              * ]);
              */
             by: function (sortBy) {
-                return sort(1, ctx, sortBy, comparer);
+                return sortArray(1, ctx, sortBy, comparer);
             },
         };
     };
-}
-var defaultSort = createSortInstance({
-    comparer: function (a, b, order) {
-        if (a == null)
-            return order;
-        if (b == null)
-            return -order;
-        if (a < b)
-            return -1;
-        if (a === b)
-            return 0;
-        return 1;
-    },
+};
+var defaultComparer = function (a, b, order) {
+    if (a == null)
+        return order;
+    if (b == null)
+        return -order;
+    if (a < b)
+        return -1;
+    if (a === b)
+        return 0;
+    return 1;
+};
+var sort = createNewSortInstance({
+    comparer: defaultComparer,
 });
-// Attach createNewInstance to sort function
-defaultSort['createNewInstance'] = createSortInstance;
+var inPlaceSort = createNewSortInstance({
+    comparer: defaultComparer,
+    inPlaceSorting: true,
+});
 
-export default defaultSort;
+export { createNewSortInstance, inPlaceSort, sort };

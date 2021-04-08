@@ -4,6 +4,7 @@ export interface IComparer {
 }
 export interface ISortInstanceOptions {
     comparer?: IComparer;
+    inPlaceSorting?: boolean;
 }
 export interface ISortByFunction<T> {
     (prop: T): any;
@@ -16,9 +17,9 @@ export interface ISortByDescSorter<T> extends ISortInstanceOptions {
     desc: boolean | ISortBy<T>;
 }
 export declare type ISortByObjectSorter<T> = ISortByAscSorter<T> | ISortByDescSorter<T>;
-declare function createSortInstance(opts: ISortInstanceOptions): <T>(ctx: T[]) => {
+export declare const createNewSortInstance: (opts: ISortInstanceOptions) => <T>(_ctx: T[]) => {
     /**
-     * Sort array in ascending order. Mutates provided array by sorting it.
+     * Sort array in ascending order.
      * @example
      * sort([3, 1, 4]).asc();
      * sort(users).asc(u => u.firstName);
@@ -27,9 +28,9 @@ declare function createSortInstance(opts: ISortInstanceOptions): <T>(ctx: T[]) =
      *   u => u.lastName,
      * ]);
      */
-    asc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    asc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
     /**
-     * Sort array in descending order. Mutates provided array by sorting it.
+     * Sort array in descending order.
      * @example
      * sort([3, 1, 4]).desc();
      * sort(users).desc(u => u.firstName);
@@ -38,21 +39,21 @@ declare function createSortInstance(opts: ISortInstanceOptions): <T>(ctx: T[]) =
      *   u => u.lastName,
      * ]);
      */
-    desc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    desc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
     /**
      * Sort array in ascending or descending order. It allows sorting on multiple props
-     * in different order for each of them. Mutates provided array by sorting it.
+     * in different order for each of them.
      * @example
      * sort(users).by([
      *  { asc: u => u.score }
      *  { desc: u => u.age }
      * ]);
      */
-    by(sortBy: ISortByAscSorter<T> | ISortByDescSorter<T> | ISortByObjectSorter<T>[]): T[];
+    by(sortBy: ISortByObjectSorter<T> | ISortByObjectSorter<T>[]): T[];
 };
-declare const defaultSort: <T>(ctx: T[]) => {
+export declare const sort: <T>(_ctx: T[]) => {
     /**
-     * Sort array in ascending order. Mutates provided array by sorting it.
+     * Sort array in ascending order.
      * @example
      * sort([3, 1, 4]).asc();
      * sort(users).asc(u => u.firstName);
@@ -61,9 +62,9 @@ declare const defaultSort: <T>(ctx: T[]) => {
      *   u => u.lastName,
      * ]);
      */
-    asc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    asc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
     /**
-     * Sort array in descending order. Mutates provided array by sorting it.
+     * Sort array in descending order.
      * @example
      * sort([3, 1, 4]).desc();
      * sort(users).desc(u => u.firstName);
@@ -72,21 +73,50 @@ declare const defaultSort: <T>(ctx: T[]) => {
      *   u => u.lastName,
      * ]);
      */
-    desc(sortBy?: ISortByFunction<T> | keyof T | (keyof T | ISortByFunction<T>)[] | ISortBy<T>[]): T[];
+    desc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
     /**
      * Sort array in ascending or descending order. It allows sorting on multiple props
-     * in different order for each of them. Mutates provided array by sorting it.
+     * in different order for each of them.
      * @example
      * sort(users).by([
      *  { asc: u => u.score }
      *  { desc: u => u.age }
      * ]);
      */
-    by(sortBy: ISortByAscSorter<T> | ISortByDescSorter<T> | ISortByObjectSorter<T>[]): T[];
+    by(sortBy: ISortByObjectSorter<T> | ISortByObjectSorter<T>[]): T[];
 };
-declare type ISortFunction = typeof defaultSort;
-interface ISortExport extends ISortFunction {
-    createNewInstance: typeof createSortInstance;
-}
-declare const _default: ISortExport;
-export default _default;
+export declare const inPlaceSort: <T>(_ctx: T[]) => {
+    /**
+     * Sort array in ascending order.
+     * @example
+     * sort([3, 1, 4]).asc();
+     * sort(users).asc(u => u.firstName);
+     * sort(users).asc([
+     *   U => u.firstName
+     *   u => u.lastName,
+     * ]);
+     */
+    asc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
+    /**
+     * Sort array in descending order.
+     * @example
+     * sort([3, 1, 4]).desc();
+     * sort(users).desc(u => u.firstName);
+     * sort(users).desc([
+     *   U => u.firstName
+     *   u => u.lastName,
+     * ]);
+     */
+    desc(sortBy?: ISortBy<T> | ISortBy<T>[]): T[];
+    /**
+     * Sort array in ascending or descending order. It allows sorting on multiple props
+     * in different order for each of them.
+     * @example
+     * sort(users).by([
+     *  { asc: u => u.score }
+     *  { desc: u => u.age }
+     * ]);
+     */
+    by(sortBy: ISortByObjectSorter<T> | ISortByObjectSorter<T>[]): T[];
+};
+export {};
