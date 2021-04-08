@@ -27,7 +27,7 @@ import { createNewSortInstance } from 'fast-sort';
 
 ### Added
 
- * `inPlaceSort` which mutates provided array. This was default behaviour of previous sort versions `import { inPlaceSort } from 'fast-sort';`
+ * `inPlaceSort` mutates provided array instead of creating new array instance. This was default behaviour of previous sort versions
  * `inPlaceSorting` option that can be passed to `createNewSortInstance`.
 
 ## [2.2.0] - 2019-12-14

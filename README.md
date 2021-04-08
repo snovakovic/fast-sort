@@ -40,12 +40,11 @@ For list of all available features check [highlights](#highlights) section.
   sort(repositories).desc(r => r.openIssues + r.closedIssues);
 
   // Sort using string for object key
-  // Using string for a key is only available for root object properties
+  // Only available for root object properties
   sort(users).asc('firstName');
 ```
 
-Fore even more examples check unit tests `test/sort.spec.ts`.
-https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts
+Fore even more examples check [unit tests](https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts).
 
 ## Highlights
 
