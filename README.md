@@ -22,26 +22,26 @@ For list of all available features check [highlights](#highlights) section.
   const descSorted = sort([1, 4, 2]).desc(); // => [4, 2, 1]
 
   // Sort users (array of objects) by firstName in descending order
-  sort(users).desc(u => u.firstName);
+  const sorted = sort(users).desc(u => u.firstName);
 
   // Sort users in ascending order by firstName and lastName
-  sort(users).asc([
+  const sorted = sort(users).asc([
     u => u.firstName,
     u => u.lastName
   ]);
 
   // Sort users ascending by firstName and descending by city
-  sort(users).by([
+  const sorted = sort(users).by([
     { asc: u => u.firstName },
     { desc: u => u.address.city }
   ]);
 
   // Sort based on computed property
-  sort(repositories).desc(r => r.openIssues + r.closedIssues);
+  const sorted = sort(repositories).desc(r => r.openIssues + r.closedIssues);
 
   // Sort using string for object key
   // Only available for root object properties
-  sort(users).asc('firstName');
+  const sorted = sort(users).asc('firstName');
 ```
 
 Fore even more examples check [unit tests](https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts).
