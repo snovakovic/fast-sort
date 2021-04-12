@@ -44,7 +44,7 @@ For list of all available features check [highlights](#highlights) section.
   const sorted = sort(users).asc('firstName');
 ```
 
-Fore even more examples check [unit tests](https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts).
+Fore more examples check [unit tests](https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts).
 
 ## Highlights
 
