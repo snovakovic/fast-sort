@@ -146,7 +146,7 @@ const sortArray = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:
     [sortBy] = sortBy;
   }
 
-  return ctx.sort(getSortStrategy(sortBy, comparer, order))
+  return ctx.sort(getSortStrategy(sortBy, comparer, order));
 };
 
 // >>> Public <<<
@@ -200,7 +200,7 @@ export const createNewSortInstance = function(opts:ISortInstanceOptions) {
       },
     };
   };
-}
+};
 
 const defaultComparer = (a, b, order):number => {
   if (a == null) return order;
@@ -209,7 +209,7 @@ const defaultComparer = (a, b, order):number => {
   if (a === b) return 0;
 
   return 1;
-}
+};
 
 export const sort = createNewSortInstance({
   comparer: defaultComparer,
