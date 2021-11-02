@@ -10,7 +10,8 @@
     "fast-sort": "^2.0.0",
     "lodash": "^4.17.21",
     "single-line-log": "^1.1.2",
-    "sort-array": "^4.0.1"
+    "sort-array": "^4.0.1",
+    "sort-on": "^4.1.1"
   },
   "devDependencies": {},
   "scripts": {

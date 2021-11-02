@@ -16,6 +16,7 @@ const librariesToRun = [
   'lodash',
   'arraySort',
   'sortArray',
+  'sortOn',
   'native',
 ];
 
