@@ -6,6 +6,8 @@
   "module": "dist/sort.es.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
   "contributors": [
+    "Linus Unnebäck: https://github.com/LinusU",
+    "Luca Ban: https://github.com/mesqueeb",
     "Tony Gutierrez: https://github.com/tony-gutierrez"
   ],
   "license": "MIT",
