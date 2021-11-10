@@ -185,6 +185,9 @@ Benchmark has been run on:
   * Ubuntu 16.04
   * Node 8.9.1
 
+Independent benchmark results from MacBook Air can be found in following PR:
+https://github.com/snovakovic/fast-sort/pull/48
+
 ![benchmark results](https://github.com/snovakovic/fast-sort/raw/master/benchmark.jpg)
 
 #### Running benchmark
