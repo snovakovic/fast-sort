@@ -80,55 +80,25 @@
       }
       return ctx.sort(getSortStrategy(sortBy, comparer, order));
   };
-  // >>> Public <<<
-  var createNewSortInstance = function (opts) {
+  function createNewSortInstance(opts) {
       var comparer = castComparer(opts.comparer);
       return function (_ctx) {
           var ctx = Array.isArray(_ctx) && !opts.inPlaceSorting
               ? _ctx.slice()
               : _ctx;
           return {
-              /**
-               * Sort array in ascending order.
-               * @example
-               * sort([3, 1, 4]).asc();
-               * sort(users).asc(u => u.firstName);
-               * sort(users).asc([
-               *   U => u.firstName
-               *   u => u.lastName,
-               * ]);
-               */
               asc: function (sortBy) {
                   return sortArray(1, ctx, sortBy, comparer);
               },
-              /**
-               * Sort array in descending order.
-               * @example
-               * sort([3, 1, 4]).desc();
-               * sort(users).desc(u => u.firstName);
-               * sort(users).desc([
-               *   U => u.firstName
-               *   u => u.lastName,
-               * ]);
-               */
               desc: function (sortBy) {
                   return sortArray(-1, ctx, sortBy, comparer);
               },
-              /**
-               * Sort array in ascending or descending order. It allows sorting on multiple props
-               * in different order for each of them.
-               * @example
-               * sort(users).by([
-               *  { asc: u => u.score }
-               *  { desc: u => u.age }
-               * ]);
-               */
               by: function (sortBy) {
                   return sortArray(1, ctx, sortBy, comparer);
               },
           };
       };
-  };
+  }
   var defaultComparer = function (a, b, order) {
       if (a == null)
           return order;
