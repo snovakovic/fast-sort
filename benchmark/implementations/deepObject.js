@@ -1,5 +1,6 @@
 const fastSort = require('fast-sort');
 const sortArray = require('sort-array');
+const sortOn = require('sort-on');
 const arraySort = require('array-sort');
 const lodash = require('lodash');
 const latestFastSortSort = require('../../dist/sort.js');
@@ -17,6 +18,7 @@ const sortImplementation = {
       amount: p => p.level1.level2.amount,
     },
   }),
+  sortOn: (arr) => sortOn(arr, 'level1.level2.amount'),
   arraySort: (arr) => arraySort(arr, 'level1.level2.amount'),
   native: (arr) => arr.sort((a, b) => {
     if (a.level1.level2.amount == null) return 1;
