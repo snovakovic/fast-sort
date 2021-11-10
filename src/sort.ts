@@ -149,49 +149,51 @@ const sortArray = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:
   return ctx.sort(getSortStrategy(sortBy, comparer, order));
 };
 
-interface ISortFunctions<T> {
+// >>> Public <<<
+
+interface IFastSort<T> {
   /**
    * Sort array in ascending order.
    * @example
    * sort([3, 1, 4]).asc();
    * sort(users).asc(u => u.firstName);
    * sort(users).asc([
-   *   U => u.firstName
+   *   u => u.firstName,
    *   u => u.lastName,
    * ]);
    */
-  asc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[]
+  asc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[],
   /**
    * Sort array in descending order.
    * @example
    * sort([3, 1, 4]).desc();
    * sort(users).desc(u => u.firstName);
    * sort(users).desc([
-   *   U => u.firstName
+   *   u => u.firstName,
    *   u => u.lastName,
    * ]);
    */
-  desc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[]
+  desc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[],
   /**
    * Sort array in ascending or descending order. It allows sorting on multiple props
    * in different order for each of them.
    * @example
    * sort(users).by([
-   *  { asc: u => u.score }
-   *  { desc: u => u.age }
+   *  { asc: u => u.score },
+   *  { desc: u => u.age },
    * ]);
    */
-  by(sortBy:ISortByObjectSorter<T> | ISortByObjectSorter<T>[]):T[]
+  by(sortBy:ISortByObjectSorter<T> | ISortByObjectSorter<T>[]):T[],
 }
 
-// >>> Public <<<
-
-export function createNewSortInstance(opts:ISortInstanceOptions & { inPlaceSorting?: false }): <T>(_ctx: readonly T[]) => ISortFunctions<T>
-export function createNewSortInstance(opts:ISortInstanceOptions): <T>(_ctx: T[]) => ISortFunctions<T>
-export function createNewSortInstance(opts:ISortInstanceOptions) {
+export function createNewSortInstance(
+  opts:ISortInstanceOptions & { inPlaceSorting?:false }
+):<T>(_ctx:readonly T[])=>IFastSort<T>
+export function createNewSortInstance(opts:ISortInstanceOptions):<T>(_ctx:T[])=>IFastSort<T>
+export function createNewSortInstance(opts:ISortInstanceOptions):<T>(_ctx:T[])=>IFastSort<T> {
   const comparer = castComparer(opts.comparer);
 
-  return function<T>(_ctx:T[]): ISortFunctions<T> {
+  return function<T>(_ctx:T[]):IFastSort<T> {
     const ctx = Array.isArray(_ctx) && !opts.inPlaceSorting
       ? _ctx.slice()
       : _ctx;
@@ -208,7 +210,7 @@ export function createNewSortInstance(opts:ISortInstanceOptions) {
       },
     };
   };
-};
+}
 
 const defaultComparer = (a, b, order):number => {
   if (a == null) return order;
