@@ -611,4 +611,27 @@ describe('sort', () => {
     assert.equal(sorted, flatArray);
     assert.deepStrictEqual(flatArray, [1, 2, 3, 4, 5, 5]);
   });
+
+  it('Should be able to sort readonly arrays when not using inPlaceSorting', () => {
+    const readOnlyArray = Object.freeze([2, 1, 4, 3]);
+
+    const sorted = sort(readOnlyArray).asc();
+    assert.deepEqual(sorted, [1, 2, 3, 4]);
+
+    // We can sort it with custom sorter if inPlaceSorting is false
+    const custom = createNewSortInstance({
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+      inPlaceSorting: false, // <= NOTE
+    });
+
+    const sorted2 = custom(readOnlyArray).asc();
+    assert.deepEqual(sorted2, [1, 2, 3, 4]);
+
+    // NOTE: will throw error if trying to sort it in place
+    assert.throws(
+      () => inPlaceSort(readOnlyArray as any).asc(),
+      Error,
+      'Cannot assign to read only property \'0\' of object \'[object Array]\'',
+    );
+  });
 });
