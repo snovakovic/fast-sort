@@ -17,14 +17,14 @@ export interface ISortByDescSorter<T> extends ISortInstanceOptions {
     desc: boolean | ISortBy<T>;
 }
 export declare type ISortByObjectSorter<T> = ISortByAscSorter<T> | ISortByDescSorter<T>;
-interface ISortFunctions<T> {
+interface IFastSort<T> {
     /**
      * Sort array in ascending order.
      * @example
      * sort([3, 1, 4]).asc();
      * sort(users).asc(u => u.firstName);
      * sort(users).asc([
-     *   U => u.firstName
+     *   u => u.firstName,
      *   u => u.lastName,
      * ]);
      */
@@ -35,7 +35,7 @@ interface ISortFunctions<T> {
      * sort([3, 1, 4]).desc();
      * sort(users).desc(u => u.firstName);
      * sort(users).desc([
-     *   U => u.firstName
+     *   u => u.firstName,
      *   u => u.lastName,
      * ]);
      */
@@ -45,16 +45,16 @@ interface ISortFunctions<T> {
      * in different order for each of them.
      * @example
      * sort(users).by([
-     *  { asc: u => u.score }
-     *  { desc: u => u.age }
+     *  { asc: u => u.score },
+     *  { desc: u => u.age },
      * ]);
      */
     by(sortBy: ISortByObjectSorter<T> | ISortByObjectSorter<T>[]): T[];
 }
 export declare function createNewSortInstance(opts: ISortInstanceOptions & {
     inPlaceSorting?: false;
-}): <T>(_ctx: readonly T[]) => ISortFunctions<T>;
-export declare function createNewSortInstance(opts: ISortInstanceOptions): <T>(_ctx: T[]) => ISortFunctions<T>;
-export declare const sort: <T>(_ctx: readonly T[]) => ISortFunctions<T>;
-export declare const inPlaceSort: <T>(_ctx: T[]) => ISortFunctions<T>;
+}): <T>(_ctx: readonly T[]) => IFastSort<T>;
+export declare function createNewSortInstance(opts: ISortInstanceOptions): <T>(_ctx: T[]) => IFastSort<T>;
+export declare const sort: <T>(_ctx: readonly T[]) => IFastSort<T>;
+export declare const inPlaceSort: <T>(_ctx: T[]) => IFastSort<T>;
 export {};
