@@ -1,7 +1,7 @@
 {
   "name": "fast-sort",
-  "version": "3.1.0",
-  "description": "Fast and powerful array sorting. Sort by any property in any direction with easy to read syntax.",
+  "version": "3.1.1",
+  "description": "Fast easy to use and flexible sorting with TypeScript support",
   "main": "dist/sort.min.js",
   "module": "dist/sort.es.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
