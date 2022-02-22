@@ -634,4 +634,27 @@ describe('sort', () => {
       'Cannot assign to read only property \'0\' of object \'[object Array]\'',
     );
   });
+  
+  it('Should sort dates correctly when the same dates', () => {
+    const testArr = [
+      { d: new Date(2000, 0, 1), n: 3 },
+      { d: new Date(2000, 0, 1), n: 1 },
+      { d: new Date(2000, 0, 1), n: 0 },
+      { d: new Date(2000, 0, 1), n: 2 },
+      { d: new Date(2000, 0, 1), n: 5 },
+      { d: new Date(2000, 0, 1), n: 4 },
+    ];
+    const sorted = sort(testArr).asc([
+      arr => arr.d,
+      arr => arr.n,
+    ]);
+    assert.deepStrictEqual(sorted, [
+      { d: new Date(2000, 0, 1), n: 0 },
+      { d: new Date(2000, 0, 1), n: 1 },
+      { d: new Date(2000, 0, 1), n: 2 },
+      { d: new Date(2000, 0, 1), n: 3 },
+      { d: new Date(2000, 0, 1), n: 4 },
+      { d: new Date(2000, 0, 1), n: 5 },
+    ]);
+  });
 });
