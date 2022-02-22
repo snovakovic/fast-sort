@@ -634,7 +634,7 @@ describe('sort', () => {
       'Cannot assign to read only property \'0\' of object \'[object Array]\'',
     );
   });
-  
+
   it('Should sort dates correctly when the same dates', () => {
     const testArr = [
       { d: new Date(2000, 0, 1), n: 3 },
