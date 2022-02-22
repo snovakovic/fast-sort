@@ -100,9 +100,9 @@ var defaultComparer = function (a, b, order) {
         return -order;
     if (a < b)
         return -1;
-    if (a === b)
-        return 0;
-    return 1;
+    if (a > b)
+        return 1;
+    return 0;
 };
 var sort = createNewSortInstance({
     comparer: defaultComparer,

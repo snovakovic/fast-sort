@@ -1,6 +1,6 @@
 {
   "name": "fast-sort",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Fast easy to use and flexible sorting with TypeScript support",
   "main": "dist/sort.min.js",
   "module": "dist/sort.es.js",
