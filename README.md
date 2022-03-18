@@ -118,6 +118,10 @@ only when needed.
   naturalSort(testArr).desc(); // => ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']
 ```
 
+NOTE: It's known that `Intl.Collator` might not sort `null` values correctly so make sure to cast them to `undefine`
+as described in the following issue
+https://github.com/snovakovic/fast-sort/issues/54#issuecomment-1072289388
+
 ## Custom sorting
 
 Fast sort can be tailored to fit any sorting need or use case by:
