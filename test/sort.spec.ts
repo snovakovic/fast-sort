@@ -667,7 +667,7 @@ describe('sort', () => {
     const sorted = naturalSort([
       { name: 'b2', temperature: 1 },
       { name: 'a10', temperature: -1 },
-      { name: 'a1', temperature: -5 },
+      { name: 'a1', temperature: 5 },
       { name: 'a1', temperature: -10 },
       { name: 'b3', temperature: 2 },
       { name: 'b2', temperature: 0 },
@@ -678,7 +678,7 @@ describe('sort', () => {
 
     assert.deepEqual(sorted, [
       { name: 'a1', temperature: -10 },
-      { name: 'a1', temperature: -5 },
+      { name: 'a1', temperature: 5 },
       { name: 'a10', temperature: -1 },
       { name: 'b2', temperature: 0 },
       { name: 'b2', temperature: 1 },
