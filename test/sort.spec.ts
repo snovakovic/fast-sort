@@ -3,6 +3,7 @@ import {
   sort,
   inPlaceSort,
   createNewSortInstance,
+  defaultComparer,
 } from '../src/sort';
 
 describe('sort', () => {
@@ -655,6 +656,33 @@ describe('sort', () => {
       { d: new Date(2000, 0, 1), n: 3 },
       { d: new Date(2000, 0, 1), n: 4 },
       { d: new Date(2000, 0, 1), n: 5 },
+    ]);
+  });
+
+  it('Should be able to override natural sort with default comparer', () => {
+    const naturalSort = createNewSortInstance({
+      comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+    });
+
+    const sorted = naturalSort([
+      { name: 'b2', temperature: 1 },
+      { name: 'a10', temperature: -1 },
+      { name: 'a1', temperature: -5 },
+      { name: 'a1', temperature: -10 },
+      { name: 'b3', temperature: 2 },
+      { name: 'b2', temperature: 0 },
+    ]).by([
+      { asc: 'name' },
+      { asc: 'temperature', comparer: defaultComparer },
+    ]);
+
+    assert.deepEqual(sorted, [
+      { name: 'a1', temperature: -10 },
+      { name: 'a1', temperature: -5 },
+      { name: 'a10', temperature: -1 },
+      { name: 'b2', temperature: 0 },
+      { name: 'b2', temperature: 1 },
+      { name: 'b3', temperature: 2 },
     ]);
   });
 });
