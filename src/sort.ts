@@ -212,7 +212,7 @@ export function createNewSortInstance(opts:ISortInstanceOptions):<T>(_ctx:T[])=>
   };
 }
 
-const defaultComparer = (a, b, order):number => {
+export const defaultComparer = (a, b, order):number => {
   if (a == null) return order;
   if (b == null) return -order;
   if (a < b) return -1;
