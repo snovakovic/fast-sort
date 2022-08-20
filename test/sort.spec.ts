@@ -70,6 +70,11 @@ describe('sort', () => {
     assert.deepStrictEqual(flatArray, [1, 5, 3, 2, 4, 5]);
     assert.notEqual(sorted, flatArray);
   });
+  
+  it('Should sort flat array in ascending order with multiple types', () => {
+    const sorted = sort(['b', 3, 2, 1, 5, 'a', 5, 4]).asc();
+    assert.deepStrictEqual(sorted, [1, 2, 3, 4, 5, 5, 'a', 'b']);
+  });
 
   it('Should in place sort flat array in ascending order', () => {
     const sorted = inPlaceSort(flatArray).asc();
