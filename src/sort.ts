@@ -53,6 +53,16 @@ const unpackObjectSorter = function(sortByObj:ISortByObjectSorter<any>) {
   return { order, sortBy, comparer };
 };
 
+/**
+ * Returns the object type of the given payload
+ *
+ * @param {*} payload
+ * @returns {string}
+ */
+const getType = function(payload:any):string {
+  return Object.prototype.toString.call(payload).slice(8, -1);
+};
+
 // >>> SORTERS <<<
 
 const multiPropertySorterProvider = function(defaultComparer:IComparer) {
@@ -215,8 +225,16 @@ export function createNewSortInstance(opts:ISortInstanceOptions):<T>(_ctx:T[])=>
 export const defaultComparer = (a, b, order):number => {
   if (a == null) return order;
   if (b == null) return -order;
-  if (a < b) return -1;
-  if (a > b) return 1;
+  const aType = getType(a);
+  const bType = getType(b);
+  if (aType === bType) {
+    if (a < b) return -1;
+    if (a > b) return 1;
+
+    return 0;
+  }
+  if (aType < bType) return -1;
+  if (aType > bType) return 1;
 
   return 0;
 };
