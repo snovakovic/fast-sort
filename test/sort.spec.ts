@@ -659,15 +659,20 @@ describe('sort', () => {
     ]);
   });
 
+  // BUG repo case: https://github.com/snovakovic/fast-sort/issues/62
   it('Should sort flat array in ascending order with multiple types', () => {
-    const sortedAsc = sort(['b', 3, 2, 1, 5, 'a', 5, 4]).asc();
-    assert.deepStrictEqual(sortedAsc, [1, 2, 3, 4, 5, 5, 'a', 'b']);
+    const sorted1 = sort(['b', 3, 2, 1, 5, 'a', 5, 4]).asc();
+    assert.deepStrictEqual(sorted1, [1, 2, 3, 4, 5, 5, 'a', 'b']);
 
-    const sortedDesc = sort(['b', 3, 2, 1, 5, 'a', 5, 4]).desc();
-    assert.deepStrictEqual(sortedDesc, ['b', 'a', 5, 5, 4, 3, 2, 1]);
+    const sorted2 = sort(['b', 3, 2, 1, 5, 'a', 5, 4]).desc();
+    assert.deepStrictEqual(sorted2, ['b', 'a', 5, 5, 4, 3, 2, 1]);
 
-    const mixBagSorted = sort([1, 3, 'a', 'c', [1, 2], { a: 1 }, { a: 2 }, 4, 2, 4]).asc();
-    assert.deepStrictEqual(mixBagSorted, [1, 2, 3, 4, 4, [1, 2], { a: 1 }, { a: 2 }, 'a', 'c']);
+    const sorted3 = sort([1, 3, 'a', 'c', [1, 2], { a: 1 }, { a: 2 }, 4, 2, 4]).asc();
+    assert.deepStrictEqual(sorted3, [1, 2, 3, 4, 4, [1, 2], { a: 1 }, { a: 2 }, 'a', 'c']);
+
+    const sorted4 = sort([1, 3, 2, '1', 'a', '2', '5', 6]).asc();
+    // Known thing where string number will be compared as numbers
+    assert.deepStrictEqual(sorted4, [1, '1', 2, '2', 3, '5', 6, 'a']);
   });
 
   it('Should be able to override natural sort with default comparer', () => {
