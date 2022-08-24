@@ -659,6 +659,17 @@ describe('sort', () => {
     ]);
   });
 
+  it('Should sort flat array in ascending order with multiple types', () => {
+    const sortedAsc = sort(['b', 3, 2, 1, 5, 'a', 5, 4]).asc();
+    assert.deepStrictEqual(sortedAsc, [1, 2, 3, 4, 5, 5, 'a', 'b']);
+
+    const sortedDesc = sort(['b', 3, 2, 1, 5, 'a', 5, 4]).desc();
+    assert.deepStrictEqual(sortedDesc, ['b', 'a', 5, 5, 4, 3, 2, 1]);
+
+    const mixBagSorted = sort([1, 3, 'a', 'c', [1, 2], { a: 1 }, { a: 2 }, 4, 2, 4]).asc();
+    assert.deepStrictEqual(mixBagSorted, [1, 2, 3, 4, 4, [1, 2], { a: 1 }, { a: 2 }, 'a', 'c']);
+  });
+
   it('Should be able to override natural sort with default comparer', () => {
     const naturalSort = createNewSortInstance({
       comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
