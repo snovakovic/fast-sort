@@ -80,10 +80,10 @@ console.info('\n --------------- SORT BENCHMARK ---------------');
 console.info('\n Benchmark 1: Flat object high randomization \n');
 run(flatObject);
 
-// console.info('\n Benchmark 2: Flat object low randomization \n');
+console.info('\n Benchmark 2: Flat object low randomization \n');
 run(flatObject, () => getRandomInt(1, 5));
 
-// console.log('\n Benchmark 3: Flat array high randomization \n');
+console.log('\n Benchmark 3: Flat array high randomization \n');
 run(flatArray);
 
 console.log('\n Benchmark 4: Deep nested properties high randomization \n');
