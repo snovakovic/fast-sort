@@ -7,7 +7,7 @@
     "array-sort": "^1.0.0",
     "chalk": "^2.4.2",
     "cli-table2": "^0.2.0",
-    "fast-sort": "^2.0.0",
+    "fast-sort": "^3.2.0",
     "lodash": "^4.17.21",
     "single-line-log": "^1.1.2",
     "sort-array": "^4.0.1",

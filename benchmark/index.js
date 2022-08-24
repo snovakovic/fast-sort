@@ -58,7 +58,6 @@ function addRow(libName, result, table) {
   table.push([libName, ...result.map((r) => value(r))]);
 }
 
-
 const run = function(implementation, randomizer) {
   const res = [];
 
@@ -75,7 +74,6 @@ const run = function(implementation, randomizer) {
 
   console.log(table.toString());
 };
-
 
 console.info('\n --------------- SORT BENCHMARK ---------------');
 

@@ -1,10 +1,10 @@
-const fastSort = require('fast-sort');
+const { sort: fastSort } = require('fast-sort');
 const arraySort = require('array-sort');
 const lodash = require('lodash');
 const sortArray = require('sort-array');
 const sortOn = require('sort-on');
-const latestFastSortSort = require('../../dist/sort.js');
 const getRandomInt = require('../getRandomInt');
+const { sort: latestFastSortSort } = require('../../dist/sort.js');
 
 const base = require('./base');
 

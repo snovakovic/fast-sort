@@ -1,9 +1,9 @@
-const fastSort = require('fast-sort');
+const { sort: fastSort } = require('fast-sort');
 const arraySort = require('array-sort');
 const sortArray = require('sort-array');
 const sortOn = require('sort-on');
 const lodash = require('lodash');
-const latestFastSortSort = require('../../dist/sort.js');
+const { sort: latestFastSortSort } = require('../../dist/sort.js');
 
 const base = require('./base');
 
