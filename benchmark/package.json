@@ -2,7 +2,8 @@
   "name": "sort-benchmark",
   "version": "1.0.0",
   "description": "benchmark for fast-sort library",
-  "main": "index.js",
+  "type": "module",
+  "exports": "./index.js",
   "dependencies": {
     "array-sort": "^1.0.0",
     "chalk": "^2.4.2",
@@ -11,11 +12,10 @@
     "lodash": "^4.17.21",
     "single-line-log": "^1.1.2",
     "sort-array": "^4.0.1",
-    "sort-on": "^4.1.1"
+    "sort-on": "^5.2.0"
   },
-  "devDependencies": {},
   "scripts": {
-    "start": "node index"
+    "start": "node index.js"
   },
   "author": "stefan.novakovich@gmail.com",
   "license": "MIT"

@@ -1,6 +1,6 @@
-const assert = require('assert');
+import assert from 'assert';
 
-module.exports = function(arr, controlArr, numberOfRuns, sortImplementation) {
+export default function(arr, controlArr, numberOfRuns, sortImplementation) {
   const times = [];
   const { length } = arr;
   assert.equal(arr.length, controlArr.length, 'control array does not match test array');
