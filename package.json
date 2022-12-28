@@ -3,7 +3,12 @@
   "version": "3.2.0",
   "description": "Fast easy to use and flexible sorting with TypeScript support",
   "main": "dist/sort.min.js",
-  "module": "dist/sort.es.js",
+  "module": "dist/sort.es.mjs",
+  "exports": {
+    "types": "./dist/sort.d.ts",
+    "import": "./dist/sort.es.mjs",
+    "require": "./dist/sort.js"
+  },
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
   "contributors": [
     "Linus Unnebäck: https://github.com/LinusU",
