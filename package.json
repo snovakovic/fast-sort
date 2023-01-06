@@ -18,7 +18,7 @@
     "test:integration:dist": "node test/integration/dist.test.js",
     "test:integration:npm": "node test/integration/npm.test.js",
     "build": "npm run test && rm -rf dist && rollup -c",
-    "prepublish": "npm run build && npm run test:integration:dist",
+    "prepublishOnly": "npm run build && npm run test:integration:dist",
     "postpublish": "npm run test:integration:npm"
   },
   "repository": {
