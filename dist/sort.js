@@ -119,6 +119,7 @@
   });
 
   exports.createNewSortInstance = createNewSortInstance;
+  exports.defaultComparer = defaultComparer;
   exports.inPlaceSort = inPlaceSort;
   exports.sort = sort;
 

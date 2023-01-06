@@ -112,4 +112,4 @@ var inPlaceSort = createNewSortInstance({
     inPlaceSorting: true,
 });
 
-export { createNewSortInstance, inPlaceSort, sort };
+export { createNewSortInstance, defaultComparer, inPlaceSort, sort };
