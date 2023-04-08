@@ -8,9 +8,8 @@
 
 [![NPM Package](https://nodei.co/npm/fast-sort.png)](https://www.npmjs.com/package/fast-sort)
 
-Fast easy to use and flexible sorting with TypeScript support.
-For speed comparison of `fast-sort` vs other popular sort libraries check [benchmark](#benchmark) section.
-For list of all available features check [highlights](#highlights) section.
+Fast-sort is a lightweight (850 bytes gzip), zero-dependency sorting library with TypeScript support.
+Its easy-to-use and flexible syntax, combined with [incredible speed](#benchmark) , make it a top choice for developers seeking efficient, reliable, and customizable sorting solutions.
 
 ## Quick examples
 
@@ -46,30 +45,9 @@ For list of all available features check [highlights](#highlights) section.
 
 Fore more examples check [unit tests](https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts).
 
-## Highlights
-
-  * Sort flat arrays
-  * Sort array of objects by one or more properties
-  * Sort in multiple directions
-  * [Natural sort](#natural-sorting--language-sensitive-sorting) support
-  * Support for [custom sort](#custom-sorting) instances
-  * Easy to read syntax
-  * [Faster](#benchmark) than other popular sort alternatives
-  * Undefined and null values are always sorted to bottom (with default comparer)
-  * TypeScript support
-  * Packed with features in small footprint with 0 dependencies (~ 850 bytes gzip)
-  * Compatible with any JS environment as Node, Web, etc..
-
-## Migrating from older versions
-
-Documentation for v2 and older versions is available [here](https://github.com/snovakovic/fast-sort/blob/v2/README.md).
-
-
-For migrating to v3 you can reference [CHANGELOG](https://github.com/snovakovic/fast-sort/blob/master/CHANGELOG.md) for what has been changed.
-
 ## In place sorting
 
-By default `sort` does not mutate provided array it creates new "sorted" instance of array. `inPlaceSort` on other hand mutates provided array by sorting it without creating new array instance. Benefits of `inPlaceSort` is that it's slightly faster and more generous on memory as it's not creating new array instance every time sorting is done. Other than that there is no difference between using one or another.
+Fast-sort provides an inPlace sorting option that mutates the original array instead of creating a new instance, resulting in marginally faster and more memory-efficient sorting. However, both the inPlaceSort and default sort methods offer exactly the same functionality.
 
 ```javascript
 const { sort, inPlaceSort } = require('fast-sort');
@@ -173,6 +151,13 @@ For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of 
   sort(addresses).desc(a => a.city); // => Zagreb, Split, undefined
 ```
 
+## Migrating from older versions
+
+Documentation for v2 and older versions is available [here](https://github.com/snovakovic/fast-sort/blob/v2/README.md).
+
+
+For migrating to v3 you can reference [CHANGELOG](https://github.com/snovakovic/fast-sort/blob/master/CHANGELOG.md) for what has been changed.
+
 ## Benchmark
 
 Five different benchmarks have been created to get better insight of how fast-sort perform under different scenarios.
@@ -205,3 +190,4 @@ To run benchmark on your PC follow steps from below
 
 In case you notice any irregularities in benchmark or you want to add sort library to benchmark score
 please open issue [here](https://github.com/snovakovic/fast-sort)
+
