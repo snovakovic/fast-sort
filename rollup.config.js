@@ -1,6 +1,6 @@
 import typescript from 'rollup-plugin-typescript2';
 import { uglify } from 'rollup-plugin-uglify';
-import copy from 'rollup-plugin-copy'
+import copy from 'rollup-plugin-copy';
 import pkg from './package.json';
 
 export default {
@@ -9,19 +9,23 @@ export default {
     {
       file: 'dist/sort.js',
       format: 'umd',
-      name: 'fast-sort',
+      name: 'fastSort',
     },
     {
       file: 'dist/sort.min.js',
       format: 'umd',
-      name: 'fast-sort',
+      name: 'fastSort',
       plugins: [uglify({})],
     },
     {
-      // sort.es.js
-      file: pkg.module,
-      format: 'es',
+      file: pkg.module, // "dist/sort.esm.js"
+      format: 'esm',
     },
+    {
+      file: pkg.main, // "dist/sort.cjs.js"
+      format: 'cjs',
+    },
+
   ],
   plugins: [
     typescript({
@@ -34,7 +38,7 @@ export default {
         src: 'dist/sort.d.ts',
         dest: 'dist',
         rename: 'sort.min.d.ts',
-      }]
-    })
+      }],
+    }),
   ],
 };

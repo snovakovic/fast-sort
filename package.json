@@ -2,8 +2,6 @@
   "name": "fast-sort",
   "version": "3.2.1",
   "description": "Fast easy to use and flexible sorting with TypeScript support",
-  "main": "dist/sort.min.js",
-  "module": "dist/sort.es.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
   "contributors": [
     "Linus Unnebäck: https://github.com/LinusU",
@@ -12,6 +10,15 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/snovakovic/fast-sort",
+  "main": "dist/sort.cjs.js",
+  "module": "dist/sort.mjs",
+  "types": "dist/sort.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/sort.cjs.js",
+      "import": "./dist/sort.mjs"
+    }
+  },
   "scripts": {
     "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha -r ts-node/register test/*.spec.ts",
     "test:watch": "watch 'npm run test' ./src",
