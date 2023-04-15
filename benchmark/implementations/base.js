@@ -1,6 +1,6 @@
-const runner = require('./../runner');
+import runner from '../runner.js';
 
-module.exports.run = function({
+export function run({
   sortImplementation,
   testArr,
   numberOfRuns,

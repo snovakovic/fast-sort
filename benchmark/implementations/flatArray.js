@@ -1,15 +1,15 @@
-const { sort: fastSort } = require('fast-sort');
-const arraySort = require('array-sort');
-const sortArray = require('sort-array');
-const sortOn = require('sort-on');
-const lodash = require('lodash');
-const { sort: latestFastSortSort } = require('../../dist/sort.js');
+import fastSort from 'fast-sort';
+import arraySort from 'array-sort';
+import sortArray from 'sort-array';
+import sortOn from 'sort-on';
+import lodash from 'lodash';
+import latestFastSortSort from '../../dist/sort.js';
 
-const base = require('./base');
+import * as base from './base.js';
 
 const sortImplementation = {
-  fastSort: (arr) => fastSort(arr).asc(),
-  latestFastSort: (arr) => latestFastSortSort(arr).asc(),
+  fastSort: (arr) => fastSort.sort(arr).asc(),
+  latestFastSort: (arr) => latestFastSortSort.sort(arr).asc(),
   lodash: (arr) => lodash.sortBy(arr),
   arraySort: (arr) => arraySort(arr),
   sortArray: (arr) => sortArray(arr),
@@ -24,7 +24,7 @@ const sortImplementation = {
   }),
 };
 
-module.exports.run = function({
+export function run({
   size,
   numberOfRuns,
   librariesToRun,

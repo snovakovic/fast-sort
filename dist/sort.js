@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global['fast-sort'] = {}));
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.fastSort = {}));
 }(this, (function (exports) { 'use strict';
 
   // >>> INTERFACES <<<
@@ -119,6 +119,7 @@
   });
 
   exports.createNewSortInstance = createNewSortInstance;
+  exports.defaultComparer = defaultComparer;
   exports.inPlaceSort = inPlaceSort;
   exports.sort = sort;
 

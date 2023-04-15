@@ -1,19 +1,19 @@
-const { sort: fastSort } = require('fast-sort');
-const arraySort = require('array-sort');
-const lodash = require('lodash');
-const sortArray = require('sort-array');
-const sortOn = require('sort-on');
-const getRandomInt = require('../getRandomInt');
-const { sort: latestFastSortSort } = require('../../dist/sort.js');
+import fastSort from 'fast-sort';
+import arraySort from 'array-sort';
+import lodash from 'lodash';
+import sortArray from 'sort-array';
+import sortOn from 'sort-on';
+import getRandomInt from '../getRandomInt.js';
+import latestFastSortSort from '../../dist/sort.js';
 
-const base = require('./base');
+import * as base from './base.js';
 
 const sortImplementation = {
-  fastSort: (arr) => fastSort(arr).asc([
+  fastSort: (arr) => fastSort.sort(arr).asc([
     (p) => p.am1,
     (p) => p.am2,
   ]),
-  latestFastSort: (arr) => latestFastSortSort(arr).asc([
+  latestFastSort: (arr) => latestFastSortSort.sort(arr).asc([
     (p) => p.am1,
     (p) => p.am2,
   ]),
@@ -28,7 +28,7 @@ const sortImplementation = {
   sortOn: (arr) => sortOn(arr, ['am1', 'am2']),
 };
 
-module.exports.run = function({ size, numberOfRuns, librariesToRun }) {
+export function run({ size, numberOfRuns, librariesToRun }) {
   const testArr = [];
   for (let i = 0; i < size; i++) {
     testArr.push({

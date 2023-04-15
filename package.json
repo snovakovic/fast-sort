@@ -1,9 +1,7 @@
 {
   "name": "fast-sort",
-  "version": "3.2.0",
+  "version": "3.3.3",
   "description": "Fast easy to use and flexible sorting with TypeScript support",
-  "main": "dist/sort.min.js",
-  "module": "dist/sort.es.js",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
   "contributors": [
     "Linus Unnebäck: https://github.com/LinusU",
@@ -12,13 +10,25 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/snovakovic/fast-sort",
+  "main": "dist/sort.cjs.js",
+  "module": "dist/sort.mjs",
+  "types": "dist/sort.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/sort.cjs.js",
+      "import": "./dist/sort.mjs",
+      "types": "./dist/sort.d.ts"
+    },
+    "./dist/sort.min": "./dist/sort.min.js",
+    "./dist/sort.js": "./dist/sort.js"
+  },
   "scripts": {
     "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha -r ts-node/register test/*.spec.ts",
     "test:watch": "watch 'npm run test' ./src",
     "test:integration:dist": "node test/integration/dist.test.js",
     "test:integration:npm": "node test/integration/npm.test.js",
     "build": "npm run test && rm -rf dist && rollup -c",
-    "prepublish": "npm run build && npm run test:integration:dist",
+    "prepublishOnly": "npm run build && npm run test:integration:dist",
     "postpublish": "npm run test:integration:npm"
   },
   "repository": {
@@ -47,7 +57,7 @@
     "eslint": "^7.21.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
-    "mocha": "^8.3.1",
+    "mocha": "^10.2.0",
     "rollup": "^2.41.1",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-typescript2": "^0.30.0",

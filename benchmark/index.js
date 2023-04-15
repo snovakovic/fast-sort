@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 
-const chalk = require('chalk');
-const Table = require('cli-table2');
-const log = require('single-line-log').stdout;
+import chalk from 'chalk';
+import Table from 'cli-table2';
+import { stdout as log } from 'single-line-log';
 
-const getRandomInt = require('./getRandomInt');
-const flatObject = require('./implementations/flatObject.js');
-const deepObject = require('./implementations/deepObject.js');
-const multiProperty = require('./implementations/multiProperty.js');
-const flatArray = require('./implementations/flatArray.js');
+import getRandomInt from './getRandomInt.js';
+import * as flatObject from './implementations/flatObject.js';
+import * as deepObject from './implementations/deepObject.js';
+import * as multiProperty from './implementations/multiProperty.js';
+import * as flatArray from './implementations/flatArray.js';
 
 const librariesToRun = [
   'fastSort',
