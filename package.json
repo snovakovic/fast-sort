@@ -17,7 +17,7 @@
     ".": {
       "require": "./dist/sort.cjs.js",
       "import": "./dist/sort.mjs",
-      "types": "dist/sort.d.ts"
+      "types": "./dist/sort.d.ts"
     }
   },
   "scripts": {
