@@ -188,15 +188,15 @@ interface IFastSort<T> {
 
 export function createNewSortInstance(
   opts:ISortInstanceOptions & { inPlaceSorting?:false }
-):<T>(_ctx:readonly T[])=>IFastSort<T>
-export function createNewSortInstance(opts:ISortInstanceOptions):<T>(_ctx:T[])=>IFastSort<T>
-export function createNewSortInstance(opts:ISortInstanceOptions):<T>(_ctx:T[])=>IFastSort<T> {
+):<T>(arrayToSort:readonly T[])=>IFastSort<T>
+export function createNewSortInstance(opts:ISortInstanceOptions):<T>(arrayToSort:T[])=>IFastSort<T>
+export function createNewSortInstance(opts:ISortInstanceOptions):<T>(arrayToSort:T[])=>IFastSort<T> { // eslint-disable-line max-len
   const comparer = castComparer(opts.comparer);
 
-  return function<T>(_ctx:T[]):IFastSort<T> {
-    const ctx = Array.isArray(_ctx) && !opts.inPlaceSorting
-      ? _ctx.slice()
-      : _ctx;
+  return function<T>(arrayToSort:T[]):IFastSort<T> {
+    const ctx = Array.isArray(arrayToSort) && !opts.inPlaceSorting
+      ? arrayToSort.slice()
+      : arrayToSort;
 
     return {
       asc(sortBy?:ISortBy<T> | ISortBy<T>[]):T[] {
@@ -219,8 +219,7 @@ export const defaultComparer = (a, b, order):number => {
   if (a < b) return -1;
   if (a > b) return 1;
 
-  // eslint-disable-next-line eqeqeq
-  if (a == b) return 0;
+  // if (a === b) return 0;
 
   const aType = typeof a;
   const bType = typeof b;
