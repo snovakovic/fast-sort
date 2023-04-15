@@ -16,7 +16,8 @@
   "exports": {
     ".": {
       "require": "./dist/sort.cjs.js",
-      "import": "./dist/sort.mjs"
+      "import": "./dist/sort.mjs",
+      "types": "dist/sort.d.ts"
     }
   },
   "scripts": {
