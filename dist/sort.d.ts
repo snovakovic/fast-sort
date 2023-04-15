@@ -53,9 +53,9 @@ interface IFastSort<T> {
 }
 export declare function createNewSortInstance(opts: ISortInstanceOptions & {
     inPlaceSorting?: false;
-}): <T>(_ctx: readonly T[]) => IFastSort<T>;
-export declare function createNewSortInstance(opts: ISortInstanceOptions): <T>(_ctx: T[]) => IFastSort<T>;
+}): <T>(arrayToSort: readonly T[]) => IFastSort<T>;
+export declare function createNewSortInstance(opts: ISortInstanceOptions): <T>(arrayToSort: T[]) => IFastSort<T>;
 export declare const defaultComparer: (a: any, b: any, order: any) => number;
-export declare const sort: <T>(_ctx: readonly T[]) => IFastSort<T>;
-export declare const inPlaceSort: <T>(_ctx: T[]) => IFastSort<T>;
+export declare const sort: <T>(arrayToSort: readonly T[]) => IFastSort<T>;
+export declare const inPlaceSort: <T>(arrayToSort: T[]) => IFastSort<T>;
 export {};

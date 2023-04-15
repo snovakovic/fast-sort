@@ -1,6 +1,6 @@
 {
   "name": "fast-sort",
-  "version": "3.3.3",
+  "version": "3.4.0",
   "description": "Fast easy to use and flexible sorting with TypeScript support",
   "author": "Stefan Novakovic <stefan.novakovich@gmail.com>",
   "contributors": [

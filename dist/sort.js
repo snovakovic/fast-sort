@@ -82,10 +82,10 @@
   };
   function createNewSortInstance(opts) {
       var comparer = castComparer(opts.comparer);
-      return function (_ctx) {
-          var ctx = Array.isArray(_ctx) && !opts.inPlaceSorting
-              ? _ctx.slice()
-              : _ctx;
+      return function (arrayToSort) {
+          var ctx = Array.isArray(arrayToSort) && !opts.inPlaceSorting
+              ? arrayToSort.slice()
+              : arrayToSort;
           return {
               asc: function (sortBy) {
                   return sortArray(1, ctx, sortBy, comparer);
@@ -104,6 +104,9 @@
           return order;
       if (b == null)
           return -order;
+      if (typeof a !== typeof b) {
+          return typeof a < typeof b ? -1 : 1;
+      }
       if (a < b)
           return -1;
       if (a > b)
