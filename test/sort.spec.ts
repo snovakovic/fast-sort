@@ -670,9 +670,8 @@ describe('sort', () => {
     const sorted3 = sort([1, 3, 'a', 'c', [1, 2], { a: 1 }, { a: 2 }, 4, 2, 4]).asc();
     assert.deepStrictEqual(sorted3, [1, 2, 3, 4, 4, [1, 2], { a: 1 }, { a: 2 }, 'a', 'c']);
 
-    const sorted4 = sort([1, 3, 2, '1', 'a', '2', '5', 6]).asc();
-    // Known thing where string number will be compared as numbers
-    assert.deepStrictEqual(sorted4, [1, '1', 2, '2', 3, '5', 6, 'a']);
+    const sorted4 = sort([1, 3, 2, '1a', 'a', '2', '5', 6]).asc();
+    assert.deepStrictEqual(sorted4, [1, 2, 3, 6, '1a', '2', '5', 'a']);
   });
 
   it('Should be able to override natural sort with default comparer', () => {

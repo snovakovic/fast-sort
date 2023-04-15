@@ -216,16 +216,14 @@ export const defaultComparer = (a, b, order):number => {
   if (a == null) return order;
   if (b == null) return -order;
 
-  if (a < b) return -1;
-  if (a > b) return 1;
-
-  // if (a === b) return 0;
-
   const aType = typeof a;
   const bType = typeof b;
 
   if (aType < bType) return -1;
   if (aType > bType) return 1;
+
+  if (a < b) return -1;
+  if (a > b) return 1;
 
   return 0;
 };
