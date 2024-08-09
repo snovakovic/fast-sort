@@ -25,8 +25,19 @@ module.exports = {
     'operator-linebreak': 0,
     'import/no-unresolved': 0,
     'import/extensions': 0,
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     '@typescript-eslint/type-annotation-spacing': ['error', { before: false, after: false }],
-    '@typescript-eslint/interface-name-prefix': ['error', 'always'],
+    '@typescript-eslint/naming-convention': [
+      'error',
+      {
+        selector: 'interface',
+        format: ['PascalCase'],
+        custom: {
+          regex: '^I[A-Z]',
+          match: true,
+        },
+      },
+    ],
     '@typescript-eslint/member-delimiter-style': ['error', {
       multiline: { delimiter: 'comma' },
     }],

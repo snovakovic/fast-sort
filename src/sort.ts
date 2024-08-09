@@ -151,7 +151,7 @@ const sortArray = function(order:IOrder, ctx:any[], sortBy:IAnySortBy, comparer:
 
 // >>> Public <<<
 
-interface IFastSort<T> {
+export interface IFastSort<T> {
   /**
    * Sort array in ascending order.
    * @example
@@ -212,7 +212,7 @@ export function createNewSortInstance(opts:ISortInstanceOptions):<T>(arrayToSort
   };
 }
 
-export const defaultComparer = (a, b, order):number => {
+export const defaultComparer = (a:any, b:any, order:IOrder):number => {
   if (a == null) return order;
   if (b == null) return -order;
 
