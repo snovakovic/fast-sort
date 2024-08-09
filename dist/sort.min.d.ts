@@ -17,7 +17,7 @@ export interface ISortByDescSorter<T> extends ISortInstanceOptions {
     desc: boolean | ISortBy<T>;
 }
 export declare type ISortByObjectSorter<T> = ISortByAscSorter<T> | ISortByDescSorter<T>;
-interface IFastSort<T> {
+export interface IFastSort<T> {
     /**
      * Sort array in ascending order.
      * @example
@@ -55,7 +55,7 @@ export declare function createNewSortInstance(opts: ISortInstanceOptions & {
     inPlaceSorting?: false;
 }): <T>(arrayToSort: readonly T[]) => IFastSort<T>;
 export declare function createNewSortInstance(opts: ISortInstanceOptions): <T>(arrayToSort: T[]) => IFastSort<T>;
-export declare const defaultComparer: (a: any, b: any, order: any) => number;
+export declare const defaultComparer: (a: any, b: any, order: IOrder) => number;
 export declare const sort: <T>(arrayToSort: readonly T[]) => IFastSort<T>;
 export declare const inPlaceSort: <T>(arrayToSort: T[]) => IFastSort<T>;
 export {};
