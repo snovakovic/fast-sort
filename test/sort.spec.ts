@@ -46,7 +46,7 @@ describe('sort', () => {
       unit: 'A10',
     }, {
       name: 'aa',
-      lastName: null,
+      lastName: null as any,
       age: 9,
       unit: 'A01',
     }, {
@@ -138,8 +138,8 @@ describe('sort', () => {
 
   it('Should ignore values that are not sortable', () => {
     assert.equal(sort('string' as any).asc(), 'string' as any);
-    assert.equal(sort(undefined).desc(), undefined);
-    assert.equal(sort(null).desc(), null);
+    assert.equal(sort(undefined as any).desc(), undefined);
+    assert.equal(sort(null as any).desc(), null);
     assert.equal(sort(33 as any).asc(), 33 as any);
     assert.deepStrictEqual(sort({ name: 'test' } as any).desc(), { name: 'test' } as any);
     assert.equal((sort(33 as any) as any).by({ asc: true }), 33 as any);
@@ -292,7 +292,7 @@ describe('sort', () => {
       Error,
       errorMessage,
     );
-    assert.throws(() => sort([1, 2]).asc(null), Error, errorMessage);
+    assert.throws(() => sort([1, 2]).asc(null as any), Error, errorMessage);
     assert.throws(() => sort([1, 2]).desc([1, 2, 3] as any), Error, errorMessage);
   });
 
