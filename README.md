@@ -68,7 +68,7 @@ inPlaceSort(array).asc();
 By default `fast-sort` is not doing language sensitive sorting of strings.
 e.g `'image-11.jpg'` will be sorted before `'image-2.jpg'` (in ascending sorting).
 We can provide custom [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) comparer to fast-sort for language sensitive sorting of strings.
-Keep in mind that natural sort is slower then default sorting so recommendation is to use it
+Keep in mind that natural sort is slower than default sorting so recommendation is to use it
 only when needed.
 
 ```javascript
