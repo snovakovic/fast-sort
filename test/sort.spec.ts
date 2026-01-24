@@ -700,4 +700,164 @@ describe('sort', () => {
       { name: 'b3', temperature: 2 },
     ]);
   });
+
+  it('Should handle empty array', () => {
+    assert.deepStrictEqual(sort([]).asc(), []);
+    assert.deepStrictEqual(sort([]).desc(), []);
+    assert.deepStrictEqual(sort([]).by({ asc: true }), []);
+    assert.deepStrictEqual(sort([]).by([]), []);
+  });
+
+  it('Should handle single element array', () => {
+    assert.deepStrictEqual(sort([1]).asc(), [1]);
+    assert.deepStrictEqual(sort([1]).desc(), [1]);
+    assert.deepStrictEqual(sort([{ name: 'a' }]).asc('name'), [{ name: 'a' }]);
+    assert.deepStrictEqual(sort([{ name: 'a' }]).desc(p => p.name), [{ name: 'a' }]);
+  });
+
+  it('Should sort boolean values correctly', () => {
+    assert.deepStrictEqual(sort([true, false, true, false]).asc(), [false, false, true, true]);
+    assert.deepStrictEqual(sort([true, false, true, false]).desc(), [true, true, false, false]);
+  });
+
+  it('Should sort objects by boolean property', () => {
+    const arr = [
+      { active: true, name: 'b' },
+      { active: false, name: 'a' },
+      { active: true, name: 'c' },
+    ];
+    const sorted = sort(arr).asc('active');
+    assert.deepStrictEqual(sorted.map(x => x.active), [false, true, true]);
+
+    const sortedDesc = sort(arr).desc('active');
+    assert.deepStrictEqual(sortedDesc.map(x => x.active), [true, true, false]);
+  });
+
+  it('Should handle Infinity values', () => {
+    assert.deepStrictEqual(
+      sort([Infinity, 1, -Infinity, 0, 5]).asc(),
+      [-Infinity, 0, 1, 5, Infinity],
+    );
+    assert.deepStrictEqual(
+      sort([Infinity, 1, -Infinity, 0, 5]).desc(),
+      [Infinity, 5, 1, 0, -Infinity],
+    );
+  });
+
+  it('Should handle empty strings', () => {
+    assert.deepStrictEqual(sort(['b', '', 'a', '']).asc(), ['', '', 'a', 'b']);
+    assert.deepStrictEqual(sort(['b', '', 'a', '']).desc(), ['b', 'a', '', '']);
+
+    const arr = [{ name: 'b' }, { name: '' }, { name: 'a' }];
+    const sorted = sort(arr).asc('name');
+    assert.deepStrictEqual(sorted.map(x => x.name), ['', 'a', 'b']);
+  });
+
+  it('Should sort strings with default case sensitivity', () => {
+    const sorted = sort(['banana', 'Apple', 'cherry', 'apricot']).asc();
+    assert.deepStrictEqual(sorted, ['Apple', 'apricot', 'banana', 'cherry']);
+  });
+
+  it('Should handle by() with empty array', () => {
+    // Empty array is treated same as no sorter - sorts in ascending order
+    const arr = [3, 1, 2];
+    const sorted = sort(arr).by([]);
+    assert.deepStrictEqual(sorted, [1, 2, 3]);
+  });
+
+  it('Should sort with by() using single object with function sorter', () => {
+    const sorted = sort(multiPropArray).by({ asc: p => p.age });
+    assert.deepStrictEqual([6, 9, 10, 11], sorted.map(m => m.age));
+
+    const sorted2 = sort(multiPropArray).by({ desc: p => p.age });
+    assert.deepStrictEqual([11, 10, 9, 6], sorted2.map(m => m.age));
+  });
+
+  it('Should handle non-existent properties', () => {
+    const arr = [
+      { a: 1 },
+      { a: 2, b: 5 },
+      { a: 3 },
+    ];
+    const sorted = sort(arr).asc('b' as any);
+    // Object with b=5 should come first, others have undefined
+    assert.strictEqual(sorted[0].a, 2);
+  });
+
+  it('Should sort by deeply nested properties using function accessor', () => {
+    const arr = [
+      { level1: { level2: { level3: 3 } } },
+      { level1: { level2: { level3: 1 } } },
+      { level1: { level2: { level3: 2 } } },
+    ];
+    const sorted = sort(arr).asc(x => x.level1.level2.level3);
+    assert.deepStrictEqual(sorted.map(x => x.level1.level2.level3), [1, 2, 3]);
+
+    const sortedDesc = sort(arr).desc(x => x.level1.level2.level3);
+    assert.deepStrictEqual(sortedDesc.map(x => x.level1.level2.level3), [3, 2, 1]);
+  });
+
+  it('Should sort zero correctly among positive and negative numbers', () => {
+    assert.deepStrictEqual(sort([1, 0, -1, 2, -2]).asc(), [-2, -1, 0, 1, 2]);
+    assert.deepStrictEqual(sort([1, 0, -1, 2, -2]).desc(), [2, 1, 0, -1, -2]);
+  });
+
+  it('Should allow multiple sort operations on same source array', () => {
+    const original = [3, 1, 2];
+    const asc = sort(original).asc();
+    const desc = sort(original).desc();
+
+    assert.deepStrictEqual(original, [3, 1, 2]); // unchanged
+    assert.deepStrictEqual(asc, [1, 2, 3]);
+    assert.deepStrictEqual(desc, [3, 2, 1]);
+  });
+
+  it('Should handle sparse arrays', () => {
+    const sparse = [3, , 1, , 2] as number[]; // eslint-disable-line no-sparse-arrays
+    const sorted = sort(sparse).asc();
+    // Sparse slots become undefined and go to the end
+    assert.strictEqual(sorted.length, 5);
+    assert.strictEqual(sorted[0], 1);
+    assert.strictEqual(sorted[1], 2);
+    assert.strictEqual(sorted[2], 3);
+  });
+
+  it('Should handle mixed null and undefined in multi-property sort', () => {
+    const arr = [
+      { a: 1, b: null },
+      { a: 1, b: undefined },
+      { a: 1, b: 2 },
+      { a: 1, b: 1 },
+    ];
+    const sorted = sort(arr).asc(['a', 'b']);
+    assert.deepStrictEqual(sorted.map(x => x.b), [1, 2, null, undefined]);
+  });
+
+  it('Should handle objects where all sort properties are nil', () => {
+    const arr = [
+      { a: null, b: undefined },
+      { a: undefined, b: null },
+      { a: null, b: null },
+    ];
+    const sorted = sort(arr).asc(['a', 'b'] as any);
+    assert.strictEqual(sorted.length, 3);
+  });
+
+  it('Should handle sorting with very small and very large numbers', () => {
+    const arr = [Number.MAX_VALUE, Number.MIN_VALUE, 0, -Number.MAX_VALUE, Number.MAX_SAFE_INTEGER];
+    const sorted = sort(arr).asc();
+    assert.strictEqual(sorted[0], -Number.MAX_VALUE);
+    assert.strictEqual(sorted[sorted.length - 1], Number.MAX_VALUE);
+  });
+
+  it('Should handle decimal numbers correctly', () => {
+    assert.deepStrictEqual(
+      sort([0.1, 0.01, 0.001, 0.11]).asc(),
+      [0.001, 0.01, 0.1, 0.11],
+    );
+    assert.deepStrictEqual(
+      sort([1.5, 1.05, 1.005, 1.55]).desc(),
+      [1.55, 1.5, 1.05, 1.005],
+    );
+  });
 });
