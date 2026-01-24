@@ -45,22 +45,28 @@ Its easy-to-use and flexible syntax, combined with [incredible speed](#benchmark
 
 For more examples check [unit tests](https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts).
 
-## In place sorting
+## Why fast-sort?
 
-Fast-sort provides an inPlace sorting option that mutates the original array instead of creating a new instance, resulting in marginally faster and more memory-efficient sorting. However, both the inPlaceSort and default sort methods offer exactly the same functionality.
+* Negligible footprint - 850 bytes gzipped, zero dependencies
+* TypeScript support out of the box
+* In some cases 10x+ faster than lodash sort in [benchmarks](#benchmark)
+* Handles `null` and `undefined` values out of the box
+* Supports [natural sorting](#natural-sorting--language-sensitive-sorting)
+* Supports sorting by multiple properties in different directions
+* Easy to read and use syntax
 
 ```javascript
-const { sort, inPlaceSort } = require('fast-sort');
+// Native JS sort
+users.sort((a, b) => a.name.localeCompare(b.name));
 
-const array = [3, 1, 5];
-const sorted = sort(array).asc();
+// Is this ascending or descending? 🤔
+```
 
-// sorted => [1, 3, 5]
-// array => [3, 1, 5]
+```javascript
+// fast-sort
+sort(users).asc(u => u.name);
 
-inPlaceSort(array).asc();
-
-// array => [1, 3, 5]
+// Clear and readable 😎
 ```
 
 ## Natural sorting / Language sensitive sorting
@@ -147,6 +153,24 @@ For example we will sort `tags` by "custom" tag importance (e.g. `vip` tag is of
   const addresses = [{ city: 'Split' }, { city: undefined }, { city: 'Zagreb'}];
   sort(addresses).asc(a => a.city); // => Split, Zagreb, undefined
   sort(addresses).desc(a => a.city); // => Zagreb, Split, undefined
+```
+
+## In place sorting
+
+Fast-sort provides an inPlace sorting option that mutates the original array instead of creating a new instance, resulting in marginally faster and more memory-efficient sorting. However, both the inPlaceSort and default sort methods offer exactly the same functionality.
+
+```javascript
+const { sort, inPlaceSort } = require('fast-sort');
+
+const array = [3, 1, 5];
+const sorted = sort(array).asc();
+
+// sorted => [1, 3, 5]
+// array => [3, 1, 5]
+
+inPlaceSort(array).asc();
+
+// array => [1, 3, 5]
 ```
 
 ## Migrating from older versions
