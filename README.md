@@ -9,7 +9,7 @@
 [![NPM Package](https://nodei.co/npm/fast-sort.png)](https://www.npmjs.com/package/fast-sort)
 
 Fast-sort is a lightweight (850 bytes gzip), zero-dependency sorting library with TypeScript support.
-Its easy-to-use and flexible syntax, combined with [incredible speed](#benchmark) , make it a top choice for developers seeking efficient, reliable, and customizable sorting solutions.
+Its easy-to-use and flexible syntax, combined with [incredible speed](#benchmark), make it a top choice for developers seeking efficient, reliable, and customizable sorting solutions.
 
 ## Quick examples
 
@@ -43,7 +43,7 @@ Its easy-to-use and flexible syntax, combined with [incredible speed](#benchmark
   const sorted = sort(users).asc('firstName');
 ```
 
-Fore more examples check [unit tests](https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts).
+For more examples check [unit tests](https://github.com/snovakovic/fast-sort/blob/master/test/sort.spec.ts).
 
 ## In place sorting
 
@@ -68,8 +68,7 @@ inPlaceSort(array).asc();
 By default `fast-sort` is not doing language sensitive sorting of strings.
 e.g `'image-11.jpg'` will be sorted before `'image-2.jpg'` (in ascending sorting).
 We can provide custom [Intl.Collator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator) comparer to fast-sort for language sensitive sorting of strings.
-Keep in mind that natural sort is slower then default sorting so recommendation is to use it
-only when needed.
+Keep in mind that natural sort is slower than default sorting so recommendation is to use it only when needed.
 
 ```javascript
   import { sort, createNewSortInstance } from 'fast-sort';
@@ -96,9 +95,7 @@ only when needed.
   naturalSort(testArr).desc(); // => ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']
 ```
 
-NOTE: It's known that `Intl.Collator` might not sort `null` values correctly so make sure to cast them to `undefine`
-as described in the following issue
-https://github.com/snovakovic/fast-sort/issues/54#issuecomment-1072289388
+NOTE: It's known that `Intl.Collator` might not sort `null` values correctly so make sure to cast them to `undefined` as described in [this issue](https://github.com/snovakovic/fast-sort/issues/54#issuecomment-1072289388).
 
 ## Custom sorting
 
@@ -108,7 +105,7 @@ Fast sort can be tailored to fit any sorting need or use case by:
   * custom handling in provided callback function
   * combination of any from above
 
-For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of greater importance then `captain` tag).
+For example we will sort `tags` by "custom" tag importance (e.g. `vip` tag is of greater importance than `captain` tag).
 
 ```javascript
   import { sort, createNewSortInstance } from 'fast-sort';
@@ -134,8 +131,9 @@ For example we will sort `tags` by "custom" tag importance (e.g `vip` tag is of 
   tagSorter(tags).desc(); // => ['vip', 'influencer', 'captain', 'unknown'];
 
   // Default sorter will sort tags by comparing string values not by their domain specific value
-  const defaultSort = sort(tags).asc(); // => ['captain', 'influencer', 'unknown' 'vip']
+  const defaultSort = sort(tags).asc(); // => ['captain', 'influencer', 'unknown', 'vip']
 ```
+
 ## More examples
 
 ```javascript
@@ -160,8 +158,8 @@ For migrating to v3 you can reference [CHANGELOG](https://github.com/snovakovic/
 
 ## Benchmark
 
-Five different benchmarks have been created to get better insight of how fast-sort perform under different scenarios.
-Each benchmark is run with different array sizes raging from small 100 items to large 100 000 items.
+Five different benchmarks have been created to get better insight of how fast-sort performs under different scenarios.
+Each benchmark is run with different array sizes ranging from small 100 items to large 100,000 items.
 
 Every run of benchmark outputs different results but the results are constantly showing better scores compared to similar popular sorting libraries.
 
