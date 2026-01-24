@@ -10,30 +10,24 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/snovakovic/fast-sort",
-  "main": "dist/sort.cjs",
-  "module": "dist/sort.js",
+  "main": "dist/sort.cjs.js",
+  "module": "dist/sort.mjs",
   "types": "dist/sort.d.ts",
-  "sideEffects": false,
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/sort.d.ts",
-        "default": "./dist/sort.js"
-      },
-      "require": {
-        "types": "./dist/sort.d.cts",
-        "default": "./dist/sort.cjs"
-      }
+      "require": "./dist/sort.cjs.js",
+      "import": "./dist/sort.mjs",
+      "types": "./dist/sort.d.ts"
     },
-    "./dist/sort.umd": "./dist/sort.umd.js",
-    "./dist/sort.umd.min": "./dist/sort.umd.min.js"
+    "./dist/sort.min": "./dist/sort.min.js",
+    "./dist/sort.js": "./dist/sort.js"
   },
   "scripts": {
     "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha -r ts-node/register test/*.spec.ts",
     "test:watch": "watch 'npm run test' ./src",
     "test:integration:dist": "node test/integration/dist.test.js",
     "test:integration:npm": "node test/integration/npm.test.js",
-    "build": "npm run test && rm -rf dist && tsup",
+    "build": "npm run test && rm -rf dist && rollup -c",
     "prepublishOnly": "npm run build && npm run test:integration:dist",
     "postpublish": "npm run test:integration:npm"
   },
@@ -64,9 +58,13 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
     "mocha": "^10.2.0",
+    "rollup": "^2.41.1",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "rollup-plugin-uglify": "^6.0.4",
     "ts-node": "^9.1.1",
-    "tsup": "^8.0.0",
-    "typescript": "^5.0.0",
+    "tslib": "^2.1.0",
+    "typescript": "^4.2.3",
     "watch": "^1.0.2"
   }
 }
