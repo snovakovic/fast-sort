@@ -49,7 +49,7 @@ import sort from 'fast-sort'; // older versions
 import { sort } from 'fast-sort'; // v3 and up
 ```
 
-* By default `sort` no longer mutates array as was case in previous versions it now creates new array instance.
+* By default `sort` no longer mutates the array as was the case in previous versions. It now creates a new array instance.
 
 * `sort.createNewInstance` is now provided as named export
 
@@ -59,7 +59,7 @@ import { createNewSortInstance } from 'fast-sort';
 
 ### Added
 
- * `inPlaceSort` mutates provided array instead of creating new array instance. This was default behaviour of previous sort versions
+ * `inPlaceSort` mutates the provided array instead of creating a new array instance. This was the default behaviour of previous sort versions.
  * `inPlaceSorting` option that can be passed to `createNewSortInstance`.
 
 ## [2.2.0] - 2019-12-14
@@ -80,7 +80,7 @@ import { createNewSortInstance } from 'fast-sort';
   });
 ```
 * TypeScript support
-* more info on this release on https://github.com/snovakovic/fast-sort/releases/tag/v2.0.0
+* More info on this release at https://github.com/snovakovic/fast-sort/releases/tag/v2.0.0
 
 ## [1.6.0]
 
